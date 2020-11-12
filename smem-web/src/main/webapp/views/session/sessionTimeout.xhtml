@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	>
+<h:body>	
+	<ui:composition template="/templates/templateMenu.xhtml">
+		<ui:define name="header">
+			<ui:include src="/views/inicio/header.xhtml" />		
+		</ui:define>	
+		<ui:define name="leftColumn" style="position: relative;">
+			<ui:include src="/views/inicio/menu.xhtml"/>
+		</ui:define>
+		<ui:define name="content">
+			<h:form id="session" prependId="false">
+				<div align="center" style="width:450px;margin-left:auto; margin-right:auto; padding-top:150px">
+					<rich:panel header="Mensaje">
+						<h:panelGrid columns="1" width="450px">
+							<h:outputText value="LA SESION HA EXPIRADO."></h:outputText>
+							<h:commandButton id="logout" value="Aceptar" action="#{loginBean.doLogout}" />
+						</h:panelGrid>
+					</rich:panel>
+				</div>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>

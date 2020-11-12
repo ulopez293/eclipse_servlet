@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+	<f:subview id="modal_agregar_grupo">
+		<h:form id="formAgregarGrupo">
+			
+			<rich:popupPanel header="#{msg['grupo.nuevo.agregargrupo']}" id="agregarGrupo" domElementAttachment="parent" autosized="true">
+				
+				<t:panelGrid id="editGrid" columns="3" columnClasses="even-row,odd-row" width="380" style="margin-top:10px">
+					
+					<h:outputText value="#{msg['grupo.nuevo.grupo']}" />
+					<h:inputText id="grupo" value="#{grupoBean.grupo.grupo}"
+						required="true" requiredMessage="El grupo es requerido." size="40"/>
+					<rich:message for="grupo" />
+					
+					<h:outputText value="#{msg['grupo.editar.estatus']}" />
+				    <h:selectOneMenu id="estatus" enableManualInput="false"
+				      value="#{grupoBean.grupo.baja}" required="true"
+				      requiredMessage="El estatus es requerido">
+				      <f:selectItems value="#{grupoBean.estatus}" var="r"
+				       	itemLabel="#{r.descripcion}" itemValue="#{r}" />
+				    </h:selectOneMenu>
+				    <rich:message for="estatus" />
+				</t:panelGrid>
+				
+				<a4j:commandButton value="Guardar"
+					style="margin-left:110px; margin-top:10px"
+					image="/resources/images/icons/btnguardar.jpg"				
+					render="tablaGrupos, alertPanel"
+					action="#{grupoBean.guardarGrupo}"
+					oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+					#{rich:component('alertPanel')}.show();  
+					#{rich:component('agregarGrupo')}.hide();}" />
+				<a4j:commandButton value="Cancelar"
+					image="/resources/images/icons/btncancelar.jpg"
+					onclick="#{rich:component('agregarGrupo')}.hide(); return false;" />
+											
+			</rich:popupPanel>
+			
+		</h:form>
+	</f:subview>
+	
+</ui:composition>

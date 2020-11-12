@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<f:subview id="modal_consulta_programaciones">
+		<h:form id="formConsultaProgramaciones">
+			<a4j:region>
+				<div align="center">
+					<rich:panel header="#{msg['programacionservicios.consulta.titulo']}">
+
+						<t:panelGrid id="consultarBitacoraGrid" columns="3" bgcolor='#F0F0F0'
+							width="830" style="margin-bottom: 10px; border: 1px solid #000000 !important;text-align: left;">
+							
+							<t:panelGroup colspan="3" style="padding-bottom: 8px; padding-top:5px; text-align:center; bgcolor:gray;">
+								<h:outputText value="PARAMETROS DE BUSQUEDA" styleClass="titulo-red"/>
+							</t:panelGroup>
+								
+							<h:outputText value="#{msg['smem.etiqueta.entidad']}" styleClass="titulo"/>						
+							<t:panelGroup colspan="2">
+								<h:selectOneMenu id="entidad" enableManualInput="false" required="true"
+									value="#{programacionServicioBean.entidad}"
+									requiredMessage="#{msg['entidad.mensaje.requerido']}">
+									<f:selectItems value="#{programacionServicioBean.entidades}" var="e"
+										itemLabel="#{e.entidad}" itemValue="#{e.idEntidad}" />
+									<a4j:ajax event="change" render="unidadRegional, centroTrabajo"
+										listener="#{programacionServicioBean.buscarUnidadesRegionales}" />	
+								</h:selectOneMenu>
+								<rich:message for="entidad" />
+							</t:panelGroup>	
+
+							<h:outputText value="#{msg['smem.etiqueta.unidadregional']}" styleClass="titulo"/>			
+							<t:panelGroup colspan="2">
+								<h:selectOneMenu id="unidadRegional" enableManualInput="false" required="true"
+									value="#{programacionServicioBean.unidadRegional}"
+									requiredMessage="#{msg['unidadregional.mensaje.requerido']}">
+									<f:selectItems value="#{programacionServicioBean.unidadesRegionales}" var="u"
+										itemLabel="#{u.unidadRegional}" itemValue="#{u.idUnidadRegional}" />
+									<a4j:ajax event="change" render="centroTrabajo"
+										listener="#{programacionServicioBean.buscarCentrosTrabajo}" />		
+								</h:selectOneMenu>
+								<rich:message for="unidadRegional" />
+							</t:panelGroup>
+
+							<h:outputText value="#{msg['smem.etiqueta.centrotrabajo']}" styleClass="titulo"/>
+							<t:panelGroup colspan="2">
+								<h:selectOneMenu id="centroTrabajo" enableManualInput="false" required="true"
+									value="#{programacionServicioBean.centroTrabajo}"
+									requiredMessage="#{msg['centrotrabajo.mensaje.requerido']}">
+									<f:selectItems value="#{programacionServicioBean.centrosTrabajo}" var="c"
+										itemLabel="#{c.descripcion}" itemValue="#{c.idCentroTrabajo}" />									
+								</h:selectOneMenu>
+								<rich:message for="centroTrabajo" />
+							</t:panelGroup>
+
+							<h:outputText value="#{msg['programacionservicios.consulta.tiposervicio']}" styleClass="titulo"/>
+							<t:panelGroup colspan="2">
+								<h:selectOneMenu id="tipoServicio" enableManualInput="false" required="true"
+									value="#{programacionServicioBean.tipoServicio}"
+									requiredMessage="El tipo de servicio es requerido">
+									<f:selectItems value="#{programacionServicioBean.tiposServicio}" var="t"
+										itemLabel="#{t.descripcion}" itemValue="#{t}" />									
+								</h:selectOneMenu>
+								<rich:message for="tipoServicio" />
+							</t:panelGroup>
+
+							<h:outputText value="#{msg['smem.etiqueta.estatus']}" styleClass="titulo"/>							
+							<t:panelGroup colspan="2">
+								<h:selectOneMenu enableManualInput="false" styleClass="width:120px"
+						      		value="#{programacionServicioBean.estatus}">
+						      		<f:selectItem itemLabel="Seleccione..."/>
+						      		<f:selectItems value="#{programacionServicioBean.estatusServicio}" var="r" itemLabel="#{r.nombre}" itemValue="#{r}" />
+						    	</h:selectOneMenu>
+					    	</t:panelGroup>
+							
+							<t:panelGroup colspan="3" style="text-align:center">
+								<a4j:commandButton value="Buscar"
+									render="tablaProgramaciones"
+									action="#{programacionServicioBean.buscarRegistros}" />
+							</t:panelGroup>
+						</t:panelGrid>				
+						
+						<rich:toolbar id="bar" height="5" width="835px" itemSeparator="none">
+							<!-- Botón Exportar -->
+							<rich:toolbarGroup location="left">
+								<h:commandButton value="Exportar" id="exportar"
+									image="/resources/images/icons/exportToExcel.png"
+									action="#{programacionServicioBean.descargarExcel}"																		
+									style="float: inherit; height: 30px; width: 30px; border:0px; margin-top: 6px"/>
+								<h:outputText value="#{msg['programacionservicios.consulta.exportar']}"
+									styleClass="txt-white" />
+							</rich:toolbarGroup>
+							<rich:toolbarGroup location="left">
+								<a4j:commandButton value="Actualizar"
+									image="/resources/images/icons/actualizar.jpg" 
+									render="tablaProgramaciones"
+									action="#{programacionServicioBean.inicializar}" 
+									style="float: inherit; height: 30px; width: 30px; border:0px;"/>
+								<h:outputText value="#{msg['programacionservicios.consulta.actualizar']}"
+									styleClass="txt-white" />
+							</rich:toolbarGroup>							
+							<sec:authorize ifAllGranted="ROLE_UNIDAD">	
+							<rich:toolbarGroup location="right">
+								<h:outputText value="Solicitar Servicio Correctivo"  styleClass="txt-white"/>
+								<a4j:commandLink value="" action="#{solicitudServicioBean.inicializar}">
+									<h:graphicImage value="/resources/images/icons/new.png"
+													alt="Nuevo" title="Nuevo Equipo"
+													style="float: inherit; height: 30px; width: 30px; border:0px;" />
+								</a4j:commandLink> 
+							</rich:toolbarGroup>
+							</sec:authorize>
+						</rich:toolbar>
+						
+						<rich:extendedDataTable  id="tablaProgramaciones" value="#{programacionServicioBean.programaciones}" var="programacion"
+							noDataLabel="No existen registros de servicios"
+							style="position:relative; width: 830px; height:inherit; text-align: center;"
+							sortMode="single" 
+							rowClasses="odd-row, even-row" rows="15"	
+							styleClass="txt-gray-small" >
+							
+							<rich:column width="220px" sorteable="false">
+								<f:facet name="header">	
+									<h:outputText value="#{msg['programacionservicios.consulta.folio']}" />
+								</f:facet>
+								<h:outputText value="#{programacion.folio}" />
+							</rich:column>
+							<rich:column width="140px" sorteable="false">
+								<f:facet name="header">	
+									<h:outputText value="#{msg['programacionservicios.consulta.id']}" />
+								</f:facet>
+								<h:outputText value="#{programacion.solicitudServicio.contratoDetalle.universo.idUniverso}" />
+							</rich:column>							
+							<rich:column width="170px">
+								<f:facet name="header">
+									<h:outputText value="#{msg['programacionservicios.consulta.estatus']}" />								
+								</f:facet>
+								<h:outputText value="#{programacion.estatus.nombre}" />
+							</rich:column>
+							<rich:column width="120px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['programacionservicios.consulta.fechaInicio']}" />
+								</f:facet>
+								<h:outputText value="#{programacion.solicitudServicio.fechaInicio}" />
+							</rich:column>
+							<rich:column width="120px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['programacionservicios.consulta.fechaVencimiento']}" />
+								</f:facet>
+								<h:outputText value="#{programacion.solicitudServicio.fechaFin}" />
+							</rich:column>
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['programacionservicios.consulta.estatus']}" />
+								</f:facet>
+								<h:graphicImage value="/resources/images/icons/semaforo_#{programacion.solicitudServicio.colorSemaforo}.gif"
+										style="float: inherit; height: 15px; width: 15px" 
+										rendered="#{programacion.estatus.idEstatus != 6}"/>
+							</rich:column>							
+							<rich:column width="120px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['programacionservicios.consulta.detalle']}" />
+								</f:facet>
+							
+								<a4j:commandLink value="Detalle"
+									render="actaEntrega, notificacion"
+									action="#{programacionServicioBean.completarDatosActa}"
+									oncomplete="#{rich:component('actaEntrega')}.show(); return false;"
+									rendered="#{programacion.mostrarVistaActa}">
+									<f:setPropertyActionListener target="#{programacionServicioBean.programacion}" value="#{programacion}" />
+								</a4j:commandLink>
+								
+								<a4j:commandLink value="Notificacion"
+									render="notificacion, actaEntrega"
+									action="#{programacionServicioBean.muestraNotificacion}"
+									oncomplete="#{rich:component('notificacion')}.show(); return false;"
+									rendered="#{programacion.mostrarVistaNotificacion}">
+									<f:setPropertyActionListener target="#{programacionServicioBean.programacion}" value="#{programacion}" />
+								</a4j:commandLink>
+																							
+							</rich:column>
+							<f:facet name="footer">
+								<rich:dataScroller page="#{programacionServicioBean.pagina}" for="tablaProgramaciones" render="tablaProgramaciones" fastControls="hide"/>
+							</f:facet>
+						</rich:extendedDataTable >
+					</rich:panel>
+				</div>
+			</a4j:region>
+		</h:form>
+	</f:subview>
+	
+</ui:composition>

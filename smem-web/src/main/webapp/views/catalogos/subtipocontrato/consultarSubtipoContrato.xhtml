@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	
+	<f:subview id="modal_consulta_subtipoContrato">
+		<h:form id="formConsultaSubtipoContratos">
+			<a4j:region>
+				<div align="center">
+					<rich:panel header="#{msg['SubtipoContrato.consulta.titulo']}">
+					
+						<rich:toolbar id="bar" height="5" width="725px" itemSeparator="none">
+							<!-- Boton Alta de SubtipoContrato -->
+							<rich:toolbarGroup location="right">
+								<h:outputText value="#{msg['SubtipoContrato.consulta.nuevaSubtipoContrato']}"  styleClass="txt-white"/>
+										<!-- <h:outputText value="Valor"  styleClass="txt-white"/>-->
+								<a4j:commandLink styleClass="no-decor" execute="@this"
+									render="agregarSubtipoContrato" ajaxSingle="true"
+									action="#{subtipoContratoBean.limpiarSubtipoContrato}"
+									oncomplete="#{rich:component('agregarSubtipoContrato')}.show(); return false;">
+									<h:graphicImage value="/resources/images/icons/new.png"
+										alt="Nuevo" title="Nuevo SubtipoContrato"
+										style="float: inherit; height: 30px; width: 30px" />
+								</a4j:commandLink> 
+							</rich:toolbarGroup>
+							<!-- Termina Boton Alta de SubtipoContrato -->
+						</rich:toolbar>
+												
+						<!-- Tabla para mostrar Registros -->
+						<rich:extendedDataTable  id="tablaSubtipoContratos" value="#{subtipoContratoBean.subtipoContratos}" var="sub"
+							noDataLabel="No existen registros de SubtipoContratos"
+							style="position:relative; width: 720px; height:inherit"
+							sortMode="single" 
+							rowClasses="odd-row, even-row" rows="15"	
+							styleClass="txt-gray-small">
+						
+							<rich:column width="100px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['SubtipoContrato.consulta.identificador']}" />
+								</f:facet>
+								<h:outputText value="#{sub.idSubtipoContrato}" />
+							</rich:column>
+							
+							<rich:column id="name" width="320px"
+										 filterValue="#{catalogoFilteringBean.nombreFilter}"
+										 filterExpression="#{fn:containsIgnoreCase(sub.subtipoContrato,catalogoFilteringBean.nombreFilter)}"
+										 filterType="custom">
+								<f:facet name="header">
+									<h:panelGroup>
+										<h:outputText value="#{msg['SubtipoContrato.consulta.nombre']}" />
+										<h:inputText value="#{catalogoFilteringBean.nombreFilter}" label="Nombre">
+                           					<a4j:ajax event="blur" render="tablaSubtipoContratos" execute="@this"/>
+                       					</h:inputText>
+									</h:panelGroup>
+								</f:facet>
+								<h:outputText value="#{sub.subtipoContrato}" />
+							</rich:column>
+							
+							<rich:column id="estatus" width="140px"
+										 filterValue="#{catalogoFilteringBean.estatusFilter}"
+										 filterExpression="#{fn:startsWith(sub.baja,catalogoFilteringBean.estatusFilter)}"
+										 filterType="custom">
+								<f:facet name="header">        <!-- filtrar por estatus --> 
+									<h:outputText value="#{msg['SubtipoContrato.consulta.estatus']}" />
+									<h:selectOneMenu enableManualInput="false" styleClass="width:120px"
+							      		value="#{catalogoFilteringBean.estatusFilter}">
+							      		<f:selectItem itemLabel="Todos" itemValue="#{null}"/>
+							      		<f:selectItems value="#{subtipoContratoBean.estatus}" var="r" itemLabel="#{r.descripcion}" itemValue="#{r}" />
+							      		<a4j:ajax render="tablaSubtipoContratos" execute="@this" event="change"/>
+							    	</h:selectOneMenu>									
+								</f:facet>
+								<h:outputText value="#{sub.baja.descripcion}" />
+							</rich:column>								
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['SubtipoContrato.consulta.modificar']}" />
+								</f:facet>
+								<a4j:commandLink render="editarSubtipoContrato"
+									oncomplete="#{rich:component('editarSubtipoContrato')}.show()">
+									<h:graphicImage value="/resources/images/icons/edit.png"
+										alt="editar" title="Editar SubtipoContrato"
+										style="float: inherit; height: 12px; width: 12px; border:0px;" />
+									<f:setPropertyActionListener target="#{subtipoContratoBean.subtipoContrato}" value="#{sub}" />
+								</a4j:commandLink>
+							</rich:column>
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['SubtipoContrato.consulta.eliminar']}"/>
+								</f:facet>
+								<a4j:commandLink styleClass="no-decor" execute="@this"
+									render="@none" ajaxSingle="true"
+									oncomplete="#{rich:component('panelConfirmacionBorrado')}.show(); return false;">
+									<h:graphicImage value="/resources/images/icons/delete.png"
+										alt="Eliminar" title="Eliminar Registro"
+										style="float: inherit; height: 25px; width: 25px" />
+									<f:setPropertyActionListener target="#{subtipoContratoBean.subtipoContrato}" value="#{sub}" />
+								</a4j:commandLink>
+							</rich:column>
+							<f:facet name="footer">
+								<rich:dataScroller page="#{subtipoContratoBean.pagina}" for="tablaSubtipoContratos"
+								 render="tablaSubtipoContratos" fastControls="hide" />
+							</f:facet>
+																	
+					</rich:extendedDataTable >
+					</rich:panel>
+					
+					<a4j:jsFunction name="eliminar" render="tablaSubtipoContratos,alertPanel"
+						action="#{subtipoContratoBean.eliminarSubtipoContrato}" execute="@this"
+						oncomplete="#{rich:component('alertPanel')}.show();" />					
+				</div>
+			</a4j:region>
+		</h:form>
+	</f:subview>
+</ui:composition>

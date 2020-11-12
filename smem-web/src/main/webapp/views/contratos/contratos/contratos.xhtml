@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/templates/templateMenu.xhtml">
+		
+	<ui:define name="header">
+		<ui:include src="/views/inicio/header.xhtml" />		
+	</ui:define>	
+	
+	<ui:define name="leftColumn" style="position: relative;">
+		<ui:include src="/views/inicio/menu.xhtml"/>
+	</ui:define>
+	
+	<ui:define name="content">
+		
+		<!--Contenedor -->
+		<ui:include src="/views/contratos/contratos/generalContratos.xhtml"/>
+		
+		<!-- Popup para Agregar Registros Contratos-->
+		<ui:include src="/views/contratos/contratos/agregarContratos.xhtml"/>		
+		
+		<!-- Popup para editar Registros Contratos-->
+		<ui:include src="/views/contratos/contratos/modificarContratos.xhtml"/>	
+		
+		<!-- Popup para Agregar Registros detalle-->
+		<ui:include src="/views/contratos/detalles/agregarDetalles.xhtml"/>		
+		
+		<!-- Popup para editar Registros detalle-->
+		<ui:include src="/views/contratos/detalles/modificarDetalles.xhtml"/>
+		
+		<!-- Popup para editar Registros detalle-->
+		<ui:include src="/views/contratos/detalles/agregarDetallesArchivo.xhtml"/>
+		
+		<!-- popups de mensages generales -->		
+		<ui:include src="/views/utilerias/popputs.xhtml" />
+				
+	</ui:define>
+	
+	<ui:define name="footer">
+		<ui:include src="/views/inicio/footer.xhtml" />
+	</ui:define>
+
+</ui:composition>

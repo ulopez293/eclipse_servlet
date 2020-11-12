@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<f:subview id="modal_agregar_usuarios">
+		<h:form id="formAgregarUsuarios">		
+			<rich:popupPanel header="#{msg['usuarios.alta.titulo']}" id="agregarUsuario" domElementAttachment="parent" width="400" height="340">
+				
+				<f:facet name="controls">
+					<h:outputLink value="#"
+						onclick="#{rich:component('agregarUsuario')}.hide(); return false;">
+						<h:graphicImage value="/resources/images/icons/close.gif"
+							alt="Cerrar" style="float: inherit; height: 15px; width: 15px; border:0px;" />
+					</h:outputLink>
+				</f:facet>
+				
+				<h:outputText value="INGRESAR LOS SIGUIENTES DATOS PARA REGISTRAR UN NUEVO USUARIO" 
+					styleClass="titulo-red" style="width: 200px;"/>
+				
+				<t:panelGrid id="addGrid" columns="3" columnClasses="primercolumna, segundacolumna" width="380" style="margin-top:10px" colspan="10">
+										
+					<h:outputText value="#{msg['usuarios.alta.perfil']}" styleClass="titulo" style="width:200px;"/>
+					<h:selectOneMenu id="perfil" enableManualInput="false"
+						value="#{usuarioBean.usuario.rol}" required="true"
+						requiredMessage="#{msg['usuarios.perfil.mensaje']}"
+						style="width:170px">
+						<f:selectItem itemLabel="Seleccione..." />
+						<f:selectItems value="#{usuarioBean.roles}" var="r"
+							itemLabel="#{r.descripcionRol}" itemValue="#{r}" />
+						<a4j:ajax event="change" render="usuario, nombreUsuario, 
+							entidad, unidadRegional, centroTrabajo"
+							listener="#{usuarioBean.buscarEntidades}" /> 							
+					</h:selectOneMenu>
+					<rich:message for="perfil" />
+					
+					<h:outputText value="#{msg['smem.etiqueta.entidad']}" styleClass="titulo"/>
+					<h:selectOneMenu id="entidad" enableManualInput="false"
+						value="#{usuarioBean.usuario.centroTrabajo.unidadRegional.entidad.idEntidad}" required="true"
+						requiredMessage="#{msg['entidad.mensaje.requerido']}"
+						style="width:170px">
+						<f:selectItems value="#{usuarioBean.entidades}" var="e"
+							itemLabel="#{e.entidad}" itemValue="#{e.idEntidad}" />
+						<a4j:ajax event="change" render="usuario, nombreUsuario, 
+							unidadRegional, centroTrabajo"
+							listener="#{usuarioBean.buscarUnidadesRegionales}" />	
+					</h:selectOneMenu>
+					<rich:message for="entidad" />	
+					
+					<h:outputText value="#{msg['smem.etiqueta.unidadregional']}" styleClass="titulo"/>
+					<h:selectOneMenu id="unidadRegional" enableManualInput="false"
+						value="#{usuarioBean.usuario.centroTrabajo.unidadRegional.idUnidadRegional}" required="true"
+						requiredMessage="#{msg['unidadregional.mensaje.requerido']}"
+						style="width:170px">
+						<f:selectItems value="#{usuarioBean.unidadesRegionales}" var="u"
+							itemLabel="#{u.unidadRegional}" itemValue="#{u.idUnidadRegional}" />
+						<a4j:ajax event="change" render="usuario, nombreUsuario, centroTrabajo"
+							listener="#{usuarioBean.buscarCentrosTrabajo}" />		
+					</h:selectOneMenu>
+					<rich:message for="unidadRegional" />
+					
+					<h:outputText value="#{msg['smem.etiqueta.centrotrabajo']}" styleClass="titulo"/>
+					<h:selectOneMenu id="centroTrabajo" enableManualInput="false"
+						value="#{usuarioBean.usuario.centroTrabajo.idCentroTrabajo}" required="true"
+						requiredMessage="#{msg['centrotrabajo.mensaje.requerido']}"
+						style="width:170px">
+						<f:selectItems value="#{usuarioBean.centrosTrabajo}" var="c"
+							itemLabel="#{c.descripcion}" itemValue="#{c.idCentroTrabajo}" />
+						<a4j:ajax event="change" render="usuario, nombreUsuario"
+							listener="#{usuarioBean.generaNombreUsuario}" />										
+					</h:selectOneMenu>
+					<rich:message for="centroTrabajo" />
+										
+					<h:outputText value="#{msg['usuarios.alta.usuario']}" styleClass="titulo"/>
+					<h:inputText id="usuario" value="#{usuarioBean.usuario.usuario}"
+						required="true" requiredMessage="#{msg['usuarios.usuario.mensaje']}" 
+						disabled="#{usuarioBean.campoLectura}" 
+						style="width:170px"/>
+					<rich:message for="usuario" />
+						
+					<h:outputText value="#{msg['usuarios.alta.nombreusuario']}" styleClass="titulo"/>	
+					<h:inputText id="nombreUsuario" value="#{usuarioBean.usuario.nombreUsuario}"
+						required="true" requiredMessage="#{msg['usuarios.nombreusuario.mensaje']}" 
+						disabled="#{usuarioBean.campoLectura}"
+						style="width:170px"/>
+					<rich:message for="nombreUsuario" />					
+					
+					<h:outputText value="#{msg['usuarios.alta.contrasenia']}" styleClass="titulo"/>
+					<h:inputSecret id="contrasenia" value="#{usuarioBean.usuario.contrasenia}"
+						required="true" requiredMessage="#{msg['usuarios.contrasenia.mensaje']}" 
+					    validator="#{validacionUsuarioBean.validaContrasenia}" 
+						style="width:170px">
+						<f:validateLength minimum="8" />
+					</h:inputSecret>	
+					<rich:message for="contrasenia" />
+					
+					<h:outputText value="#{msg['usuarios.alta.confirmarcontrasenia']}" styleClass="titulo"/>
+					<h:inputSecret id="confirmarContrasenia" value="#{usuarioBean.usuario.confirmarContrasenia}"
+						required="true" requiredMessage="#{msg['usuarios.confirmarcontrasenia.mensaje']}"
+						style="width:170px"/>
+					<rich:message for="confirmarContrasenia" />					
+					
+				</t:panelGrid>
+				
+				<a4j:commandButton value="Guardar" 
+					style="margin-left:110px; margin-top:10px"
+					image="/resources/images/icons/btnguardar.jpg"
+					render="tablaUsuarios, alertPanel"
+					action="#{usuarioBean.agregarUsuario}"
+					oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+					#{rich:component('alertPanel')}.show();  
+					#{rich:component('agregarUsuario')}.hide();}" />
+				<a4j:commandButton value="Cancelar"
+					image="/resources/images/icons/btncancelar.jpg"
+					onclick="#{rich:component('agregarUsuario')}.hide(); return false;" />
+					
+			</rich:popupPanel>
+		
+		</h:form>
+	</f:subview>
+</ui:composition>

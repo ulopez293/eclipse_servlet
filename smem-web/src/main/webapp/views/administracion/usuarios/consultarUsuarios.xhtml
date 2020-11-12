@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<f:subview id="modal_consultar_usuarios">
+		<h:form id="formConsultarUsuarios">
+			<a4j:region>
+				<div align="center">
+					<rich:panel header="#{msg['usuarios.consulta.titulo']}">
+						
+						<rich:toolbar id="bar" height="5" width="855px" itemSeparator="none" style="margin-top:30px">
+							<rich:toolbarGroup location="left">
+								<h:outputText value="#{msg['usuarios.consulta.reporteusuarios']}"
+									styleClass="txt-white" />
+								<h:commandButton action="#{usuarioBean.descargarReporteSMEM}" id="descargar" value="Descargar Reporte" 
+												image="/resources/images/icons/download.png"
+												style="float: inherit; height: 30px; width: 30px; border:0px;"/> 
+							</rich:toolbarGroup>
+							<!-- Botón Alta de usuario -->
+							<rich:toolbarGroup location="right">
+								<h:outputText value="#{msg['usuarios.consulta.agregarusuario']}"
+									styleClass="txt-white" />
+								<a4j:commandLink styleClass="no-decor" execute="@this"
+									render="agregarUsuario" ajaxSingle="true"
+									action="#{usuarioBean.limpiarUsuario}"
+									oncomplete="#{rich:component('agregarUsuario')}.show(); return false;">
+									<h:graphicImage value="/resources/images/icons/new.png"
+										alt="Nuevo" title="Nuevo Usuario"
+										style="float: inherit; height: 30px; width: 30px; border:0px;" />
+								</a4j:commandLink>
+							</rich:toolbarGroup>
+							<!--Termina Botón Alta de Usuario -->
+						</rich:toolbar>
+
+						<!-- Tabla para mostrar Registros -->
+						<rich:extendedDataTable value="#{usuarioBean.usuarios}"
+							var="usuario" id="tablaUsuarios" rows="15"
+							rowClasses="odd-row, even-row" sortMode="single"
+							style="position:relative; width: 850px; height:inherit; margin-bottom:50px"
+							noDataLabel="No existen registros de Usuarios">
+						
+							<rich:column width="250px" style="text-align: left;"
+								filterValue="#{usuarioFilteringBean.centroTrabajoFilter}"
+								filterExpression="#{fn:containsIgnoreCase(usuario.centroTrabajo.descripcion, usuarioFilteringBean.centroTrabajoFilter)}"
+								filterType="custom">
+								<f:facet name="header">
+									<h:panelGroup>
+										<h:outputText value="#{msg['usuarios.consulta.centrotrabajo']}  " />
+										<h:inputText value="#{usuarioFilteringBean.centroTrabajoFilter}" label="ct">
+                           					<a4j:ajax event="blur" render="tablaUsuarios" execute="@this"/>
+                       					</h:inputText>
+									</h:panelGroup>
+								</f:facet>
+								<h:outputText value="#{usuario.centroTrabajo.descripcion}" styleClass="txt-gray-small"/>
+							</rich:column>
+							<rich:column width="200px" 
+								filterValue="#{usuarioFilteringBean.usuarioFilter}"
+								filterExpression="#{fn:containsIgnoreCase(usuario.usuario, usuarioFilteringBean.usuarioFilter)}"
+								filterType="custom">
+								<f:facet name="header">	
+									<h:panelGroup>								
+										<h:outputText value="#{msg['usuarios.consulta.usuario']}  " />
+										<h:inputText value="#{usuarioFilteringBean.usuarioFilter}">
+	                    					<a4j:ajax event="blur" render="tablaUsuarios" execute="@this"/>
+	                					</h:inputText>
+                					</h:panelGroup>
+								</f:facet>
+								<h:outputText value="#{usuario.usuario}" styleClass="txt-gray-small"/>
+							</rich:column>
+							<!--  UNIDAD REGIONAL  -->
+							<rich:column width="120px" 
+							     filterValue="#{usuarioFilteringBean.unidadRegionalFilter}"
+								 filterExpression="#{fn:startsWith(usuario.centroTrabajo.unidadRegional, usuarioFilteringBean.unidadRegionalFilter)}"
+								  filterType="custom" >
+								<f:facet name="header">
+								  <h:outputText value="#{msg['usuarios.consulta.unidadregional']}" />
+								</f:facet>
+								<h:outputText value="#{usuario.centroTrabajo.unidadRegional.unidadRegional}" styleClass="txt-gray-small"/> 								
+							</rich:column>
+							<!-- ENTIDAD-->  
+							<rich:column width="160px">							
+							<f:facet name="header">
+						        <h:outputText value="#{msg['usuarios.consulta.entidad']}" />
+								</f:facet>
+								<h:outputText value="#{usuario.centroTrabajo.unidadRegional.entidad.entidad}" styleClass="txt-gray-small"/> 								
+							</rich:column>
+							<rich:column width="100px">
+								<f:facet name="header">								
+									<h:outputText value="#{msg['usuarios.consulta.rol']}" />																
+								</f:facet>
+								<h:outputText value="#{usuario.rol.descripcionRol}" styleClass="txt-gray-small"/>
+							</rich:column>							
+							<rich:column width="140px" 
+								 filterValue="#{usuarioFilteringBean.estatusFilter}"
+								 filterExpression="#{fn:startsWith(usuario.baja, usuarioFilteringBean.estatusFilter)}"
+								 filterType="custom" >								
+								<f:facet name="header">
+									<h:outputText value="#{msg['usuarios.consulta.estatus']} " />
+									<h:selectOneMenu enableManualInput="false" styleClass="width:120px"
+							      		value="#{usuarioFilteringBean.estatusFilter}">
+							      		<f:selectItem itemLabel="Todos" itemValue="#{null}"/>
+							      		<f:selectItems value="#{usuarioBean.estatus}" var="e" itemLabel="#{e.descripcion}" itemValue="#{e}" />
+							      		<a4j:ajax render="tablaUsuarios" execute="@this" event="change"/>
+							    	</h:selectOneMenu>
+								</f:facet>								
+								<h:outputText value="#{usuario.baja.descripcion}" styleClass="txt-gray-small"/>
+							</rich:column>
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['usuarios.consulta.modificar']}" />
+								</f:facet>
+								<a4j:commandLink render="editarUsuario"
+									action="#{usuarioBean.inicializaContrasenia}"
+									oncomplete="#{rich:component('editarUsuario')}.show()">
+									<h:graphicImage value="/resources/images/icons/edit.png"
+										alt="editar" title="Editar Usuario"
+										style="float: inherit; height: 12px; width: 12px; border:0px;" />
+									<f:setPropertyActionListener target="#{usuarioBean.usuario}"
+										value="#{usuario}" />
+								</a4j:commandLink>
+							</rich:column>
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['usuarios.consulta.eliminar']}" />
+								</f:facet>
+								<a4j:commandLink execute="@this" render="@none"
+									ajaxSingle="true"
+									oncomplete="#{rich:component('panelConfirmacionBorrado')}.show(); return false;">
+									<h:graphicImage value="/resources/images/icons/delete.png"
+										alt="Eliminar" title="Eliminar Registro"
+										style="float: inherit; height: 15px; width: 15px; border:0px;" />
+									<f:setPropertyActionListener target="#{usuarioBean.usuario}"
+										value="#{usuario}" />
+								</a4j:commandLink>
+							</rich:column>
+
+							<f:facet name="footer">
+								<rich:dataScroller page="#{usuarioBean.pagina}" for="tablaUsuarios" render="tablaUsuarios" fastControls="hide"/>
+							</f:facet>
+							
+						</rich:extendedDataTable>
+					</rich:panel>									
+				</div>
+				
+				<a4j:jsFunction name="eliminar" render="tablaUsuarios, alertPanel"
+					action="#{usuarioBean.eliminarUsuario}" execute="@this"
+					oncomplete="#{rich:component('alertPanel')}.show();" />
+						
+			</a4j:region>
+		</h:form>
+	</f:subview>
+</ui:composition>

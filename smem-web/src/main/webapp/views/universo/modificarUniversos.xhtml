@@ -1,0 +1,203 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<f:subview id="modal_editar_universos">
+		<h:form id="formEditarUniverso">		
+			<rich:popupPanel header="#{msg['universos.alta.titulo']}" id="editarUniverso" domElementAttachment="parent" width="650" height="670">
+				
+				<f:facet name="controls">
+					<h:outputLink value="#"
+						onclick="#{rich:component('editarUniverso')}.hide(); return false;">
+						<h:graphicImage value="/resources/images/icons/close.gif"
+							alt="Cerrar" style="float: inherit; height: 15px; width: 15px" />
+					</h:outputLink>
+				</f:facet>
+				
+				<t:panelGrid id="viewGrid" columns="4" columnClasses="primercolumna, segundacolumna, primercolumna, segundacolumna" width="520" style="margin-top:10px" colspan="10">
+					<h:outputText value="#{msg['universos.alta.inventario']}" />
+					<h:outputText value="#{universoBean.universo.inventario}" />
+					
+					<h:outputText value="#{msg['universos.alta.ur']}" />
+					<h:outputText value="#{universoBean.universo.claveUr}" />
+					
+					<h:outputText value="#{msg['universos.alta.ct']}" />
+					<h:outputText value="#{universoBean.universo.claveCt}" />
+					
+					<h:outputText value="#{msg['universos.alta.pf']}" />
+					<h:outputText value="#{universoBean.universo.clavePf}" />
+					
+					<h:outputText value="#{msg['universos.alta.cabm']}" />
+					<h:outputText value="#{universoBean.universo.cabm}" />
+					
+					<h:outputText value="#{msg['universos.alta.partida']}" />
+					<h:outputText value="#{universoBean.universo.partida}" />	
+					
+					<h:outputText value="#{msg['universos.alta.marca']}" />
+					<h:outputText value="#{universoBean.universo.marca}" />
+					
+					<h:outputText value="#{msg['universos.alta.modelo']}" />
+					<h:outputText value="#{universoBean.universo.modelo}" />
+					
+					<h:outputText value="#{msg['universos.alta.serie']}" />
+					<h:outputText value="#{universoBean.universo.serie}" />
+					
+					<h:outputText value="#{msg['universos.alta.ubicacion']}" />
+					<h:outputText value="#{universoBean.universo.obsubica}" />
+					
+					<h:outputText value="#{msg['universos.alta.proveedor']}" />
+					<h:outputText value="#{universoBean.universo.proveedorVentaEquipo}" />
+					
+					<h:outputText value="#{msg['universos.alta.fechaadquisicion']}" />
+					<h:outputText value="#{universoBean.universo.anioAdq}" />
+					
+					<h:outputText value="#{msg['universos.alta.precio']}" />
+					<h:outputText value="$ #{universoBean.universo.precioEquipoSinIva}">
+						<f:convertNumber currencySymbol="$" type="currency" />
+					</h:outputText>
+					
+					<h:outputText value="#{msg['universos.alta.funcionalidad']}" />
+					<h:outputText value="#{universoBean.universo.funcionalidad.descripcion}" />
+				</t:panelGrid>
+				
+				<t:panelGrid id="addGrid" columns="6" columnClasses="primercolumna, segundacolumna, segundacolumna, primercolumna, segundacolumna, segundacolumna" width="520" style="margin-top:10px" colspan="10">
+					<h:outputText value="#{msg['universos.alta.equipo']}" />
+					<h:selectOneMenu id="equipo" enableManualInput="false"
+						value="#{universoBean.idEquipo}" required="true"
+						requiredMessage="#{msg['equipo.mensaje.requerido']}"
+						style="width:170px">
+						<f:selectItems value="#{universoBean.equipos}" var="e"
+							itemLabel="#{e.equipo}" itemValue="#{e.idEquipo}" />
+						<a4j:ajax event="change" render="grupo, clave"
+							listener="#{universoBean.buscarGrupos}" /> 							
+					</h:selectOneMenu>
+					<rich:message for="equipo" />
+					
+					<h:outputText value="#{msg['universos.alta.grupo']}" />
+					<h:selectOneMenu id="grupo" enableManualInput="false"
+						value="#{universoBean.idGrupo}" required="true"
+						requiredMessage="#{msg['grupo.mensaje.requerido']}"
+						style="width:170px">
+						<f:selectItems value="#{universoBean.grupos}" var="g"
+							itemLabel="#{g.grupo}" itemValue="#{g.idGrupo}" />
+						<a4j:ajax event="change" render="clave"
+							listener="#{universoBean.buscarClaves}" /> 							
+					</h:selectOneMenu>
+					<rich:message for="grupo" />					
+					
+					<h:outputText value="#{msg['universos.alta.clave']}" />
+					<h:selectOneMenu id="clave" enableManualInput="false"
+						value="#{universoBean.idClave}" required="true"
+						requiredMessage="#{msg['clave.mensaje.requerido']}"
+						style="width:170px">
+						<f:selectItems value="#{universoBean.claves}" var="c"
+							itemLabel="#{c.clave}" itemValue="#{c.idClave}" />
+					</h:selectOneMenu>
+					<rich:message for="clave" />	
+															
+					<h:outputText value="#{msg['universos.alta.especialidad']}" />
+					<h:selectOneMenu id="especialidad" enableManualInput="false"
+						value="#{universoBean.universo.especialidad.idEspecialidad}" required="true"
+						requiredMessage="#{msg['especialidad.mensaje.requerido']}"
+						style="width:170px">
+						<f:selectItems value="#{universoBean.especialidades}" var="es"
+							itemLabel="#{es.especialidad}" itemValue="#{es.idEspecialidad}" />
+					</h:selectOneMenu>
+					<rich:message for="especialidad" />
+					
+					<h:outputText value="#{msg['universos.alta.sectoradq']}" />
+					<h:selectOneMenu id="sector" enableManualInput="false"
+						value="#{universoBean.universo.sectorAdq.idSectorAdq}" required="true"
+						requiredMessage="#{msg['sectoradq.mensaje.requerido']}"
+						style="width:170px">
+						<f:selectItem itemLabel="Seleccione..." />
+						<f:selectItems value="#{universoBean.sectoresAdq}" var="saq"
+							itemLabel="#{saq.sectorAdq}" itemValue="#{saq.idSectorAdq}" />
+					</h:selectOneMenu>
+					<rich:message for="sector" />
+					
+					<h:outputText value="#{msg['universos.alta.nocontratoadq']}" />
+					<h:inputText id="numeroContrato" value="#{universoBean.universo.noContratoAdq}"
+						required="true" requiredMessage="#{msg['nocontratoadq.mensaje.requerido']}" />
+					<rich:message for="numeroContrato" />
+					
+					<h:outputText value="#{msg['universos.alta.puestamarcha']}" />
+					<rich:calendar value="#{universoBean.universo.fechaInstalacion}" id="fechaInstalacion" 
+						datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px" style="width:200px" 
+						required="true" requiredMessage="#{msg['fechainstalacion.mensaje.requerido']}" />
+					<rich:message for="fechaInstalacion" />
+					
+					<h:outputText value="#{msg['universos.alta.fechaapertura']}" />
+					<rich:calendar value="#{universoBean.universo.fechaApertura}" id="fechaApertura" 
+						datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px" style="width:200px" 
+						required="true" requiredMessage="#{msg['fechaapertura.mensaje.requerido']}" />
+					<rich:message for="fechaApertura" />
+					
+					<h:outputText value="#{msg['universos.alta.terminogarantia']}" />
+					<rich:calendar value="#{universoBean.universo.fechaGarantia}" id="fechaGarantia" 
+						datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px" style="width:200px" 
+						required="true" requiredMessage="#{msg['fechagarantia.mensaje.requerido']}" />
+					<rich:message for="fechaGarantia" />
+					
+					<h:outputText value="#{msg['universos.alta.servicio']}" />
+					<h:selectBooleanCheckbox value="#{universoBean.requiereServicio}" />
+					<rich:message for="servicio" />					
+					
+					<h:outputText value="#{msg['universos.alta.observaciones']}" />
+					<t:panelGroup colspan="5">
+						<rich:message for="observaciones" />
+					</t:panelGroup>
+					<t:panelGroup colspan="6">
+						<h:inputTextarea id="observaciones" value="#{universoBean.universo.observaciones}" 
+	      					style="width:500px; resize: none;" rows="8">
+	      					<f:validateLength maximum="400" />
+						</h:inputTextarea>
+					</t:panelGroup>
+										
+					<h:outputText value="#{msg['universos.alta.numerolicitacion']}" />
+					<h:inputText id="numerolicitacion" value="#{universoBean.universo.numeroLicitacion}"
+						required="true" requiredMessage="#{msg['numerolicitacion.mensaje.requerido']}" />
+					<rich:message for="numerolicitacion" />
+					
+					<h:outputText value="#{msg['universos.alta.nivelatencion']}" />
+					<h:selectOneMenu id="nivelAtencion" enableManualInput="false"
+						value="#{universoBean.universo.nivelAtencion.idNivelAtencion}" required="true"
+						requiredMessage="#{msg['nivelatencion.mensaje.requerido']}"
+						style="width:170px">
+						<f:selectItem itemLabel="Seleccione..." />
+						<f:selectItems value="#{universoBean.nivelesAtencion}" var="n"
+							itemLabel="#{n.descripcion}" itemValue="#{n.idNivelAtencion}" />
+					</h:selectOneMenu>					
+					<rich:message for="nivelAtencion" />					
+					
+					<h:outputText value="#{msg['universos.alta.numerobitacora']}" />
+					<h:inputText id="numeroBitacora" value="#{universoBean.universo.numeroBitacora}"
+						converterMessage="#{msg['conversion.entero.mensaje']}" >
+						<f:convertNumber integerOnly="true"/>			
+					</h:inputText>		
+					<rich:message for="numeroBitacora" />
+										
+				</t:panelGrid>	
+				
+				<a4j:commandButton value="Actualizar" 
+					style="margin-left:110px; margin-top:10px"
+					image="/resources/images/icons/btnguardar.jpg"
+					render="tablaUniversos, alertPanel"
+					action="#{universoBean.editarUniverso}"
+					oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+					#{rich:component('alertPanel')}.show();  
+					#{rich:component('editarUniverso')}.hide();}" />
+				
+				<a4j:commandButton value="Cancelar"
+					image="/resources/images/icons/btncancelar.jpg"
+					onclick="#{rich:component('editarUniverso')}.hide(); return false;" />
+					
+			</rich:popupPanel>		
+		</h:form>
+	</f:subview>
+</ui:composition>

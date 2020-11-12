@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<f:subview id="modal_editar_contratos_Detalles">
+		<h:form id="formEditarContratosDetalles">
+			
+			<rich:popupPanel header="#{msg['contratosdetalles.editar.titulo']}" id="modificarDetalles"
+				domElementAttachment="parent" autosized="true">
+				
+				<t:panelGrid id="editGrid" columns="6">
+
+					<h:outputText value="#{msg['contratosdetalles.consulta.inicioperiodo']}" />
+															
+					<rich:calendar value="#{contratoDetalleBean.contratoDetalle.inicioPeriodo}" id="fechaInicio" 
+							datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px" style="width:200px" 
+							required="true" requiredMessage="#{msg['contratosdetalles.inicioperiodo.mensaje']}" 
+							validator="#{validacionBean.validaFechas}" />
+					<rich:message for="fechaInicio" />
+					
+					
+					<h:outputText value="#{msg['contratosdetalles.consulta.finperiodo']}" />
+												
+					<rich:calendar value="#{contratoDetalleBean.contratoDetalle.finPeriodo}" id="fechaFin" 
+						datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px" style="width:200px" 
+						required="true" requiredMessage="#{msg['contratosdetalles.finperiodo.mensaje']}" />
+					<rich:message for="fechaFin" />
+					
+					
+					<h:outputText value="#{msg['contratosdetalles.consulta.vigenciaminima']}" />
+						
+					<rich:calendar value="#{contratoDetalleBean.contratoDetalle.inicioVigencia}" id="inicioVigencia" 
+										datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px" style="width:200px" 
+										required="true" requiredMessage="#{msg['contratosdetalles.vigenciaminima.mensaje']}" />
+					<rich:message for="inicioVigencia" />
+					
+					
+					<h:outputText value="#{msg['smem.mes.enero']}" />
+										
+					<h:inputText value="#{contratoDetalleBean.contratoDetalle.enero}" id="enero"
+						required="true" requiredMessage="#{msg['contratosdetalles.monto.mensaje']}" >
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" />
+					</h:inputText>
+					<rich:message for="enero" />
+					
+								
+					<h:outputText value="#{msg['smem.mes.febrero']}" />		
+					
+					<h:inputText value="#{contratoDetalleBean.contratoDetalle.febrero}" id="febrero"
+						required="true" requiredMessage="#{msg['contratosdetalles.monto.mensaje']}" >
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" />
+					</h:inputText>
+					<rich:message for="febrero" />
+					
+									
+					<h:outputText value="#{msg['smem.mes.marzo']}" />
+														
+					<h:inputText value="#{contratoDetalleBean.contratoDetalle.marzo}" id="marzo"
+						required="true" requiredMessage="#{msg['contratosdetalles.monto.mensaje']}" >
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" />
+					</h:inputText>
+					<rich:message for="marzo" />
+					
+									
+					<h:outputText value="#{msg['smem.mes.abril']}" />
+													
+					<h:inputText value="#{contratoDetalleBean.contratoDetalle.abril}" id="abril"
+						required="true" requiredMessage="#{msg['contratosdetalles.monto.mensaje']}" >
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" />
+					</h:inputText>
+					<rich:message for="abril" />
+					
+									
+					<h:outputText value="#{msg['smem.mes.mayo']}" />	
+					
+					<h:inputText value="#{contratoDetalleBean.contratoDetalle.mayo}" id="mayo"
+						required="true" requiredMessage="#{msg['contratosdetalles.monto.mensaje']}" >
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" />
+					</h:inputText>
+					<rich:message for="mayo" />
+					
+								
+					<h:outputText value="#{msg['smem.mes.junio']}" />
+																
+					<h:inputText value="#{contratoDetalleBean.contratoDetalle.junio}" id="junio"
+						required="true" requiredMessage="#{msg['contratosdetalles.monto.mensaje']}" >
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" />
+					</h:inputText>
+					<rich:message for="junio" />
+					
+									
+					<h:outputText value="#{msg['smem.mes.julio']}" />
+													
+					<h:inputText value="#{contratoDetalleBean.contratoDetalle.julio}" id="julio"
+						required="true" requiredMessage="#{msg['contratosdetalles.monto.mensaje']}" >
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" />
+					</h:inputText>
+					<rich:message for="julio" />
+					
+																
+					<h:outputText value="#{msg['smem.mes.agosto']}" />
+												
+					<h:inputText value="#{contratoDetalleBean.contratoDetalle.agosto}" id="agosto"
+						required="true" requiredMessage="#{msg['contratosdetalles.monto.mensaje']}" >
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" />
+					</h:inputText>
+					<rich:message for="agosto" />
+					
+									
+					<h:outputText value="#{msg['smem.mes.septiembre']}" />	
+											
+					<h:inputText value="#{contratoDetalleBean.contratoDetalle.septiembre}" id="septiembre"
+						required="true" requiredMessage="#{msg['contratosdetalles.monto.mensaje']}" >
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" />
+					</h:inputText>
+					<rich:message for="septiembre" />
+					
+								
+					<h:outputText value="#{msg['smem.mes.octubre']}" />
+																
+					<h:inputText value="#{contratoDetalleBean.contratoDetalle.octubre}" id="octubre"
+						required="true" requiredMessage="#{msg['contratosdetalles.monto.mensaje']}" >
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" />
+					</h:inputText>
+					<rich:message for="octubre" />
+					
+								
+					<h:outputText value="#{msg['smem.mes.noviembre']}" />	
+												
+					<h:inputText value="#{contratoDetalleBean.contratoDetalle.noviembre}" id="noviembre"
+						required="true" requiredMessage="#{msg['contratosdetalles.monto.mensaje']}" >
+					<f:convertNumber maxFractionDigits="2" minFractionDigits="0" />
+					</h:inputText>
+					<rich:message for="noviembre" />
+					
+								
+					<h:outputText value="#{msg['smem.mes.diciembre']}" />
+																
+					<h:inputText value="#{contratoDetalleBean.contratoDetalle.diciembre}" id="diciembre"
+						required="true" requiredMessage="#{msg['contratosdetalles.monto.mensaje']}" >
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" />
+					</h:inputText>
+					<rich:message for="diciembre" />
+								
+					<t:panelGroup colspan="3"/>
+					<t:panelGroup colspan="6">
+						<a4j:commandButton value="Actualizar" render="tablaContratosDetalles, alertPanel"
+							action="#{contratoDetalleBean.actualizarContratoDetalle}"
+							oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+							#{rich:component('alertPanel')}.show();  
+							#{rich:component('modificarDetalles')}.hide();}" />
+						<a4j:commandButton value="Cancelar"
+							onclick="#{rich:component('modificarDetalles')}.hide(); return false;" />
+					</t:panelGroup>
+				</t:panelGrid>
+				
+				<f:facet name="controls">
+					<h:outputLink value="#"
+						onclick="#{rich:component('modificarDetalles')}.hide(); return false;">
+						<h:graphicImage value="/resources/images/icons/close.gif"
+							alt="Cerrar" style="float: inherit; height: 15px; width: 15px" />
+					</h:outputLink>
+				</f:facet>
+								
+			</rich:popupPanel>			
+		</h:form>
+	</f:subview>
+</ui:composition>

@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:b="http://bootsfaces.net/ui">
+	
+	<div style="border-bottom: solid 20px #6B696A; width:100%; height: 140px">
+		<h:graphicImage library="images" name="header.jpeg" style="width: 500px; height: 120px;"/>
+	</div>
+	<div style="text-align:right;">
+	 	<h:form>
+		<b:navBar>
+			<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL">
+				<b:navbarLinks>
+				    <b:dropMenu value="#{msg['menu.catalogos']}" >
+	                    <b:navCommandLink value="#{msg['menu.catalogos.centrotrabajo']}" action="#{centroTrabajoBean.inicializar()}" />
+						<b:navLink value="#{msg['menu.catalogos.clave']}" href="#"></b:navLink>
+						<b:navLink value="#{msg['menu.catalogos.equipo']}" href="#"></b:navLink>
+						<b:navLink value="#{msg['menu.catalogos.especialidad']}" href="#"></b:navLink>
+						<b:navLink value="#{msg['menu.catalogos.grupo']}" href="#"></b:navLink>								
+						<b:navLink value="#{msg['menu.catalogos.grupoclave']}" href="#"></b:navLink>	
+						<b:navLink value="#{msg['menu.catalogos.nivelatencion']}" href="#"></b:navLink>
+						<b:navLink value="#{msg['menu.catalogos.proveedor']}" href="#"></b:navLink>
+						<b:navLink value="#{msg['menu.catalogos.tipocontratacion']}" href="#"></b:navLink>
+						<b:navLink value="#{msg['menu.catalogos.subtipocontratacion']}" href="#"></b:navLink> 
+						<b:navLink value="#{msg['menu.catalogos.sectoradquisicion']}" href="#"></b:navLink>				    
+				    </b:dropMenu>	
+			    </b:navbarLinks>
+			</sec:authorize>	
+			<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL">
+				<b:navbarLinks>
+				    <b:dropMenu value="#{msg['menu.administracion']}" >
+						<b:navLink value="#{msg['menu.administracion.usuariossmem']}" href="#"></b:navLink>
+						<b:navLink value="#{msg['menu.administracion.usuariosproveedor']}" href="#"></b:navLink>			    
+				    </b:dropMenu>	
+			    </b:navbarLinks>
+		    </sec:authorize>
+			<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL">
+				<b:navbarLinks>
+					<b:dropMenu value="#{msg['menu.contratos']}">
+						<b:navLink value="#{msg['menu.contratos.administracion']}" />
+					</b:dropMenu>
+				</b:navbarLinks>
+			</sec:authorize>
+
+			<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL, ROLE_UNIDAD">
+				<b:navbarLinks>
+					<b:dropMenu value="#{msg['menu.programacionservicios']}">
+						<b:navLink value="#{msg['menu.equipomedico']}" />
+						<b:navCommandLink value="#{msg['menu.programacionservicios.servicios']}" action="#{programacionServicioBean.inicializar}"/>
+					</b:dropMenu>
+				</b:navbarLinks>
+			</sec:authorize>
+
+			<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL">
+				<b:navbarLinks>
+					<b:dropMenu value="#{msg['menu.desbloqueo']}">
+						<b:navLink value="#{msg['menu.desbloqueo.centrostrabajo']}"/>
+					</b:dropMenu>
+				</b:navbarLinks>
+			</sec:authorize>
+
+			<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL, ROLE_UNIDAD">
+				<b:navbarLinks>
+					<b:dropMenu value="Impresi&#243;n de Actas">
+						<b:navLink value="Imprimir Acta"/>
+					</b:dropMenu>
+				</b:navbarLinks>
+			</sec:authorize>
+
+			<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL">
+				<b:navbarLinks>
+					<b:dropMenu value="#{msg['menu.facturacion']}">
+						<b:navLink value="Objeto de Pago"/>
+						<b:navLink value="Penas Convencionales"/>
+					</b:dropMenu>
+				</b:navbarLinks>
+			</sec:authorize>
+
+			<sec:authorize ifAllGranted="ROLE_ADMINISTRADOR">
+				<b:navbarLinks>
+					<b:dropMenu value="#{msg['menu.configuracion']}">
+						<b:navLink value="Configuraciones"/>	
+					</b:dropMenu>	
+				</b:navbarLinks>
+			</sec:authorize>
+							
+			<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL">
+				<b:navbarLinks>
+					<b:dropMenu value="Bit&#225;cora">
+						<b:navCommandLink value="#{msg['menu.bitacora.consulta']}" action="#{bitacoraBean.inicializar}"/>
+					</b:dropMenu>
+				</b:navbarLinks>
+			</sec:authorize>			    
+			<b:navbarLinks>
+			    <b:dropMenu value="#{loginBean.nombreUsuario}" >
+			      <b:navLink value="Contactos" href="#"></b:navLink>
+			      <b:navLink value="Manual de usuario" href="#"></b:navLink>
+			      <b:navLink></b:navLink>
+			      <b:navCommandLink value="Cerrar sesi&#243;n" action="#{loginBean.doLogout()}" />
+			    </b:dropMenu>
+			</b:navbarLinks>
+		</b:navBar>
+		</h:form>
+	</div>
+</ui:composition>

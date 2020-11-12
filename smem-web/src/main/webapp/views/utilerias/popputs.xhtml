@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	>
+		
+		<!-- Ventana para confirmación de eliminación de un registro -->
+		<rich:popupPanel id="panelConfirmacionBorrado" modal="true" autosized="true" 
+			moveable="true" header="Confirmaci&oacute;n de borrado">
+			 <f:facet name="controls">
+				<h:outputLink value="#"
+					onclick="#{rich:component('panelConfirmacionBorrado')}.hide(); return false;">					
+					<h:graphicImage value="/resources/images/icons/close.gif" alt="Cerrar" 
+						style="float: inherit; height: 16px; width: 16px; border:0px;" />
+				</h:outputLink>
+			</f:facet>	
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/resources/images/icons/question.png" alt="ok" 
+				style="height:30px; width:30px; border:0px;"/>		
+				<p>¿Esta seguro que desea eliminar &eacute;ste registro?</p>
+			</h:panelGrid>	
+			<a4j:commandButton value="Eliminar" ajaxSingle="true"
+				image="/resources/images/icons/btnaceptar.jpg"
+				onclick="eliminar(); 
+				#{rich:component('panelConfirmacionBorrado')}.hide(); return false;" />
+			<a4j:commandButton value="Cancelar" ajaxSingle="true"
+				image="/resources/images/icons/btncancelar.jpg"
+				onclick="#{rich:component('panelConfirmacionBorrado')}.hide(); return false;" />
+		</rich:popupPanel>
+		<!-- Termina ventana para confirmación de eliminación de un registro -->
+		
+		
+		<!-- Ventana para confirmación de edición de un registro -->
+		<rich:popupPanel id="panelConfirmacionEdicion" modal="true" autosized="true" 
+			moveable="true" header="Confirmaci&oacute;n de Edici&oacute;n">
+			 <f:facet name="controls">
+				<h:outputLink value="#"
+					onclick="#{rich:component('panelConfirmacionEdicion')}.hide(); return false;">
+					<h:graphicImage value="/resources/images/icons/close.gif" alt="Cerrar" 
+						style="float: inherit; height: 16px; width: 16px; border:0px;" />
+				</h:outputLink>
+			</f:facet>	
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/resources/images/icons/question.png" alt="ok" 
+				style="height:30px; width:30px; border:0px;"/>		
+				<p>¿Esta seguro que desea editar &eacute;ste registro?</p>
+			</h:panelGrid>	
+			<a4j:commandButton value="Editar" ajaxSingle="true"
+				image="/resources/images/icons/btnaceptar.jpg"
+				onclick="editar(); 
+				#{rich:component('panelConfirmacionEdicion')}.hide(); return false;" />
+			<a4j:commandButton value="Cancelar" ajaxSingle="true"
+				image="/resources/images/icons/btncancelar.jpg"
+				onclick="#{rich:component('panelConfirmacionEdicion')}.hide(); return false;" />
+		</rich:popupPanel>
+		<!-- Termina ventana para confirmación de edición de un registro -->
+		
+		
+		<!-- Ventana para confirmación del guardado de un registro -->
+		<rich:popupPanel id="panelConfirmacionAdd" modal="true" autosized="true" 
+			moveable="true" header="Confirmaci&oacute;n de Alta">
+			 <f:facet name="controls">
+				<h:outputLink value="#"
+					onclick="#{rich:component('panelConfirmacionAdd')}.hide(); return false;">
+					<h:graphicImage value="/resources/images/icons/close.gif" alt="Cerrar" 
+						style="float: inherit; height: 16px; width: 16px; border:0px;" />
+				</h:outputLink>
+			</f:facet>	
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/resources/images/icons/question.png" alt="ok" 
+				style="height:30px; width:30px; border:0px;"/>		
+				<p>¿Esta seguro que desea guardar los datos?</p>
+			</h:panelGrid>	
+			<a4j:commandButton value="Aceptar" ajaxSingle="true"
+				image="/resources/images/icons/btnaceptar.jpg"
+				onclick="agregar(); 
+				#{rich:component('panelConfirmacionAdd')}.hide(); return false;" />
+			<a4j:commandButton value="Cancelar" ajaxSingle="true"
+				image="/resources/images/icons/btncancelar.jpg"
+				onclick="#{rich:component('panelConfirmacionAdd')}.hide(); return false;" />
+		</rich:popupPanel>
+		<!-- Termina ventana para confirmación del guardado de un registro -->
+		
+		<!-- Alerta de mensaje -->
+		<rich:popupPanel id="alertPanel" modal="true" onmaskclick="#{rich:component('alertPanel')}.hide()"
+			autosized="true" moveable="true" header="Notificaci&oacute;n">		   
+			<h:panelGrid columns="2">
+				<h:graphicImage value="#{alertaBean.imagen}" alt="ok" style="height:30px; width:30px"/>
+				<h:outputText value="#{alertaBean.mensaje}" />
+			</h:panelGrid>		
+			<h:commandButton value="Aceptar" ajaxSingle="true"
+				image="/resources/images/icons/btnaceptar.jpg"
+				onclick="#{rich:component('alertPanel')}.hide(); return false;" />
+		</rich:popupPanel>
+		<!-- Alerta de mensaje -->	
+		
+		<!-- Ventana para confirmación de eliminación de un registro -->
+		<rich:popupPanel id="panelConfirmacionBorradoDetalle" modal="true" autosized="true" 
+			moveable="true" header="Confirmaci&oacute;n de borrado">
+			 <f:facet name="controls">
+				<h:outputLink value="#"
+					onclick="#{rich:component('panelConfirmacionBorradoDetalle')}.hide(); return false;">					
+					<h:graphicImage value="/resources/images/icons/close.gif" alt="Cerrar" 
+						style="float: inherit; height: 16px; width: 16px; border:0px;" />
+				</h:outputLink>
+			</f:facet>	
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/resources/images/icons/question.png" alt="ok" 
+				style="height:30px; width:30px; border:0px;"/>		
+				<p>¿Esta seguro que desea eliminar &eacute;ste registro?</p>
+			</h:panelGrid>	
+			<a4j:commandButton value="Eliminar" ajaxSingle="true"
+				image="/resources/images/icons/btnaceptar.jpg"
+				onclick="eliminarDetalle(); 
+				#{rich:component('panelConfirmacionBorradoDetalle')}.hide(); return false;" />
+			<a4j:commandButton value="Cancelar" ajaxSingle="true"
+				image="/resources/images/icons/btncancelar.jpg"
+				onclick="#{rich:component('panelConfirmacionBorradoDetalle')}.hide(); return false;" />
+		</rich:popupPanel>
+		<!-- Termina ventana para confirmación de eliminación de un registro -->						
+	
+
+	
+</ui:composition>

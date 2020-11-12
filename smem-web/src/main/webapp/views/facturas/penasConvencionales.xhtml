@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/templates/templateMenu.xhtml">
+		
+	<ui:define name="header">
+		<ui:include src="/views/inicio/header.xhtml" />		
+	</ui:define>	
+	<ui:define name="leftColumn" style="position: relative;">
+		<ui:include src="/views/inicio/menu.xhtml"/>
+	</ui:define>
+	<ui:define name="content">
+		
+		<ui:include src="/views/utilerias/popputs.xhtml" />
+		
+		<f:subview id="facturacion">
+			<h:form id="formFacturacion">
+				<div align="center">
+					<rich:panel header="FACTURACIÓN">
+						<t:panelGrid id="consultarFactura" columns="3"  bgcolor='#F0F0F0' 
+							width="720" style="margin-bottom: 10px; border: 1px solid #000000 !important;">
+							
+							<t:panelGroup colspan="3" style="padding-bottom: 8px; padding-top:5px; text-align:center;">
+								<h:outputText value="PARAMETROS DE B&Uacute;SQUEDA" styleClass="titulo"/>
+							</t:panelGroup>
+							
+							<h:outputText value="Proveedor" styleClass="titulo"/>
+							<h:selectOneMenu id="proveedor" enableManualInput="false"
+							  value="#{facturaBean.proveedor.idProveedor}" required="true"
+							  style="width:220px"
+							  requiredMessage="Debe seleccionar un proveedor">
+							  <f:selectItems value="#{facturaBean.proveedores}" var="p" itemLabel="#{p.proveedor}" itemValue="#{p.idProveedor}" />
+							  <a4j:ajax event="change" render="contrato" listener="#{facturaBean.buscarContratos}" />	
+							</h:selectOneMenu>
+							<rich:message for="proveedor" />
+
+							<h:outputText value="Contrato" styleClass="titulo"/>
+							<h:selectOneMenu id="contrato" enableManualInput="false"
+							  value="#{facturaBean.contrato.idContrato}" required="true"
+							  style="width:220px"
+							  requiredMessage="Debe seleccionar un contrato">
+								<f:selectItems value="#{facturaBean.contratos}" var="c"
+									itemLabel="#{c.numeroContrato}" itemValue="#{c.idContrato}" />
+							</h:selectOneMenu>
+							<rich:message for="contrato" />
+							
+							<h:outputText value="#{msg['programacionservicios.consulta.tiposervicio']}" styleClass="titulo"/>
+							<h:selectOneMenu id="tipoServicio" enableManualInput="false" required="true"
+								style="width:220px"
+								value="#{facturaBean.tipoServicio}"
+								requiredMessage="El tipo de servicio es requerido">
+								<f:selectItems value="#{facturaBean.tiposServicio}" var="t"
+									itemLabel="#{t.descripcion}" itemValue="#{t}" />									
+							</h:selectOneMenu>
+							<rich:message for="tipoServicio" />
+
+							<h:outputText value="Mes" styleClass="titulo"/>
+							<h:selectOneMenu id="mes" enableManualInput="false" required="true"
+								style="width:220px"
+								value="#{facturaBean.mes}"
+								requiredMessage="El mes es requerido">
+								<f:selectItems value="#{facturaBean.meses}" var="m"
+									itemLabel="#{m.descripcion}" itemValue="#{m}" />									
+							</h:selectOneMenu>
+							<rich:message for="mes" />
+													
+							<t:panelGroup colspan="3" style="text-align:center">
+								<a4j:commandButton value="Buscar"
+									render="tablaPenalizaciones"
+									action="#{facturaBean.buscarRegistrosPenasConvencionales}" />
+							</t:panelGroup>
+						</t:panelGrid>
+						
+						<rich:toolbar id="barExporta" height="5" width="950px" itemSeparator="none">
+							<!-- Descargar excel -->
+							<rich:toolbarGroup location="left">
+								<h:outputText value="#{msg['contratosdetalles.consulta.exportardetalle']}"
+									styleClass="txt-white" />
+								<h:commandButton action="#{facturaBean.descargarExcel}" id="descargar" value="Descargar Excel" 
+												image="/resources/images/icons/download.png"/> 
+							</rich:toolbarGroup>
+						</rich:toolbar>							
+						<rich:extendedDataTable  id="tablaPenalizaciones" 
+							value="#{facturaBean.facturaDto.listaDetalles}"
+							var="detalleFactura"
+							noDataLabel="No existen registros de servicios"
+							style="position:relative; width: 950px; height:320px; text-align: center;"
+							sortMode="single" 
+							rowClasses="odd-row, even-row" rows="10"	
+							styleClass="txt-gray-small" >
+							
+							<rich:column width="50px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Id" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.idequipo}" />
+							</rich:column>
+
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Equipo" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.equipo}" />
+							</rich:column>
+							
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Marca" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.modelo}" />
+							</rich:column>
+							
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Modelo" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.marca}" />
+							</rich:column>
+							
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Serie" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.serie}" />
+							</rich:column>
+							
+							<rich:column width="100px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Inventario" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.inventario}" />
+							</rich:column>		
+							
+							<rich:column width="150px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Centro de Trabajo" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.centrotrabajo}" />
+							</rich:column>							
+
+							<rich:column width="120px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Tipo de Servicio" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.tiposervicio}" />
+							</rich:column>	
+							
+							<rich:column width="120px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="No. de Caso" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.folio}" />
+							</rich:column>		
+
+							<rich:column width="50px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Consecutivo" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.consecutivocontrato}" />
+							</rich:column>	
+
+							<rich:column width="70px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Fecha Inicial" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.fechainicial}" />
+							</rich:column>	
+
+							<rich:column width="70px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Fecha Final" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.fechalimite}" />
+							</rich:column>	
+
+							<rich:column width="70px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Fecha Real" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.fechareal}" />
+							</rich:column>	
+							
+							<rich:column width="100px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Costo Unitario" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.costo}">
+									 <f:convertNumber currencySymbol="$" type="currency" />
+								</h:outputText>
+							</rich:column>	
+							
+							<rich:column width="50px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Dias de Atraso" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.diasatraso}" />
+							</rich:column>		
+
+							<rich:column width="100px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Porcentaje Penas" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.porcentajepenalizacion}" />
+							</rich:column>		
+							
+							<rich:column width="100px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Penas Convencionales" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.penalizacion}">
+									 <f:convertNumber currencySymbol="$" type="currency" />
+								</h:outputText>
+							</rich:column>		
+	
+							<rich:column width="100px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Descuentos" />
+								</f:facet>
+								<h:outputText value="#{detalleFactura.descuento}">
+									 <f:convertNumber currencySymbol="$" type="currency" />
+								</h:outputText>
+							</rich:column>		
+
+							<rich:column width="100px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="Mes" />
+								</f:facet>
+								<h:outputText value="#{facturaBean.mes.descripcion}" />
+							</rich:column>		
+
+							<f:facet name="footer">
+								<rich:dataScroller page="#{facturaBean.pagina}" for="tablaPenalizaciones" render="tablaPenalizaciones" fastControls="hide"/>
+							</f:facet>
+						</rich:extendedDataTable>		
+									
+					</rich:panel>									
+				</div>
+			</h:form>
+		</f:subview>
+	</ui:define>
+	<ui:define name="footer">
+		<ui:include src="/views/inicio/footer.xhtml" />
+	</ui:define>
+</ui:composition>

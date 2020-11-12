@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<f:subview id="modal_editar_usuarios_proveedor">
+		<h:form id="formEditarUsuariosProveedor">
+			
+			<rich:popupPanel header="#{msg['usuariosproveedor.editar.titulo']}" id="editarUsuarioProveedor"
+				domElementAttachment="parent" width="400" height="280">
+				
+				<f:facet name="controls">
+					<h:outputLink value="#"
+						onclick="#{rich:component('editarUsuarioProveedor')}.hide(); return false;">
+						<h:graphicImage value="/resources/images/icons/close.gif"
+							alt="Cerrar" style="float: inherit; height: 15px; width: 15px; border:0px;" />
+					</h:outputLink>
+				</f:facet>
+								
+				<t:panelGrid id="editGrid" columns="3" columnClasses="even-row,odd-row" width="380" style="margin-top:10px">
+					
+					<h:outputText value="#{msg['usuariosproveedor.editar.usuario']}" styleClass="titulo"/>
+					<t:panelGroup colspan="2" >
+						<h:outputText value="#{usuarioProveedorBean.usuarioProveedor.usuario}" styleClass="txt-gray"/>
+					</t:panelGroup>
+									
+					<h:outputText value="#{msg['usuariosproveedor.editar.nombreusuario']}" styleClass="titulo"/>
+					<t:panelGroup colspan="2" >
+						<h:outputText value="#{usuarioProveedorBean.usuarioProveedor.nombreUsuario}" styleClass="txt-gray"/>
+					</t:panelGroup>
+									
+					<h:outputText value="#{msg['usuarios.editar.cambiarcontrasenia']}" styleClass="titulo" />
+					<t:panelGroup colspan="2">
+						<h:selectBooleanCheckbox value="#{usuarioProveedorBean.cambiarContrasenia}" >
+							<a4j:ajax event="click" listener="#{usuarioProveedorBean.muestraCampos}" render="editGrid" />
+						</h:selectBooleanCheckbox>
+					</t:panelGroup>
+											
+					<h:outputText value="#{msg['usuariosproveedor.editar.contrasenia']}" styleClass="titulo"/>
+					<h:inputSecret id="contrasenia" value="#{usuarioProveedorBean.usuarioProveedor.contrasenia}"
+						required="true" requiredMessage="#{msg['usuariosproveedor.contrasenia.mensaje']}" 
+						validator="#{validacionUsuarioBean.validaContrasenia}" redisplay="true" 
+						disabled="#{!usuarioProveedorBean.cambiarContrasenia}">
+						<f:validateLength minimum="8" />
+					</h:inputSecret>		
+					<rich:message for="contrasenia" />
+					
+					<h:outputText value="#{msg['usuariosproveedor.editar.confirmarcontrasenia']}" styleClass="titulo"/>
+					<h:inputSecret id="confirmarContrasenia" value="#{usuarioProveedorBean.usuarioProveedor.confirmarContrasenia}"
+						required="true" requiredMessage="#{msg['usuariosproveedor.confirmarcontrasenia.mensaje']}" 
+						redisplay="true" disabled="#{!usuarioProveedorBean.cambiarContrasenia}">
+						<f:validateLength minimum="8" />
+					</h:inputSecret>	
+					<rich:message for="confirmarContrasenia" />
+					
+					<h:outputText value="#{msg['usuariosproveedor.editar.estatus']}" styleClass="titulo"/>
+					<h:selectOneMenu id="estatus" enableManualInput="false"
+						value="#{usuarioProveedorBean.usuarioProveedor.baja}" required="true"
+						requiredMessage="#{msg['usuariosproveedor.estatus.mensaje']}">
+						<f:selectItems value="#{usuarioProveedorBean.estatus}" var="es"
+							itemLabel="#{es.descripcion}" itemValue="#{es}" />						 							
+					</h:selectOneMenu>											
+				</t:panelGrid>
+				
+				<a4j:commandButton value="Actualizar" render="tablaUsuariosProveedor, alertPanel"
+					style="margin-left:110px; margin-top:10px"
+					image="/resources/images/icons/btnguardar.jpg"
+					action="#{usuarioProveedorBean.editarUsuarioProveedor}"
+					oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+					#{rich:component('alertPanel')}.show();  
+					#{rich:component('editarUsuarioProveedor')}.hide();}" />
+				<a4j:commandButton value="Cancelar"
+					image="/resources/images/icons/btncancelar.jpg"
+					onclick="#{rich:component('editarUsuarioProveedor')}.hide(); return false;" />
+				
+			</rich:popupPanel>
+			
+		</h:form>
+	</f:subview>
+</ui:composition>

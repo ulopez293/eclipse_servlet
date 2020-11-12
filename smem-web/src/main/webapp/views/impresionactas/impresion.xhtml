@@ -1,0 +1,184 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/templates/templateMenu.xhtml">
+		
+	<ui:define name="header">
+		<ui:include src="/views/inicio/header.xhtml" />		
+	</ui:define>	
+	<ui:define name="leftColumn" style="position: relative;">
+		<ui:include src="/views/inicio/menu.xhtml"/>
+	</ui:define>
+	<ui:define name="content">
+		<!-- popups de mensages generales -->		
+		<ui:include src="/views/utilerias/popputs.xhtml" />
+				
+		<f:subview id="modal_impresiones">
+			<h:form id="formImpresiones">
+				<a4j:region>
+					<div align="center">
+						<rich:panel header="#{msg['acta.consulta.impresion']}">
+	
+							<t:panelGrid id="consultaActas" columns="4" bgcolor='#F0F0F0'
+								width="750" style="margin-bottom: 10px; border: 1px solid #000000 !important;text-align: left;">
+								
+								<t:panelGroup colspan="4" style="padding-bottom: 8px; padding-top:5px; text-align:center; bgcolor:gray;">
+									<h:outputText value="PARAMETROS DE BUSQUEDA" styleClass="titulo-red"/>
+								</t:panelGroup>
+									
+								<h:outputText value="#{msg['smem.etiqueta.entidad']}" styleClass="titulo"/>						
+								<h:selectOneMenu id="entidad" enableManualInput="false" required="true"
+									value="#{impresionActaBean.entidad}"
+									style="width:200px;">
+									<f:selectItems value="#{impresionActaBean.entidades}" var="e"
+										itemLabel="#{e.entidad}" itemValue="#{e.idEntidad}" />
+									<a4j:ajax event="change" render="unidadRegional, centroTrabajo"
+										listener="#{impresionActaBean.buscarUnidadesRegionales}" />	
+								</h:selectOneMenu>
+	
+								<h:outputText value="#{msg['smem.etiqueta.unidadregional']}" styleClass="titulo"/>			
+								<h:selectOneMenu id="unidadRegional" enableManualInput="false" required="true"
+									value="#{impresionActaBean.unidadRegional}"
+									style="width:200px;">
+									<f:selectItems value="#{impresionActaBean.unidadesRegionales}" var="u"
+										itemLabel="#{u.unidadRegional}" itemValue="#{u.idUnidadRegional}" />
+									<a4j:ajax event="change" render="centroTrabajo"
+										listener="#{impresionActaBean.buscarCentrosTrabajo}" />		
+								</h:selectOneMenu>
+	
+								<h:outputText value="#{msg['smem.etiqueta.centrotrabajo']}" styleClass="titulo"/>
+								<h:selectOneMenu id="centroTrabajo" enableManualInput="false" required="true"
+									value="#{impresionActaBean.centroTrabajo}"
+									style="width:200px;">
+									<f:selectItems value="#{impresionActaBean.centrosTrabajo}" var="c"
+										itemLabel="#{c.descripcion}" itemValue="#{c.idCentroTrabajo}" />									
+								</h:selectOneMenu>
+	
+								<h:outputText value="#{msg['contratos.alta.tiposervicio']}" styleClass="titulo"/>
+								<h:selectOneMenu id="tipoServicio" enableManualInput="false" required="true"
+									value="#{impresionActaBean.tipoServicio}"
+									style="width:200px;">
+									<f:selectItems value="#{impresionActaBean.tiposServicio}" var="t"
+										itemLabel="#{t.descripcion}" itemValue="#{t}" />									
+								</h:selectOneMenu>
+	
+								<h:outputText value="#{msg['smem.etiqueta.estatus']}" styleClass="titulo"/>							
+								<h:selectOneMenu enableManualInput="false" styleClass="width:120px"
+							     	value="#{impresionActaBean.estatus}"
+									style="width:200px;">
+							      	<f:selectItem itemLabel="Seleccione..."/>
+							      	<f:selectItems value="#{impresionActaBean.estatusServicio}" var="r" itemLabel="#{r.nombre}" itemValue="#{r}" />
+							    </h:selectOneMenu>
+							    
+						    	<h:outputText value="#{msg['smem.etiqueta.folio']}" styleClass="titulo"/>
+						    	<t:panelGroup>
+									<h:inputText id="folio" value="#{impresionActaBean.folio}" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, - y /">
+										<f:validateRegex pattern="[A-Za-z0-9ñÑ/-]*" />
+									</h:inputText>
+									<rich:message for="folio" />
+								</t:panelGroup>																
+								
+								<t:panelGroup colspan="4"/>
+								
+								<h:outputText value="#{msg['contratos.busqueda.fechainicio']}" styleClass="titulo"/>
+								<rich:calendar value="#{impresionActaBean.fechaInicio}"
+							      id="fechaInicio"
+							      datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px"
+							      style="width:200px"
+							      validator="#{validacionBean.validaFechas}">
+     							</rich:calendar>
+    							
+								<h:outputText value="#{msg['contratos.busqueda.fechafin']}" styleClass="titulo"/>
+								<rich:calendar value="#{impresionActaBean.fechaFin}"
+							      id="fechaFin"
+							      datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px"
+							      style="width:200px">
+     							</rich:calendar>
+								
+								<t:panelGroup colspan="4">
+									<rich:messages for="fechaFin" />
+								</t:panelGroup>								
+								
+								<t:panelGroup colspan="4" style="text-align:center">
+									<a4j:commandButton value="Buscar"
+										render="tablaProgramaciones"
+										action="#{impresionActaBean.buscarRegistros}" />
+								</t:panelGroup>
+							</t:panelGrid>				
+							
+							<rich:extendedDataTable  id="tablaProgramaciones" value="#{impresionActaBean.actas}" var="acta"
+								noDataLabel="No existen registros de servicios"
+								style="position:relative; width: 830px; height:inherit; text-align: center;"
+								sortMode="single" 
+								rowClasses="odd-row, even-row" rows="15"	
+								styleClass="txt-gray-small" >
+								
+								<rich:column width="220px" sorteable="false">
+									<f:facet name="header">	
+										<h:outputText value="#{msg['universos.consulta.idequipo']}" />
+									</f:facet>
+									<h:outputText value="#{acta.programacionServicio.solicitudServicio.contratoDetalle.universo.idUniverso}" />
+								</rich:column>
+								<rich:column width="220px" sorteable="false">
+									<f:facet name="header">	
+										<h:outputText value="#{msg['programacionservicios.consulta.folio']}" />
+									</f:facet>
+									<h:outputText value="#{acta.programacionServicio.folio}" />
+								</rich:column>
+								<rich:column width="170px">
+									<f:facet name="header">
+										<h:outputText value="#{msg['programacionservicios.consulta.estatus']}" />								
+									</f:facet>
+									<h:outputText value="#{acta.programacionServicio.estatus.nombre}" />
+								</rich:column>
+								<rich:column width="120px" sorteable="false">
+									<f:facet name="header">
+										<h:outputText value="#{msg['programacionservicios.consulta.fechaInicio']}" />
+									</f:facet>
+									<h:outputText value="#{acta.programacionServicio.solicitudServicio.fechaInicio}" />
+								</rich:column>
+								<rich:column width="120px" sorteable="false">
+									<f:facet name="header">
+										<h:outputText value="#{msg['programacionservicios.consulta.fechaVencimiento']}" />
+									</f:facet>
+									<h:outputText value="#{acta.programacionServicio.solicitudServicio.fechaFin}" />
+								</rich:column>
+								<rich:column width="80px" sorteable="false">
+									<f:facet name="header">
+										<h:outputText value="#{msg['programacionservicios.consulta.estatus']}" />
+									</f:facet>
+									<h:graphicImage value="/resources/images/icons/semaforo_#{acta.programacionServicio.solicitudServicio.colorSemaforo}.gif"
+											style="float: inherit; height: 15px; width: 15px" 
+											rendered="#{acta.programacionServicio.estatus.idEstatus != 6}"/>
+								</rich:column>							
+								<rich:column width="120px" sorteable="false">
+									<f:facet name="header">
+										<h:outputText value="Descargar Acta" />
+									</f:facet>
+								
+									<h:commandButton value="Descargar Acta"
+										image="/resources/images/icons/download.png"
+										action="#{impresionActaBean.descargarActa}">
+										<f:setPropertyActionListener target="#{impresionActaBean.acta}" value="#{acta}" />
+									</h:commandButton>
+								</rich:column>
+								<f:facet name="footer">
+									<rich:dataScroller page="#{impresionActaBean.pagina}" for="tablaProgramaciones" render="tablaProgramaciones" fastControls="hide"/>
+								</f:facet>
+							</rich:extendedDataTable >
+						</rich:panel>
+					</div>
+				</a4j:region>
+			</h:form>
+		</f:subview>
+	
+	</ui:define>
+	<ui:define name="footer">
+		<ui:include src="/views/inicio/footer.xhtml" />
+	</ui:define>
+</ui:composition>

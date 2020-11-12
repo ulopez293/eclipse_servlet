@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/templates/templateMenu.xhtml">
+		
+	<ui:define name="header">
+		<ui:include src="/views/inicio/header.xhtml" />		
+	</ui:define>	
+	<ui:define name="leftColumn" style="position: relative;">
+		<ui:include src="/views/inicio/menu.xhtml"/>
+	</ui:define>
+	<ui:define name="content">
+		<!-- popups de mensages generales -->		
+		<ui:include src="/views/utilerias/popputs.xhtml" />
+				
+		<f:subview id="modal_configuraciones">
+			<h:form id="formConfiguraciones">
+				<a4j:region>
+					<div align="center">
+						<rich:panel header="CONFIGURACIONES">
+	
+							<h:outputText value="PARAMETROS CONFIGURABLES" styleClass="titulo-red"/>
+							
+							<t:panelGrid columns="3" columnClasses="even-row,odd-row,odd-row" width="480px" style="margin-top:20px; ">
+
+								<t:panelGroup colspan="3" style="text-align:justity">
+								<h:outputText value="D&iacute;as de anticipaci&oacute;n con que se genera un servicio preventivo
+									antes de la fecha en que inicia el contrato." styleClass="txt-gray"/>
+								</t:panelGroup>
+								
+								<h:outputText value="D&iacute;as Preventivos" styleClass="titulo"/>						
+								<h:inputText id="preventivo" value="#{configuracionBean.configuracionDto.diasPreventivos}" 
+									size="8" required="true" requiredMessage="Este campo es requerido."/>
+								<rich:message for="preventivo" />
+							</t:panelGrid>		
+							
+							<t:panelGrid columns="3" columnClasses="even-row,odd-row,odd-row" width="480px" style="margin-top:20px">
+								<t:panelGroup colspan="3" style="text-align:justity">
+								<h:outputText value="D&iacute;as con los que cuenta el proveedor para atender un servicio 
+									correctivo." styleClass="txt-gray"/>	
+								</t:panelGroup>
+								
+								<h:outputText value="D&iacute;as Correctivos" styleClass="titulo"/>			
+								<h:inputText id="correctivo" value="#{configuracionBean.configuracionDto.diasCorrectivos}" 
+									size="8" required="true" requiredMessage="Este campo es requerido."/>
+								<rich:message for="correctivo" />
+							</t:panelGrid>		
+							
+							<t:panelGrid columns="3" columnClasses="even-row,odd-row,odd-row" width="480px" style="margin-top:20px">
+
+								<t:panelGroup colspan="3" style="text-align:justity">
+								<h:outputText value="D&iacute;as con los que cuenta la unidad m&eacute;dica para cancelar un servicio 
+									correctivo despu&eacute;s de la fecha de generaci&oacute;n del mismo." styleClass="txt-gray"/>	
+								</t:panelGroup>
+								
+								<h:outputText value="D&iacute;as cancela correctivo" styleClass="titulo"/>
+								<h:inputText id="correctivoC" value="#{configuracionBean.configuracionDto.diasCancelaCorrectivos}"
+									 size="8" required="true" requiredMessage="Este campo es requerido."/>
+								<rich:message for="correctivoC" />
+							</t:panelGrid>		
+									
+				
+							<a4j:commandButton value="Guardar"
+								style="margin-left:80px; margin-top:10px"
+								render="alertPanel"
+								image="/resources/images/icons/btnguardar.jpg"
+								action="#{configuracionBean.guardarConfiguracion}"
+								oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+									#{rich:component('alertPanel')}.show();}" />
+															
+						</rich:panel>
+					</div>
+				</a4j:region>
+			</h:form>
+		</f:subview>
+	
+	</ui:define>
+	<ui:define name="footer">
+		<ui:include src="/views/inicio/footer.xhtml" />
+	</ui:define>
+</ui:composition>

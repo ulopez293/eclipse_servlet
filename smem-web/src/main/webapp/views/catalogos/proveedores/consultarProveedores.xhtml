@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	
+	<f:subview id="modal_consulta_proveedores">
+		<h:form id="formConsultaProveedorse">
+			<a4j:region>
+				<div align="center">
+					<rich:panel header="#{msg['proveedores.consulta.titulo']}">
+					
+						<rich:toolbar id="bar" height="5" width="825px" itemSeparator="none">
+							<!-- Botón Alta de Proveedor -->
+							<rich:toolbarGroup location="right">
+								<h:outputText value="#{msg['proveedores.consulta.nuevoproveedor']}"  styleClass="txt-white"/>
+								<a4j:commandLink styleClass="no-decor" execute="@this"
+									render="agregarProveedor" ajaxSingle="true"
+									action="#{proveedorBean.limpiarProveedor}"
+									oncomplete="#{rich:component('agregarProveedor')}.show(); return false;">
+									<h:graphicImage value="/resources/images/icons/new.png"
+										alt="Nuevo" title="Nuevo Proveedor"
+										style="float: inherit; height: 30px; width: 30px" />
+								</a4j:commandLink>
+							</rich:toolbarGroup>
+							<!-- Termina Botón Alta de Proveedor -->
+						</rich:toolbar>
+												
+						<!-- Tabla para mostrar Registros de proveedores-->
+						<rich:extendedDataTable  id="tablaProveedores" value="#{proveedorBean.proveedores}" var="proveedor"
+							noDataLabel="No existen registros de proveedores"
+							style="position:relative; width: 820px; height:400px"
+							sortMode="single" 
+							rowClasses="odd-row, even-row" rows="15">
+						
+							<rich:column id="rfc" width="120px" style="text-align: left;">
+								<f:facet name="header">
+									<h:outputText value="#{msg['proveedores.consulta.rfc']}" />
+								</f:facet>
+								<h:outputText value="#{proveedor.rfc}" styleClass="txt-gray-small"/>
+							</rich:column>
+							<rich:column id="proveedor" width="200px" style="text-align: left;" >
+								<f:facet name="header">
+									<h:outputText value="#{msg['proveedores.consulta.nombre']}" />
+								</f:facet>
+								<h:outputText value="#{proveedor.proveedor}" styleClass="txt-gray-small"/>
+							</rich:column>
+							<rich:column id="telefono" width="200px" style="text-align: left;">
+								<f:facet name="header">
+									<h:outputText value="#{msg['proveedores.consulta.telefono']}" />
+								</f:facet>
+								<h:outputText value="#{proveedor.telefono}" styleClass="txt-gray-small"/>
+							</rich:column>
+							<rich:column id="correo" width="200px" style="text-align: left;">
+								<f:facet name="header">
+									<h:outputText value="#{msg['proveedores.consulta.correo']}" />
+								</f:facet>
+								<h:outputText value="#{proveedor.email}" styleClass="txt-gray-small"/>
+							</rich:column>
+							<rich:column id="direccion" width="300px" style="text-align: left;">
+								<f:facet name="header">
+									<h:outputText value="#{msg['proveedores.consulta.direccion']}" />
+								</f:facet>
+								<h:outputText value="#{proveedor.direccion}" styleClass="txt-gray-small"/>
+							</rich:column>
+							<rich:column id="representante" width="200px" style="text-align: left;">
+								<f:facet name="header">
+									<h:outputText value="#{msg['proveedores.consulta.representante']}" />
+								</f:facet>
+								<h:outputText value="#{proveedor.representanteLegal}" styleClass="txt-gray-small"/>
+							</rich:column>
+							<rich:column id="telefonoRepresentante" width="200px" style="text-align: left;">
+								<f:facet name="header">
+									<h:outputText value="#{msg['proveedores.consulta.telefonoR']}" />
+								</f:facet>
+								<h:outputText value="#{proveedor.telefonoRepresentanteLegal}" styleClass="txt-gray-small"/>
+							</rich:column>																																										
+							<rich:column id="estatus" width="140px">
+								<f:facet name="header">
+									<h:outputText value="#{msg['proveedores.consulta.estatus']}" />
+								</f:facet>
+								<h:outputText value="#{proveedor.baja.descripcion}" styleClass="txt-gray-small"/>
+							</rich:column>								
+							<rich:column width="80px" sorteable="false" style="text-align: center;">
+								<f:facet name="header">
+									<h:outputText value="#{msg['proveedores.consulta.modificar']}" />
+								</f:facet>
+								<a4j:commandLink render="editarProveedor"
+									oncomplete="#{rich:component('editarProveedor')}.show()">
+									<h:graphicImage value="/resources/images/icons/edit.png"
+										alt="editar" title="Editar Proveedor"
+										style="float: inherit; height: 12px; width: 12px; border:0px;" />
+									<f:setPropertyActionListener target="#{proveedorBean.proveedor}" value="#{proveedor}" />
+								</a4j:commandLink>
+							</rich:column>
+							<rich:column width="80px" sorteable="false" style="text-align: center;">
+								<f:facet name="header">
+									<h:outputText value="#{msg['proveedores.consulta.eliminar']}" />
+								</f:facet>
+								<a4j:commandLink styleClass="no-decor" execute="@this"
+									render="@none" ajaxSingle="true"
+									oncomplete="#{rich:component('panelConfirmacionBorrado')}.show(); return false;">
+									<h:graphicImage value="/resources/images/icons/delete.png"
+										alt="Eliminar" title="Eliminar Registro"
+										style="float: inherit; height: 15px; width: 15px; border:0px;" />
+									<f:setPropertyActionListener target="#{proveedorBean.proveedor}" value="#{proveedor}" />
+								</a4j:commandLink>
+							</rich:column>
+							<f:facet name="footer">
+								<rich:dataScroller page="#{proveedorBean.pagina}" for="tablaProveedores" render="tablaProveedores" fastControls="hide"/>
+							</f:facet>
+						</rich:extendedDataTable >
+					</rich:panel>
+					
+					<a4j:jsFunction name="eliminar" render="tablaProveedores,alertPanel"
+						action="#{proveedorBean.eliminarProveedor}" execute="@this"
+						oncomplete="#{rich:component('alertPanel')}.show();" />					
+				</div>
+			</a4j:region>
+		</h:form>
+	</f:subview>
+	
+</ui:composition>

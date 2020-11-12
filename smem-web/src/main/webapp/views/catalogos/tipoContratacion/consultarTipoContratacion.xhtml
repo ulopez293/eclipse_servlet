@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	
+	<f:subview id="modal_consulta_tipoContratacion">
+		<h:form id="formConsultaTiposContratacion">
+			<a4j:region>
+				<div align="center">
+					<!-- rich:panel header="#{msg['claves.consulta.titulo']}" -->
+					<rich:panel header="#{msg['tipoContratacion.consulta.titulo']}">
+						<rich:toolbar id="bar" height="5" width="725px" itemSeparator="none">
+							<!-- Botón Alta de Equipo -->
+							<rich:toolbarGroup location="right">
+								<h:outputText value="#{msg['tipoContratacion.consulta.nuevotipocontratacion']}"  styleClass="txt-white"/>
+								<a4j:commandLink styleClass="no-decor" execute="@this"
+									render="agregarTipoContratacion" ajaxSingle="true"
+									action="#{tipoContratacionBean.limpiarTipoContratacion}"
+									oncomplete="#{rich:component('agregarTipoContratacion')}.show(); return false;">
+									<h:graphicImage value="/resources/images/icons/new.png"
+										alt="Nuevo" title="Nuevo Tipo Contratación"
+										style="float: inherit; height: 30px; width: 30px" />
+								</a4j:commandLink>
+							</rich:toolbarGroup>
+							<!-- Termina Botón Alta de Curso --> 
+						</rich:toolbar>
+												
+						<!-- Tabla para mostrar Registros -->
+						<rich:extendedDataTable  id="tablaTiposContratacion" value="#{tipoContratacionBean.tiposContratacion}" var="tipoContratacion"
+							noDataLabel="No existen registros de Tipos Contratación"
+							style="position:relative; width: 720px; height:inherit"
+							sortMode="single" 
+							rowClasses="odd-row, even-row" rows="15"	
+							styleClass="txt-gray-small">
+						
+							<rich:column width="100px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['tipoContratacion.consulta.idtipocontratacion']}" />
+								</f:facet>
+								<h:outputText value="#{tipoContratacion.idTipoContratacion}" />
+							</rich:column>
+							<rich:column id="name" width="316px"
+										 filterValue="#{tipoContratacionFilteringBean.tipoContratacionFilter}"
+										 filterExpression="#{fn:containsIgnoreCase(tipoContratacion.tipoContratacion,tipoContratacionFilteringBean.tipoContratacionFilter)}"
+										 filterType="custom">
+								<f:facet name="header">
+									<h:panelGroup>
+										<h:outputText value="#{msg['tipoContratacion.consulta.tipocontratacion']}" />
+										<h:inputText value="#{tipoContratacionFilteringBean.tipoContratacionFilter}" label="TipoContratacion">
+                           					<a4j:ajax event="blur" render="tablaTiposContratacion" execute="@this"/>
+                       					</h:inputText>
+									</h:panelGroup>
+								</f:facet>
+								<h:outputText value="#{tipoContratacion.tipoContratacion}" />
+							</rich:column>
+							
+							<rich:column id="estatus" width="140px"
+										 filterValue="#{tipoContratacionFilteringBean.estatusFilter}"
+										 filterExpression="#{fn:startsWith(tipoContratacion.baja,tipoContratacionFilteringBean.estatusFilter)}"
+										 filterType="custom">
+								<f:facet name="header">
+									<h:outputText value="#{msg['tipoContratacion.consulta.estatus']}" />
+									<h:selectOneMenu enableManualInput="false" styleClass="width:120px"
+							      		value="#{tipoContratacionFilteringBean.estatusFilter}">
+							      		<f:selectItem itemLabel="Todos" itemValue="#{null}"/>
+							      		<f:selectItems value="#{tipoContratacionBean.estatus}" var="r" itemLabel="#{r.descripcion}" itemValue="#{r}" />
+							      		<a4j:ajax render="tablaTiposContratacion" execute="@this" event="change"/>
+							    	</h:selectOneMenu>									
+								</f:facet>
+								<h:outputText value="#{tipoContratacion.baja.descripcion}" />
+							</rich:column>								
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['tipoContratacion.consulta.modificar']}" />
+								</f:facet>
+								<a4j:commandLink render="editarTipoContratacion"
+									oncomplete="#{rich:component('editarTipoContratacion')}.show()">
+									<h:graphicImage value="/resources/images/icons/edit.png"
+										alt="editar" title="Editar Tipo Contrataci\u00F3n"
+										style="float: inherit; height: 12px; width: 12px; border:0px;" />
+									<f:setPropertyActionListener target="#{tipoContratacionBean.tipoContratacion}" value="#{tipoContratacion}" />
+								</a4j:commandLink>
+							</rich:column>
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['tipoContratacion.consulta.eliminar']}" />
+								</f:facet>
+								<a4j:commandLink styleClass="no-decor" execute="@this"
+									render="@none" ajaxSingle="true"
+									oncomplete="#{rich:component('panelConfirmacionBorrado')}.show(); return false;">
+									<h:graphicImage value="/resources/images/icons/delete.png"
+										alt="Eliminar" title="Eliminar Registro"
+										style="float: inherit; height: 25px; width: 25px" />
+									<f:setPropertyActionListener target="#{tipoContratacionBean.tipoContratacion}" value="#{tipoContratacion}" />
+								</a4j:commandLink>
+							</rich:column>
+
+							<f:facet name="footer">
+								<rich:dataScroller page="#{tipoContratacionBean.pagina}" for="tablaTiposContratacion" render="tablaTiposContratacion" fastControls="hide"/>
+							</f:facet>
+						</rich:extendedDataTable >
+					</rich:panel>
+					
+					<a4j:jsFunction name="eliminar" render="tablaTiposContratacion,alertPanel"
+						action="#{tipoContratacionBean.eliminarTipoContratacion}" execute="@this"
+						oncomplete="#{rich:component('alertPanel')}.show();" />					
+				</div>
+			</a4j:region>
+		</h:form>
+	</f:subview>
+	
+</ui:composition>

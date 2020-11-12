@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<f:subview id="modal_consultar_contratos">
+		<h:form ide="formConsultarContratos">
+			<a4j:region>
+				<div align="center">
+					<rich:panel header="#{msg['contratos.consulta.titulo']}">
+					
+						<t:panelGrid id="consultarContratosGrid" columns="4" bgcolor='#F0F0F0' 
+							width="855" style="margin-bottom: 10px; border: 1px solid #000000 !important;" >
+							
+							<t:panelGroup colspan="4" style="padding-bottom: 8px; padding-top:5px; text-align:center;">
+								<h:outputText value="#{msg['contratos.busqueda.titulo']}" styleClass="titulo"/>
+							</t:panelGroup>
+							
+							<h:outputText value="#{msg['contratos.busqueda.proveedor']}" styleClass="titulo" />
+							<h:selectOneMenu id="proveedor" enableManualInput="false" style="width:150px"
+								value="#{contratoBean.idProveedorBusqueda}" >
+						        <f:selectItem itemLabel="Seleccione..." />
+						        <f:selectItems value="#{contratoBean.proveedores}" var="p"
+									itemLabel="#{p.proveedor}" itemValue="#{p.idProveedor}" />
+						    </h:selectOneMenu>
+							
+						    <h:outputText value="#{msg['contratos.busqueda.estatus']}" styleClass="titulo"/>
+						    <h:selectOneMenu id="estatus" enableManualInput="false" 
+								value="#{contratoBean.estatusBusqueda}" >
+						        <f:selectItem itemLabel="Seleccione..." />
+						        <f:selectItems value="#{contratoBean.estatusContrato}" var="e"
+									itemLabel="#{e.descripcion}" itemValue="#{e}" />
+						    </h:selectOneMenu>							    							
+						    							
+							<h:outputText value="#{msg['contratos.busqueda.fechainicio']}" styleClass="titulo"/>
+							<rich:calendar value="#{contratoBean.fechaInicioBusqueda}" id="fechaInicio" 
+						        datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px" style="width:200px" 
+						        validator="#{validacionBean.validaFechas}" />
+    													
+							<h:outputText value="#{msg['contratos.busqueda.fechafin']}" styleClass="titulo"/>
+							<rich:calendar value="#{contratoBean.fechaFinBusqueda}" id="fechaFin" 
+						        datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px" style="width:200px" />
+						    
+					    	<t:panelGroup colspan="4">
+								<rich:messages for="fechaFin" />
+							</t:panelGroup>    
+						            							
+							<t:panelGroup colspan="4"/>
+							
+							<t:panelGroup colspan="4" style="text-align:center">
+								<a4j:commandButton value="Buscar" render="tablaContratos" 
+									action="#{contratoBean.buscarContratos}" />
+							</t:panelGroup>
+							
+						</t:panelGrid>
+					
+
+						<rich:toolbar id="barContratos" height="5" width="865px" itemSeparator="none">
+							<!-- actualizar detalle -->
+							<rich:toolbarGroup location="left">
+								<a4j:commandLink styleClass="no-decor" execute="@this"
+									render="tablaContratos, tablaContratosDetalles, barDetalles, alertPanel" ajaxSingle="true"
+									action="#{contratoDetalleBean.cargarDetalle}"
+									oncomplete="if(#{contratoDetalleBean.isNull}){ 
+                                     #{rich:component('alertPanel')}.show();}" >
+									<h:graphicImage value="/resources/images/icons/actualizar.jpg"
+										alt="Actualizar" title="Actualizar Contrato Detalles"
+										style="float: inherit; height: 30px; width: 30px; border:0px;" />
+								</a4j:commandLink>
+								<h:outputText value="#{msg['contratos.consulta.actualizar']}"
+									styleClass="txt-white" />							
+							</rich:toolbarGroup>
+							<!--actualizar detalle-->
+							
+							<!-- Botón Alta de Contrato -->
+							<rich:toolbarGroup location="right">
+								<h:outputText value="#{msg['contratos.consulta.agregarcontrato']}"
+									styleClass="txt-white" />
+								<a4j:commandLink styleClass="no-decor" execute="@this"
+									render="agregarContrato" ajaxSingle="true"
+									action="#{contratoBean.limpiarContrato}"
+									oncomplete="#{rich:component('agregarContrato')}.show(); return false;">
+									<h:graphicImage value="/resources/images/icons/new.png"
+										alt="Nuevo" title="Nuevo Contrato"
+										style="float: inherit; height: 30px; width: 30px" />
+								</a4j:commandLink>
+							</rich:toolbarGroup>
+							<!--Termina Botón Alta de Usuario -->
+						</rich:toolbar>
+
+						<!-- Tabla para mostrar Registros -->
+						<rich:extendedDataTable value="#{contratoBean.contratos}"
+							var="contrato" id="tablaContratos" rows="15"
+							rowClasses="odd-row, even-row" sortMode="single"
+							styleClass="txt-gray-small" 
+							selection="#{contratoBean.selection}"
+							style="position:relative; width: 860px; height:inherit"
+							noDataLabel="No existen registros de Contratos">
+							<a4j:ajax event="selectionchange"
+								listener="#{contratoBean.selectionListener}" 
+								render="tablaContratos, tablaContratosDetalles, barDetalles"/>				
+						
+							<rich:column>
+								<f:facet name="header">
+									<h:panelGroup>
+										<h:outputText value="#{msg['contratos.consulta.id']}" />										
+									</h:panelGroup>
+								</f:facet>
+								<h:outputText value="#{contrato.idContrato}" />
+							</rich:column>
+							<rich:column>
+								<f:facet name="header">	
+									<h:panelGroup>								
+										<h:outputText value="#{msg['contratos.consulta.numerocontrato']}" />										
+                					</h:panelGroup>
+								</f:facet>
+								<h:outputText value="#{contrato.numeroContrato}" />
+							</rich:column>
+							<rich:column width="100px">
+								<f:facet name="header">								
+									<h:outputText value="#{msg['contratos.consulta.tipocontratacion']}" />																
+								</f:facet>
+								<h:outputText value="#{contrato.tipoContratacion.tipoContratacion}" />
+							</rich:column>							
+							<rich:column>								
+								<f:facet name="header">
+									<h:outputText value="#{msg['contratos.consulta.proveedor']}" />									
+								</f:facet>								
+								<h:outputText value="#{contrato.proveedor.proveedor}" />
+							</rich:column>
+							<rich:column>								
+								<f:facet name="header">
+									<h:outputText value="#{msg['contratos.consulta.fechasubscripcion']}" />									
+								</f:facet>								
+								<h:outputText value="#{contrato.fechaSuscripcion}" />
+							</rich:column>
+							<rich:column>								
+								<f:facet name="header">
+									<h:outputText value="#{msg['contratos.consulta.oficiosubpartida']}" />									
+								</f:facet>								
+								<h:outputText value="#{contrato.oficioSufPresupuestal}" />
+							</rich:column>
+							<rich:column>								
+								<f:facet name="header">
+									<h:outputText value="#{msg['contratos.consulta.salariominimo']}" />									
+								</f:facet>								
+								<h:outputText value="#{contrato.montoMinimo}">
+									<f:convertNumber maxFractionDigits="2" groupingUsed="true" 
+										currencySymbol="$" maxIntegerDigits="7" type="currency" />
+								</h:outputText>
+							</rich:column>
+							<rich:column>								
+								<f:facet name="header">
+									<h:outputText value="#{msg['contratos.consulta.salariomaximo']}" />									
+								</f:facet>								
+								<h:outputText value="#{contrato.montoMaximo}">
+									<f:convertNumber maxFractionDigits="2" groupingUsed="true" 
+										currencySymbol="$" maxIntegerDigits="7" type="currency" />
+								</h:outputText>
+							</rich:column>
+							<rich:column>								
+								<f:facet name="header">
+									<h:outputText value="#{msg['contratos.consulta.vigenciaminima']}" />									
+								</f:facet>								
+								<h:outputText value="#{contrato.vigenciaInicioContrato}" />
+							</rich:column>
+							<rich:column>								
+								<f:facet name="header">
+									<h:outputText value="#{msg['contratos.consulta.vigenciamaxima']}" />									
+								</f:facet>								
+								<h:outputText value="#{contrato.vigenciaFinContrato}" />
+							</rich:column>
+							<rich:column>								
+								<f:facet name="header">
+									<h:outputText value="#{msg['contratos.consulta.tiposervicio']}" />									
+								</f:facet>								
+								<h:outputText value="#{contrato.tipoServicio.descripcion}" />
+							</rich:column>
+							<rich:column>								
+								<f:facet name="header">
+									<h:outputText value="#{msg['contratos.consulta.estatus']}" />									
+								</f:facet>								
+								<h:outputText value="#{contrato.estatus.descripcion}" />
+							</rich:column>
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['contratos.consulta.modificar']}" />
+								</f:facet>
+								<a4j:commandLink render="editarContrato, idContratoHidden"
+									oncomplete="#{rich:component('editarContrato')}.show()">
+									<h:graphicImage value="/resources/images/icons/edit.png"
+										alt="editar" title="Editar Contrato"
+										style="float: inherit; height: 12px; width: 12px; border:0px;" />
+									<f:setPropertyActionListener target="#{contratoBean.contrato}"
+										value="#{contrato}" />
+								</a4j:commandLink>
+							</rich:column>
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['contratos.consulta.eliminar']}" />
+								</f:facet>
+								<a4j:commandLink execute="@this" render="@none"
+									ajaxSingle="true"
+									oncomplete="#{rich:component('panelConfirmacionBorrado')}.show(); return false;">
+									<h:graphicImage value="/resources/images/icons/delete.png"
+										alt="Eliminar" title="Eliminar Registro"
+										style="float: inherit; height: 15px; width: 15px" />
+									<f:setPropertyActionListener target="#{contratoBean.contrato}"
+										value="#{contrato}" />
+								</a4j:commandLink>
+							</rich:column>
+
+							<f:facet name="footer">
+								<rich:dataScroller page="#{contratoBean.pagina}" for="tablaContratos" render="tablaContratos" fastControls="hide"/>
+							</f:facet>
+							
+						</rich:extendedDataTable>
+					</rich:panel>									
+				</div>
+				
+				<a4j:jsFunction name="eliminar" render="tablaContratos, alertPanel"
+					action="#{contratoBean.eliminarContrato}" execute="@this"
+					oncomplete="#{rich:component('alertPanel')}.show();" />
+						
+			</a4j:region>
+		</h:form>
+	</f:subview>
+</ui:composition>

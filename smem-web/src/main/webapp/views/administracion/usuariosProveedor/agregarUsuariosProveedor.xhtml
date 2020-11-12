@@ -1,0 +1,83 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<f:subview id="modal_agregar_usuarios_proveedor">
+		<h:form id="formAgregarUsuariosProveedor">		
+			<rich:popupPanel header="#{msg['usuariosproveedor.alta.titulo']}" id="agregarUsuarioProveedor"
+				domElementAttachment="parent" width="400" height="280">
+				
+				<f:facet name="controls">
+					<h:outputLink value="#"
+						onclick="#{rich:component('agregarUsuarioProveedor')}.hide(); return false;">
+						<h:graphicImage value="/resources/images/icons/close.gif"
+							alt="Cerrar" style="float: inherit; height: 15px; width: 15px; border:0px;" />
+					</h:outputLink>
+				</f:facet>
+								
+				<t:panelGrid id="addGrid" columns="3" columnClasses="even-row,odd-row" width="380" style="margin-top:10px">
+									
+					<h:outputText value="#{msg['usuariosproveedor.alta.proveedor']}"  styleClass="titulo"/>
+					<h:selectOneMenu id="proveedor" enableManualInput="false"
+						style="width:200px;"
+						value="#{usuarioProveedorBean.usuarioProveedor.proveedor.idProveedor}" required="true"
+						requiredMessage="#{msg['usuariosproveedor.proveedor.mensaje']}">
+						<f:selectItem itemLabel="Seleccione..." />
+						<f:selectItems value="#{usuarioProveedorBean.proveedores}" var="p"
+							itemLabel="#{p.proveedor}" itemValue="#{p.idProveedor}" />
+						<a4j:ajax event="change" render="usuario, nombreUsuario, usuarioHidden"
+							listener="#{usuarioProveedorBean.generaNombreUsuarioProveedor}" /> 							
+					</h:selectOneMenu>
+					<rich:message for="proveedor" />
+														
+					<h:outputText value="#{msg['usuariosproveedor.alta.usuario']}" styleClass="titulo"/>
+					<h:inputText id="usuario" value="#{usuarioProveedorBean.usuarioProveedor.usuario}"
+						required="true" requiredMessage="#{msg['usuariosproveedor.usuario.mensaje']}" 
+						disabled="true" />
+					<rich:message for="usuario" />
+					
+					<h:outputText value="#{msg['usuariosproveedor.alta.nombreusuario']}" styleClass="titulo"/>
+					<h:inputText id="nombreUsuario" value="#{usuarioProveedorBean.usuarioProveedor.nombreUsuario}"
+						required="true" requiredMessage="#{msg['usuariosproveedor.nombreusuario.mensaje']}" 
+						disabled="true"
+						size="45"/>
+					<rich:message for="nombreUsuario" />					
+					
+					<h:outputText value="#{msg['usuariosproveedor.alta.contrasenia']}" styleClass="titulo"/>
+					<h:inputSecret id="contrasenia" value="#{usuarioProveedorBean.usuarioProveedor.contrasenia}"
+						required="true" requiredMessage="#{msg['usuariosproveedor.contrasenia.mensaje']}" 
+						validator="#{validacionUsuarioBean.validaContrasenia}" >
+						<f:validateLength minimum="8" />
+					</h:inputSecret>
+					<rich:message for="contrasenia" />
+					
+					<h:outputText value="#{msg['usuariosproveedor.alta.confirmarcontrasenia']}" styleClass="titulo"/>
+					<h:inputSecret id="confirmarContrasenia" value="#{usuarioProveedorBean.usuarioProveedor.confirmarContrasenia}"
+						required="true" requiredMessage="#{msg['usuariosproveedor.confirmarcontrasenia.mensaje']}" >
+						<f:validateLength minimum="8" />
+					</h:inputSecret>	
+					<rich:message for="confirmarContrasenia" />					
+				</t:panelGrid>
+				
+				<a4j:commandButton value="Guardar" render="tablaUsuariosProveedor, alertPanel"
+					style="margin-left:110px; margin-top:10px"
+					image="/resources/images/icons/btnguardar.jpg"
+					action="#{usuarioProveedorBean.agregarUsuarioProveedor}"
+					oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+					#{rich:component('alertPanel')}.show();  
+					#{rich:component('agregarUsuarioProveedor')}.hide();}" />
+				<a4j:commandButton value="Cancelar"
+					image="/resources/images/icons/btncancelar.jpg"
+					onclick="#{rich:component('agregarUsuarioProveedor')}.hide(); return false;" />
+									
+			</rich:popupPanel>
+		
+		</h:form>
+	</f:subview>
+</ui:composition>

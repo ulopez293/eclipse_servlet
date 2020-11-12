@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<f:subview id="modal_editar_usuarios">
+		<h:form id="formEditarUsuarios">
+			
+			<rich:popupPanel header="#{msg['usuarios.editar.titulo']}" id="editarUsuario"
+				domElementAttachment="parent" width="400" height="340">
+				
+				<f:facet name="controls">
+					<h:outputLink value="#"
+						onclick="#{rich:component('editarUsuario')}.hide(); return false;">
+						<h:graphicImage value="/resources/images/icons/close.gif"
+							alt="Cerrar" style="float: inherit; height: 15px; width: 15px; border:0px;" />
+					</h:outputLink>
+				</f:facet>
+					
+				<t:panelGrid id="editGrid" columns="3" columnClasses="primercolumna, segundacolumna" width="380" style="margin-top:10px">
+					
+					<h:outputText value="#{msg['usuarios.editar.perfil']}" styleClass="titulo"/>					
+					<t:panelGroup colspan="2" >
+						<h:outputText value="#{usuarioBean.usuario.rol.descripcionRol}" styleClass="txt-gray"/>
+					</t:panelGroup>
+					
+					<h:outputText value="#{msg['usuarios.editar.entidad']}" styleClass="titulo"/>					
+					<t:panelGroup colspan="2" >
+						<h:outputText value="#{usuarioBean.usuario.centroTrabajo.unidadRegional.entidad.entidad}" styleClass="txt-gray"/>
+					</t:panelGroup>
+					
+					<h:outputText value="#{msg['usuarios.editar.unidadregional']}"  styleClass="titulo"/>					
+					<t:panelGroup colspan="2" >
+						<h:outputText value="#{usuarioBean.usuario.centroTrabajo.unidadRegional.unidadRegional}" styleClass="txt-gray"/>
+					</t:panelGroup>
+					
+					<h:outputText value="#{msg['usuarios.editar.centrotrabajo']}"  styleClass="titulo"/>					
+					<t:panelGroup colspan="2" >
+						<h:outputText value="#{usuarioBean.usuario.centroTrabajo.descripcion}" styleClass="txt-gray"/>
+					</t:panelGroup>
+					
+					<h:outputText value="#{msg['usuarios.editar.usuario']}"  styleClass="titulo"/>
+					<t:panelGroup colspan="2" >
+						<h:outputText value="#{usuarioBean.usuario.usuario}" styleClass="txt-gray"/>
+					</t:panelGroup>
+					
+					<h:outputText value="#{msg['usuarios.editar.nombreusuario']}"  styleClass="titulo"/>
+					<t:panelGroup colspan="2" >
+						<h:outputText value="#{usuarioBean.usuario.nombreUsuario}" styleClass="txt-gray"/>
+					</t:panelGroup>	
+					
+					<h:outputText value="#{msg['usuarios.editar.cambiarcontrasenia']}" styleClass="titulo" />
+					<t:panelGroup colspan="2">
+						<h:selectBooleanCheckbox value="#{usuarioBean.cambiarContrasenia}" >
+							<a4j:ajax event="click" listener="#{usuarioBean.muestraCampos}" render="editGrid" />
+						</h:selectBooleanCheckbox>
+					</t:panelGroup>
+					
+					<h:outputText value="#{msg['usuarios.alta.contrasenia']}"  styleClass="titulo"/>
+					<h:inputSecret id="contrasenia" value="#{usuarioBean.usuario.contrasenia}"
+						required="true" requiredMessage="#{msg['usuarios.contrasenia.mensaje']}" 
+						validator="#{validacionUsuarioBean.validaContrasenia}" redisplay="true"
+						disabled="#{!usuarioBean.cambiarContrasenia}" >
+						<f:validateLength minimum="8" />
+					</h:inputSecret>	
+					<rich:message for="contrasenia" />
+					
+					<h:outputText value="#{msg['usuarios.alta.confirmarcontrasenia']}" styleClass="titulo"/>
+					<h:inputSecret id="confirmarContrasenia" value="#{usuarioBean.usuario.confirmarContrasenia}"
+						required="true" requiredMessage="#{msg['usuarios.confirmarcontrasenia.mensaje']}" 
+						redisplay="true" disabled="#{!usuarioBean.cambiarContrasenia}" />
+					<rich:message for="confirmarContrasenia" />
+					
+					<h:outputText value="#{msg['usuarios.editar.estatus']}"  styleClass="titulo"/>
+					<h:selectOneMenu id="estatus" enableManualInput="false" styleClass="txt-gray"
+						value="#{usuarioBean.usuario.baja}" required="true"
+						requiredMessage="#{msg['usuarios.estatus.mensaje']}">
+						<f:selectItems value="#{usuarioBean.estatus}" var="es"
+							itemLabel="#{es.descripcion}" itemValue="#{es}" />						 							
+					</h:selectOneMenu>
+				</t:panelGrid>
+
+				<a4j:commandButton value="Actualizar" render="tablaUsuarios, alertPanel"
+					style="margin-left:110px; margin-top:10px"
+					image="/resources/images/icons/btnaceptar.jpg"
+					action="#{usuarioBean.editarUsuario}"
+					oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+					#{rich:component('alertPanel')}.show();  
+					#{rich:component('editarUsuario')}.hide();}" />
+				<a4j:commandButton value="Cancelar"
+					image="/resources/images/icons/btncancelar.jpg"
+					onclick="#{rich:component('editarUsuario')}.hide(); return false;" />
+									
+			</rich:popupPanel>
+			
+		</h:form>
+	</f:subview>
+</ui:composition>

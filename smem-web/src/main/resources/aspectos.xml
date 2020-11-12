@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+               
+    <bean id="bitacora" class=" mx.inntecsa.smem.aspect.BitacoraWebAspect" scope="singleton" />
+    
+    <aop:config>
+        <aop:aspect id="actualizarServicesAspect" ref="bitacora">
+            <aop:pointcut id="actBitacoraServicesPointCut" expression="execution (*  mx.inntecsa.smem.service.impl.*ServiceImpl.actualizar*(..)) &amp;&amp; target(target)"/>
+            <aop:after-returning 
+                method="actualizar"
+                pointcut-ref="actBitacoraServicesPointCut"
+                arg-names="jp, target, ret"
+                returning="ret" />
+        </aop:aspect> 
+        <aop:aspect id="guardarServicesAspect" ref="bitacora">
+            <aop:pointcut id="guardarBitacoraServicesPointCut" expression="execution (*  mx.inntecsa.smem.service.impl.*ServiceImpl.guardar*(..)) &amp;&amp; target(target)"/>
+            <aop:after-returning 
+                method="guardar"
+                pointcut-ref="guardarBitacoraServicesPointCut"
+                arg-names="jp, target, ret"
+                returning="ret" />
+        </aop:aspect>
+        <aop:aspect id="eliminarServicesAspect" ref="bitacora">
+            <aop:pointcut id="eliminarBitacoraServicesPointCut" expression="execution (*  mx.inntecsa.smem.service.impl.*ServiceImpl.eliminar*(..)) &amp;&amp; target(target)"/>
+            <aop:after-returning 
+                method="eliminar"
+                pointcut-ref="eliminarBitacoraServicesPointCut"
+                arg-names="jp, target, ret"
+                returning="ret" />
+        </aop:aspect> 
+    </aop:config>     
+ 			
+</beans>

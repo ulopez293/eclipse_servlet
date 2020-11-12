@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+	<f:subview id="modal_editar_grupoclave">
+		<h:form id="formEditar-grupoClave">
+			
+			<rich:popupPanel header="#{msg['grupoClave.editar.editargrupoclave']}" id="editarGrupoClave" domElementAttachment="parent" autosized="true">
+				
+				<f:facet name="controls">
+					<h:outputLink value="#"
+						onclick="#{rich:component('editarGrupoClave')}.hide(); return false;">
+						<h:graphicImage value="/resources/images/icons/close.gif"
+							alt="Cerrar" style="float: inherit; height: 15px; width: 15px; border:0px;" />
+					</h:outputLink>
+				</f:facet>
+				
+				<t:panelGrid id="editarGrid" columns="3" columnClasses="even-row,odd-row" width="380" style="margin-top:10px">
+					
+					<h:outputText value="#{msg['grupoClave.editar.grupo']}" />
+					<h:selectOneMenu id="idGrupo" enableManualInput="false" style="width:230px" 
+												 value="#{grupoClaveBean.grupoClave.grupo.idGrupo}" required="true"
+												 requiredMessage="Es necesario elegir un grupo"> 
+									<f:selectItems value="#{grupoClaveBean.grupos}" var="g"
+										itemLabel="#{g.grupo}" itemValue="#{g.idGrupo}" />
+					</h:selectOneMenu>
+					<rich:message for="idGrupo" />
+					<h:outputText value="#{msg['grupoClave.nuevo.clave']}" />
+					<h:selectOneMenu id="idClave" enableManualInput="false" style="width:230px" 
+												 value="#{grupoClaveBean.grupoClave.clave.idClave}" required="true"
+												 requiredMessage="Es necesario elegir una clave">
+									<f:selectItems value="#{grupoClaveBean.claves}" var="c"
+										itemLabel="#{c.clave}" itemValue="#{c.idClave}" />
+					</h:selectOneMenu>
+					<rich:message for="idClave" />
+					<h:outputText value="#{msg['grupoClave.editar.equipo']}" />
+					<h:selectOneMenu id="idEquipo" enableManualInput="false" style="width:230px" 
+												 value="#{grupoClaveBean.grupoClave.equipo.idEquipo}" required="true"
+												 requiredMessage="Es necesario elegir un equipo"> 
+									<f:selectItems value="#{grupoClaveBean.equipos}" var="e"
+										itemLabel="#{e.equipo}" itemValue="#{e.idEquipo}" />
+					</h:selectOneMenu>
+					<rich:message for="idEquipo" />
+					<h:outputText value="#{msg['grupoClave.editar.estatus']}" />
+				    <h:selectOneMenu id="estatus" enableManualInput="false"
+				      value="#{grupoClaveBean.grupoClave.baja}" required="true"
+				      requiredMessage="El estatus es requerido">
+				      <f:selectItems value="#{grupoClaveBean.estatus}" var="r"
+				       	itemLabel="#{r.descripcion}" itemValue="#{r}" />
+				    </h:selectOneMenu>
+				    <rich:message for="estatus" />
+				</t:panelGrid>
+				
+				<a4j:commandButton value="Actualizar"
+					style="margin-left:110px; margin-top:10px"
+					image="/resources/images/icons/btnguardar.jpg"				
+					render="tablaGruposClave , alertPanel"
+					action="#{grupoClaveBean.actualizarGrupoClave}"
+					oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+					#{rich:component('alertPanel')}.show();  
+					#{rich:component('editarGrupoClave')}.hide();}" />
+				<a4j:commandButton value="Cancelar"
+					image="/resources/images/icons/btncancelar.jpg"
+					onclick="#{rich:component('editarGrupoClave')}.hide(); return false;" />
+											
+			</rich:popupPanel>
+			
+		</h:form>
+	</f:subview>
+	
+</ui:composition>

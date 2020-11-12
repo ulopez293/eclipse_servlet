@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<h:head>
+	<title>INNTECSA</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<!-- Por default busca en la carpeta resources-->
+	<h:outputStylesheet library="css" name="template.css"  /> 
+	<h:outputStylesheet library="css" name="smem.css"  /> 
+</h:head>
+
+<h:body>
+	<div id="outerWrapper">
+		<div>
+			<div id="header">
+				<ui:insert name="header" />
+			</div>
+			<div id="content">			
+				<ui:insert name="content" />						
+			</div>
+		</div>			
+	</div>
+</h:body>
+</html>

@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:b="http://bootsfaces.net/ui">
+
+	<div style="text-align:right; margin-top: 20px;">
+		  <button id="newCT" class="btn btn-info btn-lg" style="margin: 10px;align:right;"
+		  	data-target="#agregarCentroTrabajoModal" data-toggle="modal">Agregar centro de trabajo
+		  </button>
+    </div>
+	<h:form id="formConsultarCentrosTrabajo">
+			<div align="center" style="margin-top: 20px; width: 100%;">
+				<b:panel title="#{msg['centrostrabajo.consulta.titulo']}" collapsible="false">
+					<!-- Tabla para mostrar Registros -->
+					<b:dataTable value="#{centroTrabajoBean.centrosTrabajo}"
+						var="centroTrabajo" 
+						id="tablaCentrosTrabajo" 
+						page-length="15"
+						excel="true"
+					    pdf="true"
+					    styleClass="tablaCentrosTrabajo">
+						
+						<b:dataTableColumn label="#{msg['centrostrabajo.consulta.id']}">
+							<h:outputText value="#{centroTrabajo.idCentroTrabajo}"/>
+						</b:dataTableColumn>																														
+						<b:dataTableColumn style="text-align: left;"  label="#{msg['centrostrabajo.consulta.unidadregional']}  " >
+							<h:outputText value="#{centroTrabajo.unidadRegional.unidadRegional}"/>
+						</b:dataTableColumn>
+						<b:dataTableColumn label="#{msg['centrostrabajo.consulta.urct']}">
+							<h:outputText value="#{centroTrabajo.urct}"/>
+						</b:dataTableColumn>	
+						<b:dataTableColumn label="#{msg['centrostrabajo.consulta.descripcion']} " >
+							<h:outputText value="#{centroTrabajo.descripcion}"/>
+						</b:dataTableColumn>	
+						<b:dataTableColumn label="#{msg['centrostrabajo.consulta.responsable']}">
+							<h:outputText value="#{centroTrabajo.responsable}"/>
+						</b:dataTableColumn>	
+						<b:dataTableColumn label="#{msg['centrostrabajo.consulta.telefono']}">
+							<h:outputText value="#{centroTrabajo.telefono}"/>
+						</b:dataTableColumn>	
+						<b:dataTableColumn label="#{msg['centrostrabajo.consulta.direccion']}">
+							<h:outputText value="#{centroTrabajo.direccion}"/>
+						</b:dataTableColumn>
+						<b:dataTableColumn label="#{msg['centrostrabajo.consulta.modificar']}" style="text-align:center;">
+							<h:graphicImage library="images"  name="edit.png" style="height: 12px; width: 12px; border:0px;" />
+						</b:dataTableColumn>
+						<b:dataTableColumn label="#{msg['centrostrabajo.consulta.eliminar']}" style="text-align:center;">
+							<h:graphicImage library="images"  name="delete.png" style="height: 15px; width: 15px; border:0px;" />
+						</b:dataTableColumn>						
+					</b:dataTable>
+				</b:panel>									
+			</div>	
+	</h:form>
+</ui:composition>

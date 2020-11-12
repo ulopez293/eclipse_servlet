@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<f:subview id="modal_editar_centros_trabajo">
+		<h:form id="formEditarCentroTrabajo">		
+			<rich:popupPanel header="#{msg['centrostrabajo.editar.titulo']}" id="editarCentroTrabajo" domElementAttachment="parent" width="650" height="520">
+				
+				<f:facet name="controls">
+					<h:outputLink value="#"
+						onclick="#{rich:component('editarCentroTrabajo')}.hide(); return false;">
+						<h:graphicImage value="/resources/images/icons/close.gif"
+							alt="Cerrar" style="float: inherit; height: 15px; width: 15px; border: 0px;" />
+					</h:outputLink>
+				</f:facet>
+				
+				<t:panelGrid id="addGrid" columns="3" columnClasses="primercolumna, segundacolumna" width="520" style="margin-top:10px" colspan="10">
+					
+					<h:outputText value="#{msg['smem.etiqueta.unidadregional']}" styleClass="titulo"/>
+					<h:selectOneMenu id="unidadRegional" enableManualInput="false"
+						value="#{centroTrabajoBean.centroTrabajo.unidadRegional.idUnidadRegional}" required="true"
+						requiredMessage="#{msg['centrostrbajo.unidadregional.mensaje']}"
+						style="width:170px">
+						<f:selectItems value="#{centroTrabajoBean.unidadesRegionales}" var="u"
+							itemLabel="#{u.unidadRegional}" itemValue="#{u.idUnidadRegional}" />							
+					</h:selectOneMenu>
+					<rich:message for="unidadRegional" />	
+					
+					<h:outputText value="#{msg['centrostrabajo.alta.urct']}" styleClass="titulo" style="width:200px;"/>
+					<h:inputText id="urct" value="#{centroTrabajoBean.centroTrabajo.urct}"
+						required="true" requiredMessage="#{msg['centrostrabajo.urct.mensaje']}" 
+						style="width:170px"/>
+					<rich:message for="urct" />
+										
+					<h:outputText value="#{msg['centrostrabajo.alta.descripcion']}" styleClass="titulo" style="width:200px;"/>
+					<h:inputText id="descripcion" value="#{centroTrabajoBean.centroTrabajo.descripcion}"
+						required="true" requiredMessage="#{msg['centrostrabajo.descripcion.mensaje']}" 
+						style="width:170px"/>
+					<rich:message for="descripcion" />			
+										
+					<h:outputText value="#{msg['centrostrabajo.alta.responsable']}" styleClass="titulo" style="width:200px;"/>
+					<h:inputText id="responsable" value="#{centroTrabajoBean.centroTrabajo.responsable}" style="width:170px" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+						<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+					</h:inputText>
+					<rich:message for="responsable" />
+					
+					<h:outputText value="#{msg['centrostrabajo.alta.telefono']}" styleClass="titulo" style="width:200px;"/>
+					<h:inputText id="telefono" value="#{centroTrabajoBean.centroTrabajo.telefono}" style="width:170px" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+						<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+					</h:inputText>
+					<rich:message for="telefono" />
+					
+					<h:outputText value="#{msg['centrostrabajo.alta.direccion']}" styleClass="titulo" style="width:200px;"/>
+					<t:panelGroup colspan="2">
+						<h:inputTextarea id="direccion" value="#{centroTrabajoBean.centroTrabajo.direccion}" 
+	      					style="width:200px; text-transform: uppercase; resize: none;" rows="8">
+	      					<f:validateLength maximum="400" />
+						</h:inputTextarea>
+					</t:panelGroup>	
+					
+					<h:outputText value="#{msg['centrostrabajo.alta.residentecargo']}" styleClass="titulo" style="width:200px;"/>
+					<h:inputText id="residenteCargo" value="#{centroTrabajoBean.centroTrabajo.residenteCargo}" style="width:170px" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+						<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+					</h:inputText>
+					<rich:message for="residenteCargo" />
+					
+					<h:outputText value="#{msg['centrostrabajo.alta.residentecorreo']}" styleClass="titulo" style="width:200px;"/>
+					<h:inputText id="residenteCorreo" value="#{centroTrabajoBean.centroTrabajo.residenteCorreo}" style="width:170px; text-transform:lowercase" validatorMessage="Formato de correo incorrecto">
+						<f:validateRegex pattern="(^[a-zA-Z0-9_\-\.~]{2,}@[a-zA-Z0-9_\-\.~]{2,}\.[a-zA-Z]{2,4}$)?" />
+					</h:inputText>
+					<rich:message for="residenteCorreo" />
+					
+					<h:outputText value="#{msg['centrostrabajo.alta.residentejefe']}" styleClass="titulo" style="width:200px;"/>
+					<h:inputText id="residenteJefe" value="#{centroTrabajoBean.centroTrabajo.residenteJefe}" style="width:170px" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+						<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+					</h:inputText>
+					<rich:message for="residenteJefe" />
+										
+					<h:outputText value="#{msg['centrostrabajo.alta.residentetelefonojefe']}" styleClass="titulo" style="width:200px;"/>
+					<h:inputText id="residenteTelefonoJefe" value="#{centroTrabajoBean.centroTrabajo.residenteTelefonoJefe}" style="width:170px" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+						<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+					</h:inputText>
+					<rich:message for="residenteTelefonoJefe" />
+					
+					<h:outputText value="#{msg['centrostrabajo.alta.residentecorreojefe']}" styleClass="titulo" style="width:200px;"/>
+					<h:inputText id="residenteCorreoJefe" value="#{centroTrabajoBean.centroTrabajo.residenteCorreoJefe}" style="width:170px; text-transform:lowercase" validatorMessage="Formato de correo incorrecto">
+						<f:validateRegex pattern="(^[a-zA-Z0-9_\-\.~]{2,}@[a-zA-Z0-9_\-\.~]{2,}\.[a-zA-Z]{2,4}$)?" />
+					</h:inputText>
+					<rich:message for="residenteCorreoJefe" />
+					
+					<h:outputText value="#{msg['centrostrabajo.alta.residentecargojefe']}" styleClass="titulo" style="width:200px;"/>
+					<h:inputText id="residenteCargoJefe" value="#{centroTrabajoBean.centroTrabajo.residenteCargoJefe}" style="width:170px" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+						<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+					</h:inputText>
+					<rich:message for="residenteCargoJefe" />
+					
+				</t:panelGrid>
+				
+				<a4j:commandButton value="Actualizar" 
+					style="margin-left:110px; margin-top:10px"
+					image="/resources/images/icons/btnguardar.jpg"
+					render="tablaCentrosTrabajo, alertPanel"
+					action="#{centroTrabajoBean.editarCentroTrabajo}"
+					oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+					#{rich:component('alertPanel')}.show();  
+					#{rich:component('editarCentroTrabajo')}.hide();}" />
+				<a4j:commandButton value="Cancelar"
+					image="/resources/images/icons/btncancelar.jpg"
+					onclick="#{rich:component('editarCentroTrabajo')}.hide(); return false;" />
+					
+			</rich:popupPanel>
+		
+		</h:form>
+	</f:subview>
+</ui:composition>

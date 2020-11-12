@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<f:subview id="modal_consulta_desbloqueos">
+		<h:form id="formConsultaDesbloqueos">
+			<a4j:region>
+				<div align="center">
+					<rich:panel header="#{msg['desbloqueos.consulta.titulo']}">
+
+						<t:panelGrid id="consultarBitacoraGrid" columns="3" bgcolor='#F0F0F0'
+							width="830" style="margin-bottom: 10px; border: 1px solid #000000 !important;text-align: left;">
+							
+							<t:panelGroup colspan="3" style="padding-bottom: 8px; padding-top:5px; text-align:center; bgcolor:gray;">
+								<h:outputText value="PARAMETROS DE BUSQUEDA" styleClass="titulo-red"/>
+							</t:panelGroup>
+								
+							<h:outputText value="#{msg['smem.etiqueta.entidad']}" styleClass="titulo"/>
+							<t:panelGroup colspan="2">
+								<h:selectOneMenu id="entidad" enableManualInput="false" required="true"
+									value="#{desbloqueoBean.entidad}"
+									requiredMessage="#{msg['entidad.mensaje.requerido']}">
+									<f:selectItems value="#{desbloqueoBean.entidades}" var="e"
+										itemLabel="#{e.entidad}" itemValue="#{e.idEntidad}" />
+									<a4j:ajax event="change" render="unidadRegional"
+										listener="#{desbloqueoBean.buscarUnidadesRegionales}" />	
+								</h:selectOneMenu>
+								<rich:message for="entidad" />
+							</t:panelGroup>
+
+							<h:outputText value="#{msg['smem.etiqueta.unidadregional']}" styleClass="titulo"/>			
+							<t:panelGroup colspan="2">
+								<h:selectOneMenu id="unidadRegional" enableManualInput="false" required="true"
+									value="#{desbloqueoBean.unidadRegional}"
+									requiredMessage="#{msg['unidadregional.mensaje.requerido']}">
+									<f:selectItems value="#{desbloqueoBean.unidadesRegionales}" var="u"
+										itemLabel="#{u.unidadRegional}" itemValue="#{u.idUnidadRegional}" />
+								</h:selectOneMenu>
+								<rich:message for="unidadRegional" />
+							</t:panelGroup>
+							
+							<t:panelGroup colspan="3" style="text-align:center">
+								<a4j:commandButton value="Buscar" render="tablaBloqueos" 
+								action="#{desbloqueoBean.buscarRegistros}" />
+							</t:panelGroup>
+						</t:panelGrid>	
+						
+						<rich:toolbar id="bar" height="5" width="835px" itemSeparator="none">
+							<rich:toolbarGroup location="left">
+								<a4j:commandButton value="Actualizar"
+									image="/resources/images/icons/actualizar.jpg" 
+									render="tablaBloqueos"
+									action="#{desbloqueoBean.inicializar}" 
+									style="float: inherit; height: 20px; width: 20px; border:0px;"/>
+							</rich:toolbarGroup>
+							<rich:toolbarGroup location="right">
+								<a4j:commandButton value="Desbloquear" 
+								render="tablaBloqueos, alertPanel" 
+								action="#{desbloqueoBean.desbloquear}"
+								oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+												#{rich:component('alertPanel')}.show();
+											}" />
+							</rich:toolbarGroup>
+						</rich:toolbar>
+						
+						<rich:extendedDataTable  id="tablaBloqueos" value="#{desbloqueoBean.centrosTrabajo}" var="bloqueo"
+							selection="#{desbloqueoBean.selection}" selectionMode="multipleKeyboardFree"
+							noDataLabel="No existen unidades bloqueadas"
+							style="position:relative; width: 830px; height:inherit; text-align: center;"
+							sortMode="single" rowClasses="odd-row" rows="15"	
+							styleClass="txt-gray-small" >
+							
+							<rich:column width="170px">
+								<f:facet name="header">
+									<h:outputText value="#{msg['desbloqueos.consulta.entidad']}" />								
+								</f:facet>
+								<h:outputText value="#{bloqueo.entidad}" />
+							</rich:column>
+							<rich:column width="180px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['desbloqueos.consulta.urct']}" />
+								</f:facet>
+								<h:outputText value="#{bloqueo.urct}" />
+							</rich:column>
+							<rich:column width="240px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['desbloqueos.consulta.unidadmedica']}" />
+								</f:facet>
+								<h:outputText value="#{bloqueo.unidad}" />
+							</rich:column>
+							<rich:column width="210px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['desbloqueos.consulta.supervisor']}" />
+								</f:facet>
+								<h:outputText value="#{bloqueo.supervisor}" />
+							</rich:column>
+							<f:facet name="footer">
+								<rich:dataScroller page="#{desbloqueoBean.pagina}" for="tablaBloqueos" render="tablaBloqueos" fastControls="hide"/>
+							</f:facet>
+						</rich:extendedDataTable>
+					</rich:panel>
+				</div>
+			</a4j:region>
+		</h:form>
+	</f:subview>
+	
+</ui:composition>

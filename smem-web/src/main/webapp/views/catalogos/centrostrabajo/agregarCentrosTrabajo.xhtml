@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:b="http://bootsfaces.net/ui">
+
+	<b:modal title="#{msg['centrostrabajo.alta.titulo']}" id="agregarCentroTrabajoModal" class="titulo">
+		
+		<h:outputText value="INGRESAR LOS SIGUIENTES DATOS PARA REGISTRAR UN NUEVO CENTRO DE TRABAJO" 
+			styleClass="titulo-red" style="width: 200px;"/>
+		
+		<h:form id="formAgregarCentroTrabajo">	
+		<b:panelGrid columns="3" style="margin-top: 10px;">
+		
+				<h:outputText value="#{msg['smem.etiqueta.unidadregional']}" styleClass="titulo"/>
+				<h:selectOneMenu id="unidadRegional" enableManualInput="false"
+					value="#{centroTrabajoBean.centroTrabajo.unidadRegional.idUnidadRegional}" required="true"
+					requiredMessage="#{msg['centrostrbajo.unidadregional.mensaje']}"
+					style="width:170px">
+					<f:selectItems value="#{centroTrabajoBean.unidadesRegionales}" var="u"
+						itemLabel="#{u.unidadRegional}" itemValue="#{u.idUnidadRegional}" />							
+				</h:selectOneMenu>
+				<h:message for="unidadRegional" class="txt-red" />
+	
+				<h:outputText value="#{msg['centrostrabajo.alta.urct']}" styleClass="titulo" style="width:200px;"/>
+				<h:inputText id="urct" value="#{centroTrabajoBean.centroTrabajo.urct}"
+					required="true" requiredMessage="#{msg['centrostrabajo.urct.mensaje']}" 
+					style="width:170px"/>
+				<h:message for="urct" class="txt-red" />
+			
+				<h:outputText value="#{msg['centrostrabajo.alta.descripcion']}" styleClass="titulo" style="width:200px;"/>
+				<h:inputText id="descripcion" value="#{centroTrabajoBean.centroTrabajo.descripcion}"
+					required="true" requiredMessage="#{msg['centrostrabajo.descripcion.mensaje']}" 
+					style="width:170px"/>
+				<h:message for="descripcion" class="txt-red" />			
+			
+				<h:outputText value="#{msg['centrostrabajo.alta.responsable']}" styleClass="titulo" style="width:200px;"/>
+				<h:inputText id="responsable" value="#{centroTrabajoBean.centroTrabajo.responsable}" style="width:170px" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+					<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+				</h:inputText>
+				<h:message for="responsable" class="txt-red" />	
+			
+				<h:outputText value="#{msg['centrostrabajo.alta.telefono']}" styleClass="titulo" style="width:200px;"/>
+				<h:inputText id="telefono" value="#{centroTrabajoBean.centroTrabajo.telefono}" style="width:170px" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+					<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+				</h:inputText>
+				<h:message for="telefono" class="txt-red" />	
+		
+				<h:outputText value="#{msg['centrostrabajo.alta.direccion']}" styleClass="titulo" style="width:200px;"/>
+				<h:inputTextarea id="direccion" value="#{centroTrabajoBean.centroTrabajo.direccion}" 
+					style="width:200px; text-transform: uppercase; resize: none;" rows="8">
+					<f:validateLength maximum="400" />
+				</h:inputTextarea>
+				<h:message for="direccion" class="txt-red" />
+			
+				<h:outputText value="#{msg['centrostrabajo.alta.residentecargo']}" styleClass="titulo" style="width:200px;"/>
+				<h:inputText id="residentCargo" value="#{centroTrabajoBean.centroTrabajo.residenteCargo}"  style="width:170px" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+					<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+				</h:inputText>
+				<h:message for="residentCargo" class="txt-red" />	
+							
+				<h:outputText value="#{msg['centrostrabajo.alta.residentecorreo']}" styleClass="titulo" style="width:200px;"/>
+				<h:inputText id="residenteCorreo" value="#{centroTrabajoBean.centroTrabajo.residenteCorreo}" style="width:170px; text-transform:lowercase" validatorMessage="Formato de correo incorrecto" >
+					<f:validateRegex pattern="(^[a-zA-Z0-9_\-\.~]{2,}@[a-zA-Z0-9_\-\.~]{2,}\.[a-zA-Z]{2,4}$)?" />
+				</h:inputText>
+				<h:message for="residenteCorreo" class="txt-red" />	
+			
+				<h:outputText value="#{msg['centrostrabajo.alta.residentejefe']}" styleClass="titulo" style="width:200px;"/>
+				<h:inputText id="residenteJefe" value="#{centroTrabajoBean.centroTrabajo.residenteJefe}" style="width:170px" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+					<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+				</h:inputText>
+				<h:message for="residenteJefe" class="txt-red" />	
+			
+				<h:outputText value="#{msg['centrostrabajo.alta.residentetelefonojefe']}" styleClass="titulo" style="width:200px;"/>
+				<h:inputText id="residenteTelefonoJefe" value="#{centroTrabajoBean.centroTrabajo.residenteTelefonoJefe}" style="width:170px" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+					<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+				</h:inputText>
+				<h:message for="residenteTelefonoJefe" class="txt-red" />	
+			
+				<h:outputText value="#{msg['centrostrabajo.alta.residentecorreojefe']}" styleClass="titulo" style="width:200px;"/>
+				<h:inputText id="residenteCorreoJefe" value="#{centroTrabajoBean.centroTrabajo.residenteCorreoJefe}" style="width:170px; text-transform:lowercase" validatorMessage="Formato de correo incorrecto">
+					<f:validateRegex pattern="(^[a-zA-Z0-9_\-\.~]{2,}@[a-zA-Z0-9_\-\.~]{2,}\.[a-zA-Z]{2,4}$)?" />
+				</h:inputText>
+				<h:message for="residenteCorreoJefe" class="txt-red" />	
+			
+				<h:outputText value="#{msg['centrostrabajo.alta.residentecargojefe']}" styleClass="titulo" style="width:200px;"/>
+				<h:inputText id="residenteCargoJefe" value="#{centroTrabajoBean.centroTrabajo.residenteCargoJefe}" style="width:170px" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+					<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+				</h:inputText>
+				<h:message for="residenteCargoJefe" class="txt-red" />	
+		    </b:panelGrid>
+		    
+		    <div style="margin-top: 20px;  margin-left: 200px;">
+				<b:button value="Cancelar" dismiss="modal" />
+		    	<b:commandButton value="Guardar" 
+		    					 action="#{centroTrabajoBean.agregarCentroTrabajo}" 
+		    					 look="primary"/>
+	    	</div>
+	    </h:form>
+	</b:modal>
+</ui:composition>

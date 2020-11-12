@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:b="http://bootsfaces.net/ui">
+	
+	<h:body>
+		<ui:composition template="/templates/templateMenu.xhtml">		
+			<ui:define name="header"><ui:include src="/views/inicio/header.xhtml" /></ui:define>	
+			
+			<ui:define name="content">
+			
+				<h:form id="formConsultarBitacora">
+					<div align="center" style="margin-top: 30px; width: 100%;">
+					
+						<b:panel title="#{msg['bitacora.consulta.titulo']}" collapsible="false" class="titulo">
+						
+							<!-- Tabla para mostrar Registros -->
+							<b:dataTable value="#{bitacoraBean.bitacora}"
+								var="bit" 
+								id="tablaBitacora" 
+								page-length="15"
+								excel="true"
+							    pdf="true"
+							    style="position:relative; width: 850px; height:inherit;">
+							
+								<b:dataTableColumn label="#{msg['bitacora.consulta.idMovimiento']}">
+									<h:outputText value="#{bit.idBitacora}" />
+								</b:dataTableColumn>
+								<b:dataTableColumn label="#{msg['bitacora.consulta.usuario']}">
+									<h:outputText value="#{bit.usuario}" />
+								</b:dataTableColumn>
+								<b:dataTableColumn label="#{msg['bitacora.consulta.operacion']}">
+									<h:outputText value="#{bit.operacion}" />
+								</b:dataTableColumn>							
+								<b:dataTableColumn label="#{msg['bitacora.consulta.fechaMov']}">
+									<h:outputText value="#{bit.fecha}" />
+								</b:dataTableColumn>
+								<b:dataTableColumn label="#{msg['bitacora.consulta.descripcion']}">
+									<h:outputText value="#{bit.descripcion}" />
+								</b:dataTableColumn>
+							</b:dataTable>
+						</b:panel>									
+					</div>
+				</h:form>
+			</ui:define>	
+			
+			<ui:define name="footer"><ui:include src="/views/inicio/footer.xhtml" /></ui:define>		
+		</ui:composition>
+	</h:body>
+</html>	
+	

@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:sec="http://www.springframework.org/security/tags">
+	
+	<f:view contentType="text/html">
+		<h:form id="sideBarId">
+		
+			<rich:panelMenu mode="server" iconExpandedGroup="disc"
+				iconCollapsedGroup="disc" iconExpandedTopGroup="chevronUp"
+				iconGroupTopPosition="right" iconCollapsedTopGroup="chevronDown"
+				iconCollapsedTopPosition="right" itemMode="server" id="menuPrincipal">
+
+					<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL">
+						<rich:panelMenuGroup label="#{msg['menu.catalogos']}">
+							<rich:panelMenuItem label="#{msg['menu.catalogos.centrotrabajo']}" action="#{centroTrabajoBean.inicializar}" />
+							<rich:panelMenuItem label="#{msg['menu.catalogos.clave']}" action="#{claveBean.inicializar}" />
+							<rich:panelMenuItem label="#{msg['menu.catalogos.equipo']}" action="#{equipoBean.inicializar}"/>
+							<rich:panelMenuItem label="#{msg['menu.catalogos.especialidad']}" action="#{especialidadBean.inicializar}"/>
+							<rich:panelMenuItem label="#{msg['menu.catalogos.grupo']}" action="#{grupoBean.inicializar}"/>								
+							<rich:panelMenuItem label="#{msg['menu.catalogos.grupoclave']}" action="#{grupoClaveBean.inicializar}"/>	
+							<rich:panelMenuItem label="#{msg['menu.catalogos.nivelatencion']}" action="#{nivelAtencionBean.inicializar}"/>
+							<rich:panelMenuItem label="#{msg['menu.catalogos.proveedor']}" action="#{proveedorBean.inicializar}" />
+							<rich:panelMenuItem label="#{msg['menu.catalogos.tipocontratacion']}" action="#{tipoContratacionBean.inicializar}"/>
+							<rich:panelMenuItem label="#{msg['menu.catalogos.subtipocontratacion']}" action="#{subtipoContratoBean.inicializar}"/> 
+							<rich:panelMenuItem label="#{msg['menu.catalogos.sectoradquisicion']}" action="#{sectorAdquisicionBean.inicializar}" />
+						</rich:panelMenuGroup>
+					</sec:authorize>
+
+				<sec:authorize ifAllGranted="ROLE_ADMINISTRADOR">
+					<rich:panelMenuGroup label="#{msg['menu.administracion']}">
+						<rich:panelMenuItem label="#{msg['menu.administracion.usuariossmem']}" action="#{usuarioBean.inicializar}"/>	
+						<rich:panelMenuItem label="#{msg['menu.administracion.usuariosproveedor']}" action="#{usuarioProveedorBean.inicializar}"/>	
+					</rich:panelMenuGroup>						
+				</sec:authorize>
+
+				<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL">
+					<rich:panelMenuGroup label="#{msg['menu.contratos']}">
+						<rich:panelMenuItem label="#{msg['menu.contratos.administracion']}" action="#{contratoBean.inicializar}" />
+					</rich:panelMenuGroup>
+				</sec:authorize>
+
+				<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL, ROLE_UNIDAD">
+					<rich:panelMenuGroup label="#{msg['menu.programacionservicios']}">
+						<rich:panelMenuItem label="#{msg['menu.programacionservicios.servicios']}" 
+							action="#{programacionServicioBean.inicializar}"/>
+					</rich:panelMenuGroup>
+				</sec:authorize>
+
+				<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL">
+					<rich:panelMenuGroup label="#{msg['menu.desbloqueo']}">
+						<rich:panelMenuItem label="#{msg['menu.desbloqueo.centrostrabajo']}" action="#{desbloqueoBean.inicializar}" />
+					</rich:panelMenuGroup>
+				</sec:authorize>
+
+				<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL, ROLE_UNIDAD">
+					<rich:panelMenuGroup label="Impresi&oacute;n de Actas">
+						<rich:panelMenuItem label="Imprimir Acta" action="#{impresionActaBean.inicializar}" />
+					</rich:panelMenuGroup>
+				</sec:authorize>
+				
+				<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL, ROLE_UNIDAD">
+					<rich:panelMenuGroup
+						label="#{msg['menu.equipomedico']}">
+						<rich:panelMenuItem label="#{msg['menu.equipomedico.equipo']}" action="#{universoBean.inicializar}" />
+					</rich:panelMenuGroup>
+				</sec:authorize>
+
+				<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL">
+					<rich:panelMenuGroup label="#{msg['menu.facturacion']}">
+						<rich:panelMenuItem label="Objeto de Pago" action="#{facturaBean.inicializarObjectosPago}" />
+						<rich:panelMenuItem label="Penas Convencionales" action="#{facturaBean.inicializarPenasConvencionales}" />
+					</rich:panelMenuGroup>
+				</sec:authorize>
+
+				<sec:authorize ifAllGranted="ROLE_ADMINISTRADOR">
+					<rich:panelMenuGroup label="#{msg['menu.configuracion']}">
+						<rich:panelMenuItem label="Configuraciones" action="#{configuracionBean.inicializar}"/>	
+					</rich:panelMenuGroup>						
+				</sec:authorize>
+								
+				<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL">
+					<rich:panelMenuGroup label="Bit&aacute;cora">
+						<rich:panelMenuItem label="#{msg['menu.bitacora.consulta']}" action="#{bitacoraBean.inicializar}"/>
+					</rich:panelMenuGroup>
+				</sec:authorize>
+				
+				<rich:panelMenuGroup label="Sesi&oacute;n">
+					<rich:panelMenuItem label="Cerrar Sesi&oacute;n" action="#{loginBean.doLogout}"/>
+				</rich:panelMenuGroup>											    
+				
+			</rich:panelMenu>   
+		</h:form>
+	</f:view>
+	
+	<!-- Incrementando el área de trabajo con respecto al tamaño del menú -->
+	<rich:jQuery selector="#menuPrincipal" timing="domready" 
+		query="click(function(){$('#content').height($('#leftColumn').height()); return false;})" />
+		
+</ui:composition>

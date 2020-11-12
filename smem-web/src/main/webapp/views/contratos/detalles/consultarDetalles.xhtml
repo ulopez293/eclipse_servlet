@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	
+
+	<f:subview id="modal_consultar_ContratosDetalles">
+	
+		<h:form id="formConsultarContratosDetalles">
+			<a4j:region>
+				<div align="center">
+					<rich:panel header="#{msg['contratosdetalles.consulta.titulo']}">															
+
+						<rich:toolbar id="barDetalles" height="5" width="865px" itemSeparator="grid">
+							<!-- Botón Alta de ContratoDetalle -->
+							<rich:toolbarGroup location="left">
+								<h:outputText value="#{msg['contratosdetalles.consulta.exportardetalle']}"
+									styleClass="txt-white" />
+								<h:commandButton action="#{contratoDetalleBean.descargarArchivo}" id="descargar" value="Descargar Excel" 
+												image="/resources/images/icons/download.png"/> 
+							</rich:toolbarGroup>
+							<rich:toolbarGroup location="left">
+								<h:outputText value="#{msg['contratosdetalles.consulta.importardetalle']}"
+									styleClass="txt-white" />
+								<a4j:commandLink styleClass="no-decor" execute="@this"
+									render="agregarContratoDetalleArchivo" ajaxSingle="true"
+									action="#{contratoDetalleBean.limpiarContratoDetalle}"
+									oncomplete="#{rich:component('agregarContratoDetalleArchivo')}.show(); return false;">
+									<h:graphicImage value="/resources/images/icons/upload.png"
+										alt="cargar" title="Importar desde archivo" 
+										style="float: inherit; height: 30px; width: 30px" />
+								</a4j:commandLink>									
+							</rich:toolbarGroup>
+							<rich:toolbarGroup location="right" rendered="#{contratoDetalleBean.tamanioContratosDetalle}">
+								<h:outputText value="#{msg['contratosdetalles.consulta.agregarcontratodetalle']}"
+									styleClass="txt-white" id="textoAgregar"/>
+								<a4j:commandLink styleClass="no-decor" execute="@this"
+									render="agregarContratoDetalle" ajaxSingle="true" id="botonAgregar"									
+									action="#{contratoDetalleBean.limpiarContratoDetalle}"
+									oncomplete="#{rich:component('agregarContratoDetalle')}.show(); return false;">
+									<h:graphicImage value="/resources/images/icons/new.png"
+										alt="Nuevo" title="Nuevo Detalle" 
+										style="float: inherit; height: 30px; width: 30px" />
+								</a4j:commandLink>
+							</rich:toolbarGroup>									
+							<!--Termina Botón Alta de ContratoDetalle -->
+						</rich:toolbar>
+
+						<!-- Tabla para mostrar Registros -->
+						<div id="scrolltable" style="width: 860px; !important">
+							<rich:dataTable value="#{contratoDetalleBean.contratosDetalles}"
+								var="contratoDetalle" id="tablaContratosDetalles" rows="15"
+								rowClasses="odd-row, even-row" sortMode="single"
+								styleClass="txt-gray-small"
+								style="position:relative; width: 860px; height:inherit"
+								noDataLabel="No existen registros de los Detalles del Contrato">
+							
+								<rich:column>
+									<f:facet name="header">
+										<h:panelGroup>
+											<h:outputText value="#{msg['contratosdetalles.consulta.idcontrato']}" />										
+										</h:panelGroup>
+									</f:facet>
+									<h:outputText value="#{contratoDetalle.contrato.idContrato}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">
+										<h:panelGroup>
+											<h:outputText value="#{msg['contratosdetalles.consulta.idcontratodetalle']}" />										
+										</h:panelGroup>
+									</f:facet>
+									<h:outputText value="#{contratoDetalle.idContratoDetalle}" />
+								</rich:column>
+								<rich:column>
+									<f:facet name="header">	
+										<h:panelGroup>								
+											<h:outputText value="#{msg['contratosdetalles.consulta.periodo']}" />										
+	                					</h:panelGroup>
+									</f:facet>
+									<h:outputText value="#{contratoDetalle.periodo}" />
+								</rich:column>
+								<rich:column width="100px">
+									<f:facet name="header">								
+										<h:outputText value="#{msg['contratosdetalles.consulta.consecutivocontrato']}" />																
+									</f:facet>
+									<h:outputText value="#{contratoDetalle.consecutivoContrato}" />
+								</rich:column>							
+								<rich:column>								
+									<f:facet name="header">
+										<h:outputText value="#{msg['contratosdetalles.consulta.inicioperiodo']}" />									
+									</f:facet>								
+									<h:outputText value="#{contratoDetalle.inicioPeriodo}" />
+								</rich:column>
+								<rich:column>								
+									<f:facet name="header">
+										<h:outputText value="#{msg['contratosdetalles.consulta.finperiodo']}" />									
+									</f:facet>								
+									<h:outputText value="#{contratoDetalle.finPeriodo}" />
+								</rich:column>
+								<rich:column>								
+									<f:facet name="header">
+										<h:outputText value="#{msg['smem.mes.enero']}" />									
+									</f:facet>								
+									<h:outputText value="#{contratoDetalle.enero}" />
+								</rich:column>
+								<rich:column>								
+									<f:facet name="header">
+										<h:outputText value="#{msg['smem.mes.febrero']}" />									
+									</f:facet>								
+									<h:outputText value="#{contratoDetalle.febrero}" />
+								</rich:column>
+								<rich:column>								
+									<f:facet name="header">
+										<h:outputText value="#{msg['smem.mes.marzo']}" />									
+									</f:facet>								
+									<h:outputText value="#{contratoDetalle.marzo}" />
+								</rich:column>
+								<rich:column>								
+									<f:facet name="header">
+										<h:outputText value="#{msg['smem.mes.abril']}" />									
+									</f:facet>								
+									<h:outputText value="#{contratoDetalle.abril}" />
+								</rich:column>
+								<rich:column>								
+									<f:facet name="header">
+										<h:outputText value="#{msg['smem.mes.mayo']}" />									
+									</f:facet>								
+									<h:outputText value="#{contratoDetalle.mayo}" />
+								</rich:column>
+								<rich:column>								
+									<f:facet name="header">
+										<h:outputText value="#{msg['smem.mes.junio']}" />									
+									</f:facet>								
+									<h:outputText value="#{contratoDetalle.junio}" />
+								</rich:column>
+								<rich:column>								
+									<f:facet name="header">
+										<h:outputText value="#{msg['smem.mes.julio']}" />									
+									</f:facet>								
+									<h:outputText value="#{contratoDetalle.julio}" />
+								</rich:column>
+								<rich:column>								
+									<f:facet name="header">
+										<h:outputText value="#{msg['smem.mes.agosto']}" />									
+									</f:facet>								
+									<h:outputText value="#{contratoDetalle.agosto}" />
+								</rich:column>
+								<rich:column>								
+									<f:facet name="header">
+										<h:outputText value="#{msg['smem.mes.septiembre']}" />									
+									</f:facet>								
+									<h:outputText value="#{contratoDetalle.septiembre}" />
+								</rich:column>
+								<rich:column>								
+									<f:facet name="header">
+										<h:outputText value="#{msg['smem.mes.octubre']}" />									
+									</f:facet>								
+									<h:outputText value="#{contratoDetalle.octubre}" />
+								</rich:column>
+								<rich:column>								
+									<f:facet name="header">
+										<h:outputText value="#{msg['smem.mes.noviembre']}" />									
+									</f:facet>								
+									<h:outputText value="#{contratoDetalle.noviembre}" />
+								</rich:column>
+								<rich:column>								
+									<f:facet name="header">
+										<h:outputText value="#{msg['smem.mes.diciembre']}" />									
+									</f:facet>								
+									<h:outputText value="#{contratoDetalle.diciembre}" />
+								</rich:column>							
+								<rich:column width="80px" sorteable="false">
+									<f:facet name="header">
+										<h:outputText value="#{msg['contratosdetalles.consulta.modificar']}" />
+									</f:facet>
+									<a4j:commandLink render="modificarDetalles"
+										oncomplete="#{rich:component('modificarDetalles')}.show()">
+										<h:graphicImage value="/resources/images/icons/edit.png"
+											alt="editar" title="Editar Detalle"
+											style="float: inherit; height: 12px; width: 12px; border:0px;" />
+										<f:setPropertyActionListener target="#{contratoDetalleBean.contratoDetalle}"
+											value="#{contratoDetalle}" />
+									</a4j:commandLink>
+								</rich:column>
+								<rich:column width="80px" sorteable="false">
+									<f:facet name="header">
+										<h:outputText value="#{msg['contratosdetalles.consulta.eliminar']}" />
+									</f:facet>
+									<a4j:commandLink execute="@this" render="@none" ajaxSingle="true"
+										oncomplete="#{rich:component('panelConfirmacionBorradoDetalle')}.show(); 
+										return false;">
+										<h:graphicImage value="/resources/images/icons/delete.png"
+											alt="Eliminar" title="Eliminar Registro"
+											style="float: inherit; height: 15px; width: 15px" />
+										<f:setPropertyActionListener target="#{contratoDetalleBean.contratoDetalle}"
+											value="#{contratoDetalle}" />
+									</a4j:commandLink>
+								</rich:column>
+                                  	                            
+								<f:facet name="footer">
+									<rich:dataScroller page="#{contratoDetalleBean.pagina}" for="tablaContratosDetalles" render="tablaContratosDetalles" fastControls="hide"/>
+								</f:facet>
+								
+							</rich:dataTable>
+						</div>	
+					</rich:panel>									
+				</div>
+				
+				<a4j:jsFunction name="eliminarDetalle" render="tablaContratosDetalles, alertPanel"
+					action="#{contratoDetalleBean.eliminarContratoDetalle}" execute="@this"
+					oncomplete="#{rich:component('alertPanel')}.show();" />
+						
+			</a4j:region>
+		</h:form>
+	</f:subview>
+</ui:composition>

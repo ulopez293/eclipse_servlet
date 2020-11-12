@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+    xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+                    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+                    http://www.springframework.org/schema/security
+                     http://www.springframework.org/schema/security/spring-security-4.0.xsd">
+ 
+	<global-method-security secured-annotations="enabled" />
+
+    <http use-expressions="true">    	
+    	     
+    	<csrf disabled="true"/>
+    				 
+		<intercept-url pattern="/javax.faces.resource/**"  access="permitAll" />
+		<intercept-url pattern="/templates/**"  access="permitAll" />
+		<intercept-url pattern="/resources/**"  access="permitAll" />
+		<intercept-url pattern="/views/inicio/login.xhtml"  access="permitAll" />  
+		<intercept-url pattern="/views/inicio/bloqueo.xhtml"  access="permitAll" />
+		<intercept-url pattern="/**" access="authenticated" />
+
+		<custom-filter after="EXCEPTION_TRANSLATION_FILTER" ref="ajaxTimeoutRedirectFilter" />		
+		 
+		 <!--  form: login  username: username  password: password -->
+		<form-login 
+			login-page="/views/inicio/login.xhtml"
+			login-processing-url="/login"
+			username-parameter="username" 
+            password-parameter="password"  
+			authentication-failure-url="/views/inicio/login.xhtml?error=1"
+			authentication-success-handler-ref="authSuccessHandler"
+			default-target-url="/views/inicio/home.xhtml" />
+		<form-login />
+		
+		<logout logout-success-url="/" invalidate-session="true" logout-url="/j_spring_security_logout" delete-cookies="JSESSIONID"/>
+		
+		<session-management invalid-session-url="/views/session/sessionTimeout.xhtml"/>
+		
+	</http>
+	
+	<beans:bean id="authSuccessHandler" class=" mx.inntecsa.smem.seguridad.BloqueoUrctHandlerImpl"/>
+
+	<beans:bean  id="ajaxTimeoutRedirectFilter" class=" mx.inntecsa.smem.seguridad.AjaxTimeOutRedirectFilter" >
+    	<beans:property name="customSessionExpiredErrorCode" value="901"/>
+	</beans:bean >
+   
+	<authentication-manager>
+		<authentication-provider>	     
+			<jdbc-user-service data-source-ref="dataSource"
+				users-by-username-query="select usuario as username, contrasenia as password, 
+										 (CASE WHEN baja = 'f' THEN '1' ELSE '0' END) as enabled
+				                         from usuario
+			     	                     where usuario = ?
+				                         and tipo_usuario = 1;" 
+				                         
+				authorities-by-username-query="select  usuario as username, rol as authority 
+										       from usuario
+										       where usuario = ?
+				                               and tipo_usuario = 1;"/>
+		</authentication-provider>
+	</authentication-manager>
+	
+<!--	<authentication-manager>-->
+<!--		<authentication-provider>-->
+<!--			<user-service>-->
+<!--				<user name="administrador" authorities="ROLE_ADMINISTRADOR" password="administrador"/>-->
+<!--				<user name="unidad" authorities="ROLE_UNIDAD" password="unidad"/>-->
+<!--			</user-service>-->
+<!--		</authentication-provider>-->
+<!--	</authentication-manager>-->
+	
+</beans:beans>
+

@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config version="2.0" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd">
+
+	<navigation-rule>
+		<display-name>General</display-name>
+		<from-view-id>*</from-view-id>
+		
+		<!-- ADMINISTRACION DE USUARIOS -->
+		<navigation-case>
+			<from-outcome>pantallaUsuarios</from-outcome>
+			<to-view-id>/views/administracion/usuarios/usuarios.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>pantallaUsuariosProveedor</from-outcome>
+			<to-view-id>/views/administracion/usuariosProveedor/usuariosProveedor.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+		
+		<!-- CATALOGOS -->
+		<navigation-case>
+			<from-outcome>pantallaEquipos</from-outcome>
+			<to-view-id>/views/catalogos/equipos/equipos.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>		
+		<navigation-case>
+			<from-outcome>pantallaClaves</from-outcome>
+			<to-view-id>/views/catalogos/claves/claves.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>pantallaEspecialidad</from-outcome>
+			<to-view-id>/views/catalogos/especialidad/especialidades.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+		<navigation-case>
+			<from-outcome>pantallaNivelAtencion</from-outcome>
+			<to-view-id>/views/catalogos/nivelatencion/nivelesAtencion.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+	    <navigation-case>
+			<from-outcome>pantallaCentrosTrabajo</from-outcome>
+			<to-view-id>/views/catalogos/centrostrabajo/centrosTrabajo.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+		<navigation-case>	
+			<from-outcome>pantallaProveedores</from-outcome>
+			<to-view-id>/views/catalogos/proveedores/proveedores.xhtml</to-view-id>
+			<redirect/>			
+		</navigation-case>		
+		
+		<navigation-case>	
+			<from-outcome>pantallaGrupo</from-outcome>
+			<to-view-id>/views/catalogos/grupo/grupo.xhtml</to-view-id>
+			<redirect/>			
+		</navigation-case>
+		
+		<navigation-case>	
+			<from-outcome>pantallaGrupoClave</from-outcome>
+			<to-view-id>/views/catalogos/grupoClave/grupoClave.xhtml</to-view-id>
+			<redirect/>			
+		</navigation-case>
+			
+		<navigation-case>	
+			<from-outcome>pantallaTipoContratacion</from-outcome>
+			<to-view-id>/views/catalogos/tipoContratacion/tiposContratacion.xhtml</to-view-id>
+			<redirect/>			
+		</navigation-case>		
+		<navigation-case>	
+			<from-outcome>pantallaSubtipoContrato</from-outcome>
+			<to-view-id>/views/catalogos/subtipocontrato/subtipoContrato.xhtml</to-view-id>
+			<redirect/>			
+		</navigation-case>			
+		
+		<navigation-case>	
+			<from-outcome>pantallaSectorAdquisicion</from-outcome>
+			<to-view-id>/views/catalogos/sectorAdquisicion/sectorAdquisicion.xhtml</to-view-id>
+			<redirect/>			
+		</navigation-case>		
+		
+		
+		<!-- Universo(equipo Medico) -->
+		<navigation-case>	
+			<from-outcome>pantallaUniverso</from-outcome>
+			<to-view-id>/views/universo/universos.xhtml</to-view-id>
+			<redirect/>			
+		</navigation-case>		
+				
+		<!-- CONTRATOS -->
+		<navigation-case>	
+			<from-outcome>pantallaContratos</from-outcome>
+			<to-view-id>/views/contratos/contratos/contratos.xhtml</to-view-id>
+			<redirect/>			
+		</navigation-case>
+		
+		<!-- MODULO BITACORA -->
+		<navigation-case>	
+			<from-outcome>bitacora</from-outcome>
+			<to-view-id>/views/bitacora/bitacora.xhtml</to-view-id>
+			<redirect/>			
+		</navigation-case>
+		
+		<!-- MODULO PROGRAMACION DE SERVICIOS -->
+		<navigation-case>	
+			<from-outcome>programacionServicios</from-outcome>
+			<to-view-id>/views/programacionservicios/programaciones.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+		
+		<!-- MODULO DESBLOQUEO CENTROS DE TRABAJO -->
+		<navigation-case>
+			<from-outcome>desbloqueoUrct</from-outcome>
+			<to-view-id>/views/desbloqueo/desbloqueo.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+		
+		<!-- FACTURACION -->
+		<navigation-case>
+			<from-outcome>pantallaObjectosPago</from-outcome>
+			<to-view-id>/views/facturas/objectosPago.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>
+
+		<navigation-case>
+			<from-outcome>pantallaPenasConvencionales</from-outcome>
+			<to-view-id>/views/facturas/penasConvencionales.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>	
+		
+		<!--IMPRESION DE ACTAS  -->
+		<navigation-case>
+			<from-outcome>pantallaImpresionActas</from-outcome>
+			<to-view-id>/views/impresionactas/impresion.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>		
+					
+		<!-- CONFIGURACION -->
+		<navigation-case>
+			<from-outcome>pantallaConfiguracion</from-outcome>
+			<to-view-id>/views/configuracion/configuracion.xhtml</to-view-id>
+			<redirect/>
+		</navigation-case>		
+		
+		
+	</navigation-rule>
+	
+	<navigation-rule>
+	    <from-view-id>/views/programacionservicios/programaciones.xhtml</from-view-id>
+	    <navigation-case>	
+			<from-outcome>solicitudServicio</from-outcome>
+			<to-view-id>/views/programacionservicios/solicitudServicio.xhtml</to-view-id>
+			<redirect/>			
+		</navigation-case>	
+	</navigation-rule>
+
+</faces-config>

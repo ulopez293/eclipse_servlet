@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	
+	<f:subview id="modal_consulta_grupoClave">
+		<h:form id="formConsultaGrupoClave">
+			<a4j:region>
+				<div align="center">
+					<rich:panel header="#{msg['grupoClave.consulta.titulo']}">
+						<rich:toolbar id="bar" height="5" width="725px" itemSeparator="none">
+							<!-- Botón Alta de Equipo -->
+							<rich:toolbarGroup location="right">
+								<h:outputText value="#{msg['grupoClave.consulta.nuevogrupoclave']}"  styleClass="txt-white"/>
+								<a4j:commandLink styleClass="no-decor" execute="@this"
+									render="agregarGrupoClave" ajaxSingle="true"
+									action="#{grupoClaveBean.limpiarGrupoClave}"
+									oncomplete="#{rich:component('agregarGrupoClave')}.show(); return false;">
+									<h:graphicImage value="/resources/images/icons/new.png"
+										alt="Nuevo" title="Nuevo Grupo Clave"
+										style="float: inherit; height: 30px; width: 30px" />
+								</a4j:commandLink>
+							</rich:toolbarGroup>
+							<!-- Termina Botón Alta de Curso -->
+						</rich:toolbar>
+												
+						<!-- Tabla para mostrar Registros -->
+						<rich:extendedDataTable  id="tablaGruposClave" value="#{grupoClaveBean.gruposClave}" var="grupoClave"
+							noDataLabel="No existen registros de Grupo Clave"
+							style="position:relative; width: 720px; height:inherit"
+							sortMode="single" 
+							rowClasses="odd-row, even-row" rows="15"	
+							styleClass="txt-gray-small">
+						
+							<rich:column width="100px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['grupoClave.consulta.identificador']}" />
+								</f:facet>
+								<h:outputText value="#{grupoClave.idGrupoClave}" />
+							</rich:column>
+							
+							
+							<rich:column id="grupo" width="316px"
+										 filterValue="#{grupoClaveFilteringBean.grupoFilter}"
+										 filterExpression="#{fn:containsIgnoreCase(grupoClave.grupo.grupo,grupoClaveFilteringBean.grupoFilter)}"
+										 filterType="custom">
+								<f:facet name="header">
+									<h:panelGroup>
+										<h:outputText value="#{msg['grupoClave.consulta.grupo']}" />
+										<h:inputText value="#{grupoClaveFilteringBean.grupoFilter}" label="Grupo">
+                           					<a4j:ajax event="blur" render="tablaGruposClave" execute="@this"/>
+                       					</h:inputText>
+									</h:panelGroup>
+								</f:facet>
+								<h:outputText value="#{grupoClave.grupo.grupo}" />
+							</rich:column>
+							
+							
+						
+							<rich:column id="clave" width="316px"
+										 filterValue="#{grupoClaveFilteringBean.claveFilter}"
+										 filterExpression="#{fn:containsIgnoreCase(grupoClave.clave.clave,grupoClaveFilteringBean.claveFilter)}"
+										 filterType="custom">
+								<f:facet name="header">
+									<h:panelGroup>
+										<h:outputText value="#{msg['grupoClave.consulta.clave']}" />
+										<h:inputText value="#{grupoClaveFilteringBean.claveFilter}" label="Clave">
+                           					<a4j:ajax event="blur" render="tablaGruposClave" execute="@this"/>
+                       					</h:inputText>
+									</h:panelGroup>
+								</f:facet>
+								<h:outputText value="#{grupoClave.clave.clave}" />
+							</rich:column>	
+							<rich:column id="equipo" width="316px"
+										 filterValue="#{grupoClaveFilteringBean.equipoFilter}"
+										 filterExpression="#{fn:containsIgnoreCase(grupoClave.equipo.equipo,grupoClaveFilteringBean.equipoFilter)}"
+										 filterType="custom">
+								<f:facet name="header">
+									<h:panelGroup>
+										<h:outputText value="#{msg['grupoClave.consulta.equipo']}" />
+										<h:inputText value="#{grupoClaveFilteringBean.equipoFilter}" label="Equipo">
+                           					<a4j:ajax event="blur" render="tablaGruposClave" execute="@this"/>
+                       					</h:inputText>
+									</h:panelGroup>
+								</f:facet>
+								<h:outputText value="#{grupoClave.equipo.equipo}" />
+							</rich:column>
+							
+							<rich:column id="estatus" width="140px"
+						           filterValue="#{grupoClaveFilteringBean.estatusFilter}"
+						           filterExpression="#{fn:startsWith(grupoClave.baja,grupoClaveFilteringBean.estatusFilter)}"
+						           filterType="custom">
+						        <f:facet name="header">
+						        <h:outputText value="#{msg['grupoClave.consulta.estatus']}" />
+						        <h:selectOneMenu enableManualInput="false" styleClass="width:120px"
+						               value="#{grupoClaveFilteringBean.estatusFilter}">
+						               <f:selectItem itemLabel="Todos" itemValue="#{null}"/>
+						               <f:selectItems value="#{grupoClaveBean.estatus}" var="r" itemLabel="#{r.descripcion}" itemValue="#{r}" />
+						               <a4j:ajax render="tablaGruposClave" execute="@this" event="change"/>
+						            </h:selectOneMenu>         
+						        </f:facet>
+						        <h:outputText value="#{grupoClave.baja.descripcion}" />
+					       </rich:column>
+												
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['grupoClave.consulta.modificar']}" />
+								</f:facet>
+								<a4j:commandLink render="editarGrupoClave"
+									oncomplete="#{rich:component('editarGrupoClave')}.show()">
+									<h:graphicImage value="/resources/images/icons/edit.png"
+										alt="editar" title="Editar Grupo Clave"
+										style="float: inherit; height: 12px; width: 12px; border:0px;" />
+									<f:setPropertyActionListener target="#{grupoClaveBean.grupoClave}" value="#{grupoClave}" />
+								</a4j:commandLink>
+							</rich:column>
+							
+							<rich:column width="80px" sorteable="false">
+								<f:facet name="header">
+									<h:outputText value="#{msg['grupoClave.consulta.eliminar']}" />
+								</f:facet>
+								<a4j:commandLink styleClass="no-decor" execute="@this"
+									render="@none" ajaxSingle="true"
+									oncomplete="#{rich:component('panelConfirmacionBorrado')}.show(); return false;">
+									<h:graphicImage value="/resources/images/icons/delete.png"
+										alt="Eliminar" title="Eliminar Registro"
+										style="float: inherit; height: 25px; width: 25px" />
+									<f:setPropertyActionListener target="#{grupoClaveBean.grupoClave}" value="#{grupoClave}" />
+								</a4j:commandLink>
+							</rich:column>
+							<f:facet name="footer">
+        						<rich:dataScroller page="#{grupoClaveBean.pagina}" for="tablaGruposClave" 
+         						render="tablaGruposClave" fastControls="hide"/>
+       						</f:facet>
+						
+						</rich:extendedDataTable >
+					</rich:panel>
+					
+					<a4j:jsFunction name="eliminar" render="tablaGruposClave,alertPanel"
+						action="#{grupoClaveBean.eliminarGrupoClave}" execute="@this"
+						oncomplete="#{rich:component('alertPanel')}.show();" />					
+				</div>
+			</a4j:region>
+		</h:form>
+	</f:subview>
+	
+</ui:composition>

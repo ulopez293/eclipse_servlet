@@ -1,0 +1,287 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<f:subview id="modal_acta_entrega">
+		
+		<h:form id="formActaEntrega">
+			
+			<rich:popupPanel header="ACTA ENTREGA" id="actaEntrega" domElementAttachment="parent"  width="1000" height="565">
+				
+				<f:facet name="controls">
+					<h:outputLink value="#"
+						onclick="#{rich:component('actaEntrega')}.hide(); return false;">
+						<h:graphicImage value="/resources/images/icons/close.gif"
+							alt="Cerrar" style="float: inherit; height: 15px; width: 15px" />
+					</h:outputLink>
+				</f:facet>
+				
+				<h:outputText value="CENTRO DE TRABAJO #{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.centroTrabajo.descripcion}" styleClass="titulo-red"/>
+				
+				<rich:tabPanel switchType="client" width="100%" height="100%" style="margin-top:5px">
+					<rich:tab header="Guardar Acta">
+						<div style="height:440px; overflow-y: scroll;">
+							<t:panelGrid id="altaActaEntrega" columns="3" columnClasses="even-row,odd-row"
+								width="650" style="margin-top: 2px; margin-left: 100px">
+								
+								<h:outputText value="TECNICO ENVIADO" styleClass="titulo"/>
+								<h:inputText id="tecnico" value="#{programacionServicioBean.actaEntrega.tecnicoEnviado}" 
+											required="true" requiredMessage="El nombre es requerido." size="40"
+											disabled="#{programacionServicioBean.deshabilitaCampos}"/>
+								<rich:message for="tecnico"/>
+								
+								<h:outputText value="RESPONSABLE EQUIPO" styleClass="titulo"/>
+								<h:inputText id="responsable" value="#{programacionServicioBean.actaEntrega.responsableEquipo}" 
+											required="true" requiredMessage="El responsable es requerido." size="40"
+											disabled="#{programacionServicioBean.deshabilitaCampos}"/>
+								<rich:message for="responsable"/>
+								
+								<h:outputText value="MANTENIMIENTO EXITOSO" styleClass="titulo"/>
+								<h:selectOneMenu id="estatusMant" enableManualInput="false" 
+												 value="#{programacionServicioBean.actaEntrega.mantenimientoExitoso}"
+												 disabled="#{programacionServicioBean.deshabilitaCampos}">
+								  		<f:selectItem itemLabel="SI" itemValue="1" />
+								  		<f:selectItem itemLabel="NO" itemValue="0" />
+								  		<a4j:ajax event="change" render="condicion, atribuible" listener="#{programacionServicioBean.cambiarCondicion}" />
+								</h:selectOneMenu>
+								<rich:message for="estatusMant"/>
+								
+								<h:outputText value="FECHA REAL INICIO" styleClass="titulo"/>
+								<rich:calendar value="#{programacionServicioBean.actaEntrega.fechaInicioServicio}"
+										  id="fechaInicio"
+										  datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px"
+										  style="width:200px"
+										  validator="#{validacionBean.validaFechas}"
+										  required="true" requiredMessage="La fecha es requerida."
+										  disabled="#{programacionServicioBean.deshabilitaCampos}"/>
+								<rich:message for="fechaInicio"/>
+										
+								<h:outputText value="FECHA REAL FIN" styleClass="titulo"/>	
+								<rich:calendar value="#{programacionServicioBean.actaEntrega.fechaFinalServicio}"
+										  id="fechaFin"
+										  datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px"
+										  style="width:200px"
+										  required="true" requiredMessage="La fecha es requerida."
+										  disabled="#{programacionServicioBean.deshabilitaCampos}"/>
+								<rich:message for="fechaFin"/>
+														
+								<h:outputText value="ATRIBUIBLE A" styleClass="titulo"/>
+								<h:selectOneMenu id="atribuible" enableManualInput="false"
+								  value="#{programacionServicioBean.actaEntrega.atribuible}"
+								  disabled="#{programacionServicioBean.deshabilitaAtribuible || programacionServicioBean.deshabilitaCampos}"
+								  required="true" requiredMessage="Campo requerido">
+									  <f:selectItem itemLabel="Seleccione..." itemValue="" />
+									  <f:selectItem itemLabel="PROVEEDOR" itemValue="PROVEEDOR" />
+									  <f:selectItem itemLabel="ISSSTE" itemValue="ISSSTE" />
+								</h:selectOneMenu>
+								<rich:message for="atribuible"/>
+
+								<h:outputText value="CANCELA SOLICITUD DE MANTENIMIENTO" styleClass="titulo"
+									rendered="#{programacionServicioBean.programacion.tipoServicio.idTipoServicio==2}"/>
+								<h:selectBooleanCheckbox id="cancela" value="#{programacionServicioBean.actaEntrega.cancelaActa}" 
+													disabled="#{!programacionServicioBean.programacion.esCancelable}"
+													rendered="#{programacionServicioBean.programacion.tipoServicio.idTipoServicio==2}">
+									<f:ajax event="change" listener="#{programacionServicioBean.deshabilitaCampos}" 
+											render="tecnico responsable estatusMant fechaInicio fechaFin horasServicio kitRefacciones recomendaciones" />
+								</h:selectBooleanCheckbox>
+								<rich:message for="cancela" rendered="#{programacionServicioBean.programacion.tipoServicio.idTipoServicio==2}"/>
+								
+								<h:outputText value="HORAS REALES DE SERVICIO" styleClass="titulo"/>
+								<h:inputText id="horasServicio" value="#{programacionServicioBean.actaEntrega.horasRealServicio}" size="5"
+									required="true" requiredMessage="Horas es requerido."
+									disabled="#{programacionServicioBean.deshabilitaCampos}"/>
+								<rich:message for="horasServicio"/>
+								
+								<h:outputText value="KIT REFACCIONES USUADAS" styleClass="titulo"/>
+								<h:inputTextarea id="kitRefacciones" value="#{programacionServicioBean.actaEntrega.kitRefUtilizadas}" 
+										style="width:450px; text-transform: uppercase; resize: none;" rows="3" 
+										required="true" requiredMessage="Este campo es requerido."
+										disabled="#{programacionServicioBean.deshabilitaCampos}">
+										<f:validateLength maximum="500" />
+								</h:inputTextarea>
+								<rich:message for="kitRefacciones"/>
+									
+								<h:outputText value="RECOMENDACIONES" styleClass="titulo"/>
+								<h:inputTextarea id="recomendaciones" value="#{programacionServicioBean.actaEntrega.recomendaciones}" 
+										style="width:450px; text-transform: uppercase; resize: none;" rows="3" 
+										required="true" requiredMessage="Este campo es requerido."
+										disabled="#{programacionServicioBean.deshabilitaCampos}">
+										<f:validateLength maximum="500" />
+								</h:inputTextarea>
+								<rich:message for="recomendaciones"/>
+								
+								<h:outputText value="DESCRIPCION COMPLETA" styleClass="titulo"/>
+								<h:inputTextarea id="descripcion" value="#{programacionServicioBean.actaEntrega.descripcionCompletaServicio}" 
+										style="width:450px;  text-transform: uppercase; resize: none;" rows="3" 
+										required="true" requiredMessage="Este campo es requerido.">
+										<f:validateLength maximum="500" />
+								</h:inputTextarea>
+								<rich:message for="descripcion"/>
+								
+								<h:outputText value="CONDICIONES DEL EQUIPO" styleClass="titulo"/>
+								<h:outputText id="condicion" name="condicion" value="#{programacionServicioBean.condicion}" styleClass="titulo"/>
+								<rich:message for="condicion"/>
+								
+							</t:panelGrid>	
+							<t:panelGrid columns="3" width="650" style="margin-top: 3px; margin-left: 280px">
+								<t:panelGroup colspan="3" id="panel">
+									<sec:authorize ifAllGranted="ROLE_UNIDAD">	
+										<a4j:commandButton value="Guardar" id="guardar"
+											image="/resources/images/icons/btnguardar.jpg" 
+											render="tablaProgramaciones, alertPanel, panel"
+											action="#{programacionServicioBean.guardarActa}"
+											rendered="#{!programacionServicioBean.mostrarBoton}"
+											oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+												#{rich:component('alertPanel')}.show();}" />		
+											<h:commandButton value="Imprimir"
+												image="/resources/images/icons/btnimprimir.jpg"
+												action="#{programacionServicioBean.descargarActa}"
+												rendered="#{programacionServicioBean.mostrarBoton}"/>
+									</sec:authorize>						
+									<a4j:region renderRegionOnly="true">
+										<a4j:commandButton value="Cancelar"
+												image="/resources/images/icons/btncancelar.jpg"
+												onclick="#{rich:component('actaEntrega')}.hide();"
+												rendered="#{!programacionServicioBean.mostrarBoton}"/>
+										<a4j:commandButton value="Terminar"
+												image="/resources/images/icons/btnterminar.jpg"
+												onclick="#{rich:component('actaEntrega')}.hide();"
+												rendered="#{programacionServicioBean.mostrarBoton}"/>
+									</a4j:region>
+								</t:panelGroup>
+							</t:panelGrid>
+						</div>
+					</rich:tab>				
+					<rich:tab header="Datos del Servicio">
+						<div style="height:440px; overflow-y: scroll;">
+							<t:panelGrid columns="2" columnClasses="even-row,odd-row" width="650" style="margin-top: 10px; margin-bottom: 10px; margin-left: 100px">
+							
+								<h:outputText value="#{msg['smem.etiqueta.proveedor']}" styleClass="titulo-red"/>
+								<h:outputText value=""/>
+								
+								<h:outputText value="#{msg['smem.etiqueta.proveedor']}"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.contrato.proveedor.proveedor}"/>
+								
+								<h:outputText value="RFC"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.contrato.proveedor.rfc}"/>
+								
+								<h:outputText value="DIRECCION"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.contrato.proveedor.direccion}"/>
+
+								<h:outputText value="TELEFONO"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.contrato.proveedor.telefono}"/>
+
+								<h:outputText value="CORREO"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.contrato.proveedor.email}"/>
+
+								<h:outputText value="REPRESENTANTE LEGAL"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.contrato.proveedor.representanteLegal}"/>
+
+								<h:outputText value="TELEFONO DEL REPRESENTANTE"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.contrato.proveedor.telefonoRepresentanteLegal}"/>
+
+								<h:outputText value="GERENTE"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.contrato.proveedor.nombreGerenteServicio}"/>
+								
+								<h:outputText value="TELEFONO GERENTE"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.contrato.proveedor.telefonoGerenteServicio}"/>
+								
+								<h:outputText value="CORREO GERENTE"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.contrato.proveedor.emailGerenteServicio}"/>
+							
+								<h:outputText value="SUPERVISOR" styleClass="titulo-red"/>
+								<h:outputText value=""/>
+								
+								<h:outputText value="SUPERVISOR"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.centroTrabajo.unidadRegional.supervisor.nombre}"/>			
+								
+								<h:outputText value="TELEFONO"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.centroTrabajo.unidadRegional.supervisor.telefono}"/>			
+								
+								<h:outputText value="CORREO"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.centroTrabajo.unidadRegional.supervisor.correo}"/>			
+							
+								<h:outputText value="RESIDENTE" styleClass="titulo-red"/>
+								<h:outputText value=""/>
+								
+								<h:outputText value="RESIDENTE"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.centroTrabajo.responsable}"/>			
+
+								<h:outputText value="CARGO"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.centroTrabajo.residenteCargo}"/>			
+
+								<h:outputText value="DIRECCION"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.centroTrabajo.direccion}"/>			
+																								
+								<h:outputText value="TELEFONO"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.centroTrabajo.telefono}"/>			
+								
+								<h:outputText value="CORREO"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.centroTrabajo.residenteCorreo}"/>			
+
+								<h:outputText value="JEFE"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.centroTrabajo.residenteJefe}"/>			
+
+								<h:outputText value="TELEFONO"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.centroTrabajo.residenteTelefonoJefe}"/>			
+								
+								<h:outputText value="CORREO"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.centroTrabajo.residenteCorreoJefe}"/>			
+
+								<h:outputText value="CARGO"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.centroTrabajo.residenteCargoJefe}"/>							
+							
+								<h:outputText value="#{msg['smem.etiqueta.equipo']}" styleClass="titulo-red"/>
+								<h:outputText value=""/>
+								
+								<h:outputText value="#{msg['smem.etiqueta.id']}"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.idUniverso}"/>			
+								
+								<h:outputText value="#{msg['smem.etiqueta.equipo']}"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.equipo.equipo}"/>
+								
+								<h:outputText value="#{msg['smem.etiqueta.marca']}" />
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.marca}"/>
+
+								<h:outputText value="#{msg['smem.etiqueta.modelo']}"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.modelo}"/>
+
+								<h:outputText value="ESPECIALIDAD" />
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.especialidad.especialidad}"/>
+
+								<h:outputText value="FUNCIONALIDAD" />
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.funcionalidad.descripcion}"/>
+
+								<h:outputText value="NUMERO DE CONTRATO"/>
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.contrato.numeroContrato}"/>
+
+								<h:outputText value="CONSECUTIVO DE CONTRATO" />
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.consecutivoContrato}"/>
+							
+								<h:outputText value="#{msg['actaentrega.alta.titulo']}" styleClass="titulo-red"/>
+								<h:outputText value=""/>
+								
+								<h:outputText value="#{msg['actaentrega.alta.tiposervicio']}"/>
+								<h:outputText value="#{programacionServicioBean.programacion.tipoServicio.descripcion}"/>			
+								
+								<h:outputText value="#{msg['actaentrega.alta.fechainicio']}" />
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.fechaInicio}"/>
+								
+								<h:outputText value="#{msg['actaentrega.alta.fechafin']}" />
+								<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.fechaFin}"/>
+
+								<h:outputText value="#{msg['actaentrega.alta.fechavisita']}" />
+								<h:outputText value="#{programacionServicioBean.programacion.fechaVisita}"/>
+							</t:panelGrid>						
+						</div>
+					</rich:tab>
+				</rich:tabPanel>
+			</rich:popupPanel>
+		</h:form>
+	</f:subview>
+</ui:composition>

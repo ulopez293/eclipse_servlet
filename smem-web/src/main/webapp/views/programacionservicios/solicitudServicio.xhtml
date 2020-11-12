@@ -1,0 +1,318 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	template="/templates/templateMenu.xhtml"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+			
+	<ui:define name="header">
+		<ui:include src="/views/inicio/header.xhtml" />		
+	</ui:define>	
+	<ui:define name="leftColumn" style="position: relative;">
+		<ui:include src="/views/inicio/menu.xhtml"/>
+	</ui:define>
+	<ui:define name="content">
+			
+		<f:subview id="modal_solicitud_servicio">
+			<h:form id="formSoliciturServicio">
+				<a4j:region>
+					<rich:panel header="#{msg['solicitudservicio.nuevo.titulo']}" styleClass="padding: 0px  0px  0px  0px; margin: 0px  0px  0px  0px;">
+						<a4j:region renderRegionOnly="true">
+							<div style="float:left;">
+							<fieldset style="margin-bottom: 10px; height:180px">
+								<legend>
+									<h:outputText value="BUSCAR EQUIPO" styleClass="titulo-red"/>
+								</legend>
+								<t:panelGrid id="buscarUniversoGrid" columns="2">
+									
+									<h:outputText value="#{msg['smem.etiqueta.equipo']}" styleClass="titulo"/>
+									<h:selectOneMenu id="idEquipo" enableManualInput="false" style="width:230px" 
+													 value="#{solicitudServicioBean.idEquipo}">
+										<f:selectItem itemLabel="Seleccione" />
+										<f:selectItems value="#{solicitudServicioBean.equipos}" var="e"
+											itemLabel="#{e.equipo}" itemValue="#{e.idEquipo}" />
+									</h:selectOneMenu>
+				
+									<h:outputText value="#{msg['smem.etiqueta.id']}" styleClass="titulo"/>			
+									<h:inputText id="idUniverso" value="#{solicitudServicioBean.idUniverso}" size="30" validatorMessage="#{msg['conversion.entero.mensaje']}">
+										<f:validateRegex pattern="(^\d*$)"/>
+									</h:inputText>
+									
+									<t:panelGroup colspan="2" style="text-align:center">
+										<rich:message for="idUniverso"/>
+									</t:panelGroup>
+									
+									<h:outputText value="#{msg['smem.etiqueta.serie']}" styleClass="titulo"/>
+									<h:inputText id="serie" value="#{solicitudServicioBean.serie}" size="30"/>
+									
+									<h:outputText value="#{msg['smem.etiqueta.inventario']}" styleClass="titulo"/>
+									<h:inputText id="inventario" value="#{solicitudServicioBean.inventario}" size="30"/>
+									
+									<t:panelGroup colspan="2" style="text-align:center">
+										<a4j:commandButton value="Buscar"
+											image="/resources/images/icons/btnbuscar.jpg"
+											render="tablaUniversos, universoDetalle, panel"
+											action="#{solicitudServicioBean.buscarUniversos}"/>
+									</t:panelGroup>
+								</t:panelGrid>
+							</fieldset>
+							</div>
+							<div >
+								<rich:extendedDataTable  id="tablaUniversos" value="#{solicitudServicioBean.universos}" var="universo"
+									noDataLabel="No existen equipos con estos datos."
+									style="position:relative; width: 630px; height:200px; text-align: center;"
+									selectionMode="single" 
+									selection="#{solicitudServicioBean.selection}"
+									rowClasses="odd-row, even-row" rows="10"	
+									styleClass="txt-gray-small">
+									
+									<a4j:ajax event="selectionchange"
+												listener="#{solicitudServicioBean.selectionListener}"
+												render="universoDetalle, panel" />
+								
+									<rich:column width="100px" sorteable="false">
+										<f:facet name="header">	
+											<h:outputText value="#{msg['smem.etiqueta.id']}" styleClass="titulo-red"/>
+										</f:facet>
+										<h:outputText value="#{universo.idUniverso}" />
+									</rich:column>
+									<rich:column width="200px">
+										<f:facet name="header">
+											<h:outputText value="#{msg['smem.etiqueta.equipo']}" styleClass="titulo-red"/>								
+										</f:facet>
+										<h:outputText value="#{universo.equipo.equipo}" />
+									</rich:column>
+									<rich:column width="100px" sorteable="false">
+										<f:facet name="header">
+											<h:outputText value="#{msg['smem.etiqueta.serie']}" styleClass="titulo-red"/>
+										</f:facet>
+										<h:outputText value="#{universo.serie}" />
+									</rich:column>
+									<rich:column width="200px" sorteable="false">
+										<f:facet name="header">
+											<h:outputText value="#{msg['smem.etiqueta.inventario']}" styleClass="titulo-red"/>
+										</f:facet>
+										<h:outputText value="#{universo.inventario}" />
+									</rich:column>
+									<rich:column width="100px" sorteable="false">
+										<f:facet name="header">
+											<h:outputText value="#{msg['smem.etiqueta.modelo']}"  styleClass="titulo-red"/>
+										</f:facet>
+										<h:outputText value="#{universo.modelo}" />
+									</rich:column>
+									<rich:column width="100px" sorteable="false">
+										<f:facet name="header">
+											<h:outputText value="#{msg['smem.etiqueta.marca']}"  styleClass="titulo-red"/>
+										</f:facet>
+										<h:outputText value="#{universo.marca}" />
+									</rich:column>					
+									<f:facet name="footer">
+										<rich:dataScroller page="#{solicitudServicioBean.pagina}" for="tablaUniversos" render="tablaUniversos" fastControls="hide"/>
+									</f:facet>
+								</rich:extendedDataTable >	
+							</div>
+						<div style="width:980px; height:300px; overflow-y: scroll;">
+							<t:panelGrid id="universoDetalle" columns="2" bgcolor='#F0F0F0'
+								width="950" style="margin-top: 10px; border: 1px solid #000000 !important;">
+								
+								<t:panelGroup colspan="2" style="padding-bottom: 8px; padding-top:5px; text-align:center; bgcolor:gray;">
+									<h:outputText value="CENTRO DE TRABAJO" styleClass="titulo-red"/>
+								</t:panelGroup>
+									
+								<h:outputText value="URCT" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.urct}"/>			
+								
+								<h:outputText value="CENTRO DE TRABAJO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.descripcion}"/>
+								
+								<h:outputText value="DIRECCION" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.direccion}"/>
+
+								<t:panelGroup colspan="2" style="padding-bottom: 8px; padding-top:5px; text-align:center; bgcolor:gray;">
+									<h:outputText value="#{msg['smem.etiqueta.equipo']}" styleClass="titulo-red"/>
+								</t:panelGroup>
+									
+								<h:outputText value="#{msg['smem.etiqueta.id']}" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.idUniverso}"/>			
+								
+								<h:outputText value="#{msg['smem.etiqueta.equipo']}" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.equipo.equipo}"/>
+								
+								<h:outputText value="#{msg['smem.etiqueta.serie']}" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.serie}"/>
+								
+								<h:outputText value="#{msg['smem.etiqueta.inventario']}" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.inventario}"/>
+								
+								<h:outputText value="#{msg['smem.etiqueta.marca']}" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.marca}"/>
+
+								<h:outputText value="#{msg['smem.etiqueta.modelo']}" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.modelo}"/>
+
+								<h:outputText value="ESPECIALIDAD" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.especialidad.especialidad}"/>
+
+								<h:outputText value="FUNCIONALIDAD" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.funcionalidad.descripcion}"/>
+
+								<h:outputText value="NUMERO DE CONTRATO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.contratoDetalleDto.contrato.numeroContrato}"/>
+
+								<h:outputText value="CONSECUTIVO DE CONTRATO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.contratoDetalleDto.consecutivoContrato}"/>
+
+								<t:panelGroup colspan="2" style="padding-bottom: 8px; padding-top:5px; text-align:center; bgcolor:gray;">
+									<h:outputText value="#{msg['smem.etiqueta.proveedor']}" styleClass="titulo-red"/>
+								</t:panelGroup>
+									
+								<h:outputText value="#{msg['smem.etiqueta.proveedor']}" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.contratoDetalleDto.contrato.proveedor.proveedor}"/>
+								
+								<h:outputText value="RFC" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.contratoDetalleDto.contrato.proveedor.rfc}"/>
+								
+								<h:outputText value="DIRECCION" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.contratoDetalleDto.contrato.proveedor.direccion}"/>
+
+								<h:outputText value="TELEFONO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.contratoDetalleDto.contrato.proveedor.telefono}"/>
+
+								<h:outputText value="CORREO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.contratoDetalleDto.contrato.proveedor.email}"/>
+
+								<h:outputText value="REPRESENTANTE LEGAL" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.contratoDetalleDto.contrato.proveedor.representanteLegal}"/>
+
+								<h:outputText value="TELEFONO DEL REPRESENTANTE" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.contratoDetalleDto.contrato.proveedor.telefonoRepresentanteLegal}"/>
+
+								<h:outputText value="GERENTE" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.contratoDetalleDto.contrato.proveedor.nombreGerenteServicio}"/>
+								
+								<h:outputText value="TELEFONO GERENTE" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.contratoDetalleDto.contrato.proveedor.telefonoGerenteServicio}"/>
+								
+								<h:outputText value="CORREO GERENTE" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.contratoDetalleDto.contrato.proveedor.emailGerenteServicio}"/>
+
+								<t:panelGroup colspan="2" style="padding-bottom: 8px; padding-top:5px; text-align:center; bgcolor:gray;">
+									<h:outputText value="SUPERVISOR" styleClass="titulo-red"/>
+								</t:panelGroup>
+									
+								<h:outputText value="SUPERVISOR" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.unidadRegional.supervisor.nombre}"/>			
+								
+								<h:outputText value="TELEFONO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.unidadRegional.supervisor.telefono}"/>			
+								
+								<h:outputText value="CORREO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.unidadRegional.supervisor.correo}"/>			
+
+								<t:panelGroup colspan="2" style="padding-bottom: 8px; padding-top:5px; text-align:center; bgcolor:gray;">
+									<h:outputText value="RESIDENTE" styleClass="titulo-red"/>
+								</t:panelGroup>
+									
+								<h:outputText value="RESIDENTE" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.responsable}"/>			
+
+								<h:outputText value="CARGO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.residenteCargo}"/>			
+
+								<h:outputText value="DIRECCION" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.direccion}"/>			
+																								
+								<h:outputText value="TELEFONO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.telefono}"/>			
+								
+								<h:outputText value="CORREO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.residenteCorreo}"/>			
+
+								<h:outputText value="JEFE" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.residenteJefe}"/>			
+
+								<h:outputText value="TELEFONO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.residenteTelefonoJefe}"/>			
+								
+								<h:outputText value="CORREO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.residenteCorreoJefe}"/>			
+
+								<h:outputText value="CARGO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.universoSeleccionado.centroTrabajo.residenteCargoJefe}"/>			
+
+								<t:panelGroup colspan="2" style="padding-bottom: 8px; padding-top:5px; text-align:center; bgcolor:gray;">
+									<h:outputText value="ULTIMO MANTENIMIENTO" styleClass="titulo-red"/>
+								</t:panelGroup>
+
+								<h:outputText value="PROVEEDOR QUE ATENDIO LA FALLA" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.actaEntregaRecepcionDto.programacionServicio.solicitudServicio.contratoDetalle.contrato.proveedor.proveedor}"/>
+
+								<h:outputText value="FECHA DEL ULTIMO MANTENIMIENTO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.actaEntregaRecepcionDto.fechaFinalServicio}"/>
+
+								<h:outputText value="TECNICO ENVIADO" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.actaEntregaRecepcionDto.tecnicoEnviado}"/>
+																								
+								<h:outputText value="DESCRIPCION DE LA ULTIMA FALLA" styleClass="titulo"/>
+								<h:outputText value="#{solicitudServicioBean.actaEntregaRecepcionDto.descripcionCompletaServicio}"/>
+								
+							</t:panelGrid>						
+						</div>
+						</a4j:region>
+						<t:panelGrid columns="3" width="950" style="margin-top: 10px;" id="panel">		
+							<h:outputText value="DESCRIPCION DE LA FALLA" styleClass="titulo-red"/>
+							<h:inputTextarea id="descripcionFalla" value="#{solicitudServicioBean.descripcionFalla}" 
+								style="width:550px; text-transform: uppercase; resize: none;" rows="8" 
+								required="true" requiredMessage="Este campo es requerido.">
+								<f:validateLength maximum="500" />
+							</h:inputTextarea>
+							<rich:message for="descripcionFalla" />
+							<t:panelGroup colspan="3" style="text-align:center">
+								<a4j:commandButton value="Guardar" 
+										image="/resources/images/icons/btnguardar.jpg"
+										render="mensajePanel, panel, universoDetalle, tablaUniversos,"
+										action="#{solicitudServicioBean.guardarSolicitud}"
+										rendered="#{!solicitudServicioBean.mostrarBoton}"
+										oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+														#{rich:component('mensajePanel')}.show();}" />
+								<a4j:region renderRegionOnly="true">
+									<h:commandButton value="Imprimir"
+											image="/resources/images/icons/btnimprimir.jpg"
+											action="#{solicitudServicioBean.descargarSolicitud}"
+											rendered="#{solicitudServicioBean.mostrarBoton}"/>
+								</a4j:region>
+								<a4j:region renderRegionOnly="true">
+									<a4j:commandButton value="Cancelar"
+											image="/resources/images/icons/btncancelar.jpg"
+											action="#{programacionServicioBean.inicializar}" 
+											rendered="#{!solicitudServicioBean.mostrarBoton}"/>
+									<a4j:commandButton value="Terminar"
+											image="/resources/images/icons/btnterminar.jpg"
+											action="#{programacionServicioBean.inicializar}"
+											rendered="#{solicitudServicioBean.mostrarBoton}" />
+								</a4j:region>
+							</t:panelGroup>
+						</t:panelGrid>
+												
+						<rich:popupPanel id="mensajePanel" modal="true" onmaskclick="#{rich:component('mensajePanel')}.hide()"
+							autosized="true" moveable="true" header="Notificaci&oacute;n">		   
+							<h:panelGrid columns="2">
+								<h:graphicImage value="#{alertaBean.imagen}" alt="ok" style="height:50px; width:50px"/>
+								<h:outputText value="#{alertaBean.mensaje}" />
+							</h:panelGrid>		
+							<a4j:commandButton value="Aceptar" ajaxSingle="true"
+											    onclick="#{rich:component('mensajePanel')}.hide(); return false;"/>
+						</rich:popupPanel>
+					</rich:panel>
+				</a4j:region>
+			</h:form>
+		</f:subview>
+	</ui:define>
+	<ui:define name="footer">
+		<ui:include src="/views/inicio/footer.xhtml" />
+	</ui:define>
+</ui:composition>

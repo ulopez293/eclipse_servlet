@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+       http://www.springframework.org/schema/tx
+       http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+               
+     <context:annotation-config/>
+     <context:component-scan base-package=" mx.inntecsa.smem" />
+     <context:property-placeholder location="resources/properties/desarrollo.properties"/>
+         		
+     <!-- configuracion del datasource y el session factory para hibernate -->
+     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+		<property name="driverClassName" value="${database.jdbc.driver}"/>
+		<property name="url" value="${database.jdbc.url}"/>		
+		<property name="username" value="${database.jdbc.user}"/>
+		<property name="password" value="${database.jdbc.password}"/>				
+		<property name="maxActive" value="20" />
+        <property name="maxIdle" value="10" />
+        <property name="maxWait" value="1000" />
+        <property name="defaultAutoCommit" value="false" />
+        <property name="removeAbandoned" value="true" />
+        <property name="removeAbandonedTimeout" value="60" />
+        <property name="logAbandoned" value="true" />
+	</bean>    	  	
+	
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"/>
+		<property name="packagesToScan" value="mx/inntecsa/smem/pojo"/>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<!-- Manejador de transacciones -->	
+	<bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<!--1. Se definen las transacciones de forma explicita -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<!-- the transactional semantics... -->
+		<tx:attributes>
+			<!-- all methods starting with 'get' are read-only, se indica en que exception se hace roolback -->
+			<tx:method name="get*" read-only="true"   /> 
+			<!-- other methods use the default transaction settings (see below) -->
+			 <tx:method name="guardar*" timeout="180" rollback-for="Throwable, SMEMException, Exception" propagation="REQUIRED" />
+			 <tx:method name="actualizar*" timeout="180" rollback-for="Throwable, SMEMException, Exception" propagation="REQUIRED" />
+			 <tx:method name="eliminar*" timeout="180" rollback-for="Throwable, SMEMException, Exception" propagation="REQUIRED" />
+			<!-- tiempo en que una transaccion lanza timeout en segundos -->
+		</tx:attributes>
+	</tx:advice>
+
+	<!-- ensure that the above transactional advice runs for any execution of an operation defined by the FooService interface -->
+	<aop:config>									  
+	  <aop:pointcut id="serviceOperation" expression="execution(*  mx.inntecsa.smem.service.impl.*ServiceImpl.*(..))"/>
+	  <aop:advisor pointcut-ref="serviceOperation" advice-ref="txAdvice"/>
+	</aop:config>	
+    
+	<!-- beans que necesitan tomar la ruta de archivos temporales desde el properties -->
+	<bean id="ActaEntregaReporte"  class=" mx.inntecsa.smem.reporte.ActaEntregaReporte">
+	    <property name="rutaArchivoTemporal" value="${smem.archivos.temporales.ruta}" />
+	</bean>
+	
+	<bean id="SolicitudServicioReporte"  class=" mx.inntecsa.smem.reporte.SolicitudServicioReporte">
+	    <property name="rutaArchivoTemporal" value="${smem.archivos.temporales.ruta}" />
+	</bean>
+	
+ 	<import resource="aspectos.xml"/>	
+  	<import resource="cron.xml"/>
+</beans>

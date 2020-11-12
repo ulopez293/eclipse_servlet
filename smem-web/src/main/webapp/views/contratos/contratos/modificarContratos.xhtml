@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<f:subview id="modal_editar_contratos">
+		<h:form id="formEditarContratos">
+			
+			<rich:popupPanel header="#{msg['contratos.alta.titulo']}" id="editarContrato"
+				domElementAttachment="parent"  width="600" height="500">
+				
+				<f:facet name="controls">
+					<h:outputLink value="#"
+						onclick="#{rich:component('editarContrato')}.hide(); return false;">
+						<h:graphicImage value="/resources/images/icons/close.gif"
+							alt="Cerrar" style="float: inherit; height: 15px; width: 15px" />
+					</h:outputLink>
+				</f:facet>
+									
+				<t:panelGrid id="editGrid" columns="3" columnClasses="primercolumna, segundacolumna, segundacolumna"
+					width="580" height="480" style="margin-top:10px" colspan="10">
+					
+					<h:outputText value="#{msg['contratos.alta.numerocontrato']}" style="width:350px" />
+					<h:inputText id="numeroContrato" value="#{contratoBean.contrato.numeroContrato}"
+						required="true" requiredMessage="#{msg['contratos.numerocontrato.mensaje']}" 
+						validator="#{validacionContratoBean.validaNumeroContrato}" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, - y / ">
+						<f:validateRegex pattern="[A-Za-z0-9ñÑ/-]*" />
+					</h:inputText>
+					<rich:message for="numeroContrato" />	
+					
+					<h:outputText value="#{msg['contratos.alta.tipocontratacion']}" />
+					<h:selectOneMenu id="tipoContratacion" enableManualInput="false"
+						value="#{contratoBean.contrato.tipoContratacion.idTipoContratacion}" 
+						required="true" requiredMessage="#{msg['contratos.tipocontratacion.mensaje']}">
+						<f:selectItem itemLabel="Seleccione..." />
+						<f:selectItems value="#{contratoBean.tiposContratacion}" var="tc"
+							itemLabel="#{tc.tipoContratacion}" itemValue="#{tc.idTipoContratacion}" />						 							
+					</h:selectOneMenu>
+					<rich:message for="tipoContratacion" />
+					
+					<h:outputText value="#{msg['contratos.alta.proveedor']}" />
+					<h:selectOneMenu id="proveedor" enableManualInput="false" style="width:150px"
+						value="#{contratoBean.contrato.proveedor.idProveedor}" 
+						required="true" requiredMessage="#{msg['contratos.proveedor.mensaje']}">
+						<f:selectItem itemLabel="Seleccione..." />
+						<f:selectItems value="#{contratoBean.proveedores}" var="p"
+							itemLabel="#{p.proveedor}" itemValue="#{p.idProveedor}" />						 							
+					</h:selectOneMenu>
+					<rich:message for="proveedor" />
+					
+					<h:outputText value="#{msg['contratos.alta.fechasuscripcion']}" />
+					<rich:calendar value="#{contratoBean.contrato.fechaSuscripcion}" id="fechaSuscripcion" 
+						datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px" style="width:200px" 
+				        required="true" requiredMessage="#{msg['contratos.fechasuscripcion.mensaje']}" />
+				    <rich:message for="fechaSuscripcion" />    
+					
+					<h:outputText value="#{msg['contratos.alta.oficiosuficiencia']}" />
+					<h:inputText id="oficioSuficiencia" value="#{contratoBean.contrato.oficioSufPresupuestal}"
+						required="true" requiredMessage="#{msg['contratos.oficiosuficiencia.mensaje']}" />					
+					<rich:message for="oficioSuficiencia" />
+					
+					<h:outputText value="#{msg['contratos.alta.partida']}" />
+					<h:inputText id="partida" value="#{contratoBean.contrato.partida}"
+						required="true" requiredMessage="#{msg['contratos.partida.mensaje']}"
+						converterMessage="#{msg['conversion.entero.mensaje']}" >	
+						<f:convertNumber integerOnly="true"/>				
+					</h:inputText>	
+					<rich:message for="partida" />
+					
+					<h:outputText value="#{msg['contratos.alta.montominimo']}" />
+					<h:inputText id="montoMinimo" value="#{contratoBean.contrato.montoMinimo}"						
+						required="true" requiredMessage="#{msg['contratos.montominimo.mensaje']}" >	
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" />				
+					</h:inputText>	
+					<rich:message for="montoMinimo" />
+					
+					<h:outputText value="#{msg['contratos.alta.montomaximo']}" />
+					<h:inputText id="montoMaximo" value="#{contratoBean.contrato.montoMaximo}"						
+						required="true" requiredMessage="#{msg['contratos.montomaximo.mensaje']}" >	
+						<f:convertNumber maxFractionDigits="2" minFractionDigits="0" />				
+					</h:inputText>	
+					<rich:message for="montoMaximo" />
+					
+					<h:outputText value="#{msg['contratos.alta.vigenciainicio']}" />
+					<rich:calendar value="#{contratoBean.contrato.vigenciaInicioContrato}" id="fechaInicio" 
+						datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px" style="width:200px" 
+				        required="true" requiredMessage="#{msg['contratos.vigenciainicio.mensaje']}" 
+				        validator="#{validacionBean.validaFechas}" />
+				    <rich:message for="fechaInicio" />    
+				    
+				    <h:outputText value="#{msg['contratos.alta.vigenciafin']}" />
+					<rich:calendar value="#{contratoBean.contrato.vigenciaFinContrato}" id="fechaFin" 
+						datePattern="dd/MMM/yyyy" cellWidth="24px" cellHeight="22px" style="width:200px" 
+				        required="true" requiredMessage="#{msg['contratos.vigenciafin.mensaje']}" />
+				    <rich:message for="fechaFin" />    
+				    
+				    <h:outputText value="#{msg['contratos.alta.subtipocontrato']}" />
+					<h:selectOneMenu id="subtipoContrato" enableManualInput="false"
+						value="#{contratoBean.contrato.subtipoContrato.idSubtipoContrato}" 
+						required="true" requiredMessage="#{msg['contratos.subtipocontrato.mensaje']}">
+						<f:selectItem itemLabel="Seleccione..." />
+						<f:selectItems value="#{contratoBean.subtiposContrato}" var="tc"
+							itemLabel="#{tc.subtipoContrato}" itemValue="#{tc.idSubtipoContrato}" />						 							
+					</h:selectOneMenu>
+					<rich:message for="subtipoContrato" />
+					
+					<h:outputText value="#{msg['contratos.alta.tiposervicio']}" />
+					<h:selectOneMenu id="tipoServicio" enableManualInput="false"
+						value="#{contratoBean.contrato.tipoServicio}" 
+						required="true" requiredMessage="#{msg['contratos.tiposervicio.mensaje']}">
+						<f:selectItem itemLabel="Seleccione..." />
+						<f:selectItems value="#{contratoBean.tiposServicio}" var="ts"
+							itemLabel="#{ts.descripcion}" itemValue="#{ts}" />						 							
+					</h:selectOneMenu>
+					<rich:message for="tipoServicio" />
+				</t:panelGrid>
+				
+				<h:inputHidden value="#{contratoBean.contrato.idContrato}" id="idContratoHidden" />	
+				
+				<a4j:commandButton value="Actualizar" render="tablaContratos, alertPanel"
+					image="/resources/images/icons/btnguardar.jpg"
+					style="margin-left:110px; margin-top:10px"				
+					action="#{contratoBean.editarContrato}"
+					oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+					#{rich:component('alertPanel')}.show();  
+					#{rich:component('editarContrato')}.hide();}" />
+				<a4j:commandButton value="Cancelar"
+					image="/resources/images/icons/btncancelar.jpg"
+					onclick="#{rich:component('editarContrato')}.hide(); return false;" />
+				
+			</rich:popupPanel>
+			
+		</h:form>
+	</f:subview>
+</ui:composition>

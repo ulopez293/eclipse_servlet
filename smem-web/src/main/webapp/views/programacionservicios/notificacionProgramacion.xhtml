@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+	<f:subview id="modal_notificacion">
+	
+		<h:form id="formNotificacion">
+			
+			<rich:popupPanel header="#{msg['programacionservicios.notificacion.titulo']}" id="notificacion" domElementAttachment="parent" 
+							width="700" height="380">
+				
+				<f:facet name="controls">
+					<h:outputLink value="#"
+						onclick="#{rich:component('notificacion')}.hide(); return false;">
+						<h:graphicImage value="/resources/images/icons/close.gif"
+							alt="Cerrar" style="float: inherit; height: 15px; width: 15px" />
+					</h:outputLink>
+				</f:facet>
+								
+				<h:outputText value="EL PROVEEDOR HA PROGRAMADO UNA NUEVA VISIA A SU CENTRO DE TRABAJO,
+											 DESDE EL PORTAL DE PROVEEDORES, QUEDANDO AGENDADA LA VISITA PARA LA 
+											 SIGUIENTE FECHA" styleClass="titulo-red"/>
+											 
+				<t:panelGrid id="editGrid" columns="2" columnClasses="even-row,odd-row" style="width:600px; margin-top:20px; margin-bottom:20px;">
+					<h:outputText value="#{msg['smem.etiqueta.id']}"  styleClass="titulo"/>
+					<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.idUniverso}" />
+										
+					<h:outputText value="#{msg['smem.etiqueta.marca']}"  styleClass="titulo"/>
+					<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.marca}" />
+
+					<h:outputText value="#{msg['smem.etiqueta.modelo']}"  styleClass="titulo"/>
+					<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.universo.modelo}" />
+
+					<h:outputText value="#{msg['smem.etiqueta.contrato']}"  styleClass="titulo"/>
+					<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.contrato.numeroContrato}" />
+
+					<h:outputText value="#{msg['smem.etiqueta.proveedor']}"  styleClass="titulo"/>
+					<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.contrato.proveedor.proveedor}" />
+
+					<h:outputText value="#{msg['smem.etiqueta.correo']}"  styleClass="titulo"/>
+					<h:outputText value="#{programacionServicioBean.programacion.solicitudServicio.contratoDetalle.contrato.proveedor.email}" />
+
+					<h:outputText value="#{msg['programacionservicios.notificacion.tecnico']}"  styleClass="titulo"/>
+					<h:outputText value="#{programacionServicioBean.programacion.tecnicoProv}" />	
+
+					<h:outputText value="#{msg['smem.etiqueta.telefono']}"  styleClass="titulo"/>
+					<h:outputText value="#{programacionServicioBean.programacion.telTecnico}" />
+
+					<h:outputText value="#{msg['programacionservicios.notificacion.fechavis']}"  styleClass="titulo"/>
+					<h:outputText value="#{programacionServicioBean.programacion.fechaVisita}" />
+																	
+				</t:panelGrid>				
+				
+				<sec:authorize ifAllGranted="ROLE_UNIDAD">	
+					<t:panelGrid columns="2" style="width:600px; margin-left:300px;">
+						<t:panelGroup colspan="2">
+							<a4j:commandButton value="Guardar"
+								image="/resources/images/icons/btnaceptar.jpg"
+								render="tablaProgramaciones, alertPanel"
+								action="#{programacionServicioBean.actualizarEstatusProgramacion}"
+								oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+									#{rich:component('alertPanel')}.show();  
+									#{rich:component('notificacion')}.hide();}" />
+							<a4j:commandButton value="Cancelar"
+								image="/resources/images/icons/btncancelar.jpg"
+								onclick="#{rich:component('notificacion')}.hide(); return false;" />
+						</t:panelGroup>
+					</t:panelGrid>
+				</sec:authorize>
+				
+			</rich:popupPanel>
+			
+		</h:form>
+	</f:subview>
+	
+</ui:composition>

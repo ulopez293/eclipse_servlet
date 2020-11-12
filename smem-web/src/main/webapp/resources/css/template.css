@@ -1,0 +1,50 @@
+html { 
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	color: #2d2e2e;
+	font-family: Arial, Helvetica, sans-serif;
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	text-align: center;
+	line-height: 1.2em;
+}
+
+#outerWrapper {
+	background-color: transparent;
+	margin: 0 auto 0 auto;
+	text-align: left;
+	height: 100%;
+	width: 1100px;	
+	
+}
+
+#outerWrapper #header {
+	background-size: auto auto;
+	font-weight: bold;
+	line-height: 1.7em;
+	height: 240px;
+	width: 1100px;	
+}
+
+#outerWrapper #content {
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	height: 800px;
+	width: 1100px;
+	position: relative;
+}
+
+#outerWrapper #footer {
+	background-color: #6B696A;
+	font-weight: bold;
+	line-height: 1.7em;
+	height: 100px;
+	width: 1100px;
+	border-color: #6B696A;
+	border-size: 1px;
+}
+

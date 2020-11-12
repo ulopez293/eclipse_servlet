@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	
+	<parent>
+   		<groupId> mx.inntecsa.smem</groupId>
+   		<artifactId>smem</artifactId>
+   		<version>0.0.1-SNAPSHOT</version>
+  	</parent>
+
+	<artifactId>smem-web</artifactId>
+	<packaging>war</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<dependencyManagement> 
+		<dependencies> 
+			<dependency> 
+				<groupId>org.springframework</groupId> 
+				<artifactId>spring-framework-bom</artifactId> 
+				<version>4.2.4.RELEASE</version> 
+				<type>pom</type> 
+				<scope>import</scope> 
+			</dependency>
+		</dependencies> 
+	</dependencyManagement>	
+	
+	<dependencies>
+		<!-- Dependencias de test
+		-->
+		<dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+        </dependency>
+		 
+		 
+		<!--Importando el smem-core y sus dependencias-->
+		<dependency>
+			<groupId> mx.inntecsa.smem</groupId>
+  			<artifactId>smem-core</artifactId>
+  			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		
+		<!-- spring web -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+		</dependency>
+		
+		<!-- JSF -->
+		<dependency>
+		    <groupId>javax.faces</groupId>
+		    <artifactId>jsf-api</artifactId>
+		    <version>2.1</version>
+		    <scope>provided</scope>
+		</dependency>
+
+		<dependency>
+		    <groupId>net.bootsfaces</groupId>
+		    <artifactId>bootsfaces</artifactId>
+		    <version>1.5.0</version>
+		    <scope>compile</scope>
+		</dependency>
+                
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet.jsp</groupId>
+			<artifactId>jsp-api</artifactId>
+			<version>2.1</version>
+		</dependency>
+		
+		<!-- Dependencia de Spring security -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-core</artifactId>
+			<version>4.0.3.RELEASE</version>
+		</dependency>		
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<version>4.0.3.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-config</artifactId>
+			<version>4.0.3.RELEASE</version>
+		</dependency>
+ 		<dependency>
+           <groupId>org.springframework.webflow</groupId>
+           <artifactId>spring-faces</artifactId>
+           <version>2.4.4.RELEASE</version>
+        </dependency>		
+		<dependency>
+		    <groupId>org.springframework.security</groupId>
+		    <artifactId>spring-security-taglibs</artifactId>
+		    <version>4.0.3.RELEASE</version>
+		</dependency>
+		
+		<!-- dependencias de Apache POI -->
+		<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>3.10-FINAL</version>
+		</dependency>
+		
+		<!-- Dependencia jxl excel con estilos-->
+		<dependency>
+			<groupId>com.jxl</groupId>
+			<artifactId>jxl</artifactId>
+			<version>1.0</version>
+		</dependency>		
+
+		<!-- Dependencia de Jasper --> 
+   		<dependency>			
+			<groupId>net.sf.jasperreports</groupId>
+			<artifactId>jasperreports</artifactId>
+			<version>4.1.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>jfree</groupId>
+					<artifactId>jcommon</artifactId>				    
+				</exclusion>
+				<exclusion>
+					<groupId>jfree</groupId>
+					<artifactId>jfreechart</artifactId>				    
+				</exclusion>
+				<exclusion>
+					<groupId>eclipse</groupId>
+					<artifactId>jdtcore</artifactId>				    
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.castor</groupId>
+					<artifactId>castor</artifactId>				    
+				</exclusion>
+				<exclusion>
+					<groupId>xml-apis</groupId>
+					<artifactId>xml-apis</artifactId>				    
+				</exclusion>																								
+			</exclusions>
+		</dependency>
+		
+		<!-- dependencias de Apache XML Transaction -->
+		<dependency>
+			 <groupId>org.kathrynhuxtable.maven.plugins</groupId>
+			 <artifactId>htmlfilter-site-maven-plugin</artifactId>
+			 <version>0.2.2</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>${basedir}/src/main/resources</directory>
+				<includes>
+					<include>applicationContext.xml</include>
+					<include>securityContext.xml</include>					
+					<include>mensajes/messages_es.properties</include>
+					<include>aspectos.xml</include>
+					<include>cron.xml</include>
+				</includes>
+				<filtering>true</filtering>
+			</resource>		
+		</resources>
+		<filters>
+			<filter>${basedir}/src/main/webapp/resources/properties/${enviroment}.properties</filter>
+		</filters>
+		
+		<finalName>smem-web</finalName>
+	</build>
+	
+	<profiles>
+		<profile>
+			<id>desarrollo</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<properties>
+				<enviroment>desarrollo</enviroment>
+			</properties>
+		</profile>
+		<profile>
+			<id>qa</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<enviroment>qa</enviroment>
+			</properties>
+		</profile>
+		<profile>
+			<id>produccion</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<enviroment>produccion</enviroment>
+			</properties>
+		</profile>			
+	</profiles>
+</project>

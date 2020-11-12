@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:sec="http://www.springframework.org/security/tags"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+	
+	<f:subview id="modal_agregar_proveedor">
+		<h:form id="formAgregarProveedor">
+			
+			<rich:popupPanel header="#{msg['proveedores.nuevo.agregarproveedor']}" id="agregarProveedor" domElementAttachment="parent" autosized="true">
+				
+				<f:facet name="controls">
+					<h:outputLink value="#"
+						onclick="#{rich:component('agregarProveedor')}.hide(); return false;">
+						<h:graphicImage value="/resources/images/icons/close.gif"
+							alt="Cerrar" style="float: inherit; height: 15px; width: 15px; border:0px;" />
+					</h:outputLink>
+				</f:facet>
+								
+				<t:panelGrid id="agregarGrid" columns="3" columnClasses="primercolumna, segundacolumna" style="margin-top:10px" colspan="10">
+
+					<h:outputText value="#{msg['proveedores.consulta.rfc']}" styleClass="titulo"/>
+					<h:inputText id="rfcProveedor" value="#{proveedorBean.proveedor.rfc}" style="text-transform:uppercase" 
+						required="true" requiredMessage="El RFC es requerido." size="40" validatorMessage="Formato de RFC incorrecto. Ejemplo: XXXX(3 ó 4 letras)-000000(6 números que representen una fecha válida)-XX0(3 caracteres alfanuméricos)" >
+						<f:validateRegex pattern="^([a-zA-ZñÑ\x26]{3,4}[-]{1}([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[-]{1}[a-zA-Z|\d]{3})$" />
+					</h:inputText>
+					<rich:message for="rfcProveedor" />
+										
+					<h:outputText value="#{msg['proveedores.nuevo.nombre']}" styleClass="titulo"/>
+					<h:inputText id="nombreProveedor" value="#{proveedorBean.proveedor.proveedor}"
+						required="true" requiredMessage="El nombre es requerido." size="40" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+						<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+					</h:inputText>
+					<rich:message for="nombreProveedor" />
+					
+					<h:outputText value="#{msg['proveedores.consulta.telefono']}" styleClass="titulo"/>
+					<h:inputText id="telProveedor" value="#{proveedorBean.proveedor.telefono}" size="40" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+						<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+					</h:inputText>
+					<rich:message for="telProveedor" />
+
+					<h:outputText value="#{msg['proveedores.consulta.correo']}" styleClass="titulo"/>
+					<h:inputText id="correoProveedor" value="#{proveedorBean.proveedor.email}" style="text-transform:lowercase" 
+						required="true" requiredMessage="El correo es requerido." size="40" validatorMessage="Formato de correo incorrecto" >
+						<f:validateRegex pattern="(^[a-zA-Z0-9_\-\.~]{2,}@[a-zA-Z0-9_\-\.~]{2,}\.[a-zA-Z]{2,4}$)?" />
+					</h:inputText>
+					<rich:message for="correoProveedor" />
+
+					<h:outputText value="#{msg['proveedores.consulta.direccion']}" styleClass="titulo"/>
+					<h:inputTextarea id="dirProveedor" value="#{proveedorBean.proveedor.direccion}" 
+						style="width:220px; text-transform: uppercase; resize: none;" rows="8" >
+						<f:validateLength maximum="400" />
+					</h:inputTextarea>
+					<rich:message for="dirProveedor" />
+
+					<h:outputText value="#{msg['proveedores.consulta.representante']}" styleClass="titulo"/>
+					<h:inputText id="representante" value="#{proveedorBean.proveedor.representanteLegal}" size="40" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+						<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+					</h:inputText>
+					<rich:message for="representante" />
+
+					<h:outputText value="#{msg['proveedores.consulta.telefonoR']}" styleClass="titulo"/>
+					<h:inputText id="telefonoR" value="#{proveedorBean.proveedor.telefonoRepresentanteLegal}" size="40" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+						<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+					</h:inputText>
+					<rich:message for="telefonoR" />
+
+					<h:outputText value="#{msg['proveedores.consulta.gerente']}" styleClass="titulo"/>
+					<h:inputText id="gerente" value="#{proveedorBean.proveedor.nombreGerenteServicio}" size="40" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+						<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+					</h:inputText>
+					<rich:message for="gerente" />
+
+					<h:outputText value="#{msg['proveedores.consulta.telGerente']}" styleClass="titulo"/>
+					<h:inputText id="telefonoG" value="#{proveedorBean.proveedor.telefonoGerenteServicio}" size="40" validatorMessage="Solo se permiten los siguientes caracteres: letras de la a-z, números del 0-9, -, /, (, ), . y , ">
+						<f:validateRegex pattern="[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ.,()/-]*" />
+					</h:inputText>
+					<rich:message for="telefonoG" />
+
+					<h:outputText value="#{msg['proveedores.consulta.correoGerente']}" styleClass="titulo"/>
+					<h:inputText id="emailG" value="#{proveedorBean.proveedor.emailGerenteServicio}" style="text-transform:lowercase" 
+						size="40" validatorMessage="Formato de correo incorrecto" >
+						<f:validateRegex pattern="(^[a-zA-Z0-9_\-\.~]{2,}@[a-zA-Z0-9_\-\.~]{2,}\.[a-zA-Z]{2,4}$)?" />
+					</h:inputText>
+					<rich:message for="emailG" />
+					
+				</t:panelGrid>
+				
+				<a4j:commandButton value="Guardar"
+					style="margin-left:150px; margin-top:10px"
+					image="/resources/images/icons/btnguardar.jpg"				
+					render="tablaProveedores, alertPanel"
+					action="#{proveedorBean.guardarProveedor}"
+					oncomplete="if(#{facesContext.maximumSeverity==null}){ 
+					#{rich:component('alertPanel')}.show();  
+					#{rich:component('agregarProveedor')}.hide();}" />
+				<a4j:commandButton value="Cancelar"
+					image="/resources/images/icons/btncancelar.jpg"
+					onclick="#{rich:component('agregarProveedor')}.hide(); return false;" />
+				
+			</rich:popupPanel>
+			
+		</h:form>
+	</f:subview>
+	
+</ui:composition>
