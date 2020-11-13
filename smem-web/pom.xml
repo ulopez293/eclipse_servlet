@@ -182,8 +182,7 @@
 		<filters>
 			<filter>${basedir}/src/main/webapp/resources/properties/${enviroment}.properties</filter>
 		</filters>
-		
-		<finalName>smem-web</finalName>
+		<finalName>smem-web-${enviroment}</finalName>
 	</build>
 	
 	<profiles>
@@ -197,12 +196,12 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>desarrollo</id>
+			<id>dev</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<enviroment>desarrollo</enviroment>
+				<enviroment>dev</enviroment>
 			</properties>
 		</profile>		
 		<profile>
@@ -215,12 +214,12 @@
 			</properties>
 		</profile>
 		<profile>
-			<id>produccion</id>
+			<id>prod</id>
 			<activation>
 				<activeByDefault>false</activeByDefault>
 			</activation>
 			<properties>
-				<enviroment>produccion</enviroment>
+				<enviroment>prod</enviroment>
 			</properties>
 		</profile>			
 	</profiles>
