@@ -431,3 +431,17 @@ ALTER TABLE historico_movimiento ADD FOREIGN KEY (id_funcionalidad_anterior) REF
 ALTER TABLE historico_movimiento ADD FOREIGN KEY (id_centro_trabajo_actual) REFERENCES cat_centro_trabajo(id_centro_trabajo);
 
 ALTER TABLE historico_movimiento ADD FOREIGN KEY (id_centro_trabajo_anterior) REFERENCES cat_centro_trabajo(id_centro_trabajo);
+
+
+
+-- CREACION DE USUARIO DE BASE DE DATOS PARA AMBIENTE DE DESARROLLO
+CREATE USER 'smembduser'@'localhost' IDENTIFIED BY 'j4NvOA@l1sm3m';
+GRANT UPDATE, INSERT, SELECT  ON smem.* TO 'smembduser'@'%';
+
+
+-- CREACION DE USUARIO DE BASE DE DATOS PARA AMBIENTE DE QA
+CREATE USER 'smembduserqa'@'localhost' IDENTIFIED BY 'j4NvOA@l1sm3m';
+GRANT UPDATE, INSERT, SELECT  ON smemqa.* TO 'smembduserqa'@'%';
+
+
+
