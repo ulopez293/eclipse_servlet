@@ -188,14 +188,23 @@
 	
 	<profiles>
 		<profile>
-			<id>desarrollo</id>
+			<id>local</id>
 			<activation>
 				<activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
-				<enviroment>desarrollo</enviroment>
+				<enviroment>local</enviroment>
 			</properties>
 		</profile>
+		<profile>
+			<id>desarrollo</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<enviroment>desarrollo</enviroment>
+			</properties>
+		</profile>		
 		<profile>
 			<id>qa</id>
 			<activation>
