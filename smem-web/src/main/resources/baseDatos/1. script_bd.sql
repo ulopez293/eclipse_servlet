@@ -183,6 +183,17 @@ CREATE TABLE cat_supervisor (
 	    CONSTRAINT PK_id_supervisor PRIMARY KEY(id_supervisor)
 );
 
+create table cat_nivel_atencion 
+(
+		id_nivel_atencion int AUTO_INCREMENT NOT NULL,
+		descripcion varchar(20) not null ,
+		fecha_registro   	datetime NULL DEFAULT CURRENT_TIMESTAMP,
+		fecha_modificacion datetime NULL,
+		fecha_baja   		datetime NULL,
+		baja bit NULL,
+		primary key (id_nivel_atencion) 
+);
+
 -- FUNCIONALIDAD --
 CREATE TABLE programacion_servicio (
     id_programacion_servicio	int AUTO_INCREMENT NOT NULL,
@@ -378,6 +389,37 @@ CREATE TABLE configuracion (
     dias_correctivos	int NOT NULL,
     alerta_incidencia int NOT NULL
 );
+
+create view contratos_activos (id_universo,numero_contrato,consecutivo_contrato) as 
+	select distinct x0.id_universo ,x1.numero_contrato ,x0.consecutivo_contrato 
+	from (contrato_detalle x0 join contrato x1 on (x0.id_contrato = x1.id_contrato ) )
+	where (((now() >= x1.vigencia_inicio_contrato) 
+			AND (now() <= x1.vigencia_fin_contrato ) ) AND (x0.baja = 'f' ) ) order by 1 ;  
+
+create view periodo1 (id_universo,inicio_periodo,fin_periodo) as 
+	select x0.id_universo ,x0.inicio_periodo ,x0.fin_periodo 
+	from (contrato_detalle x0 join contrato x1 on (x0.id_contrato= x1.id_contrato ) )
+	where (((x0.periodo = 1 ) AND (x0.baja = 'f' ) ) AND ((now() >= x1.vigencia_inicio_contrato ) 
+			AND (now() <= x1.vigencia_fin_contrato ) ) ) order by 1 ;  
+
+create view periodo2 (id_universo,inicio_periodo,fin_periodo) as 
+	select x0.id_universo ,x0.inicio_periodo ,x0.fin_periodo 
+	from (contrato_detalle x0 join contrato x1 on (x0.id_contrato = x1.id_contrato ) )
+	where (((x0.periodo = 2 ) AND (x0.baja = 'f' ) ) 
+			AND ((now() >= x1.vigencia_inicio_contrato ) 
+			AND (now() <= x1.vigencia_fin_contrato ) ) ) order by 1 ;  
+
+create view periodo3 (id_universo,inicio_periodo,fin_periodo) as 
+	select x0.id_universo ,x0.inicio_periodo ,x0.fin_periodo 
+	from (contrato_detalle x0 join contrato x1 on (x0.id_contrato = x1.id_contrato ) )
+	where (((x0.periodo = 3 ) AND (x0.baja = 'f' ) ) AND ((now() >= x1.vigencia_inicio_contrato ) AND 
+	  (now() <= x1.vigencia_fin_contrato ) ) ) order by 1 ;  
+
+create view periodo4 (id_universo,inicio_periodo,fin_periodo) as 
+	select x0.id_universo ,x0.inicio_periodo ,x0.fin_periodo 
+	from (contrato_detalle x0 join contrato x1 on (x0.id_contrato = x1.id_contrato ) )
+	where (((x0.periodo = 4 ) AND (x0.baja='f' ) ) AND ((now() >= x1.vigencia_inicio_contrato ) AND 
+			(now() <= x1.vigencia_fin_contrato ) ) ) order by 1 ;  
 
 
 ALTER TABLE solicitud_servicio ADD FOREIGN KEY (id_contrato_detalle) REFERENCES contrato_detalle(id_contrato_detalle);

@@ -114,6 +114,14 @@
 		    <version>4.0.3.RELEASE</version>
 		</dependency>
 		
+		<!-- Google QR code -->
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+		
+		
 		<!-- dependencias de Apache POI -->
 		<dependency>
 			<groupId>org.apache.poi</groupId>
@@ -182,7 +190,7 @@
 		<filters>
 			<filter>${basedir}/src/main/webapp/resources/properties/${enviroment}.properties</filter>
 		</filters>
-		<finalName>smem-web-${enviroment}</finalName>
+		<finalName>smem-${enviroment}</finalName>
 	</build>
 	
 	<profiles>

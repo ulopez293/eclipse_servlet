@@ -301,3 +301,11 @@ INSERT INTO `usuario` values(2,'unidad','Unidad','unidad',1,1,'ROLE_UNIDAD',1,nu
 INSERT INTO proveedor (`id_proveedor`,`proveedor`,`rfc`,`telefono`,`email`,`direccion`,`representante_legal`,`telefono_representante_legal`,`nombre_gerente_servicio`,`telefono_gerente_servicio`,`email_gerente_servicio`,`fecha_registro`,`fecha_modificacion`,`fecha_baja`,`baja`) 
 VALUES (1,'proveedor','rfc_prov','5566778890','email@gmail.com','Direcdcion proveedor','','','','','','2020-11-07 02:50:37',NULL,NULL,0);
 
+insert into cat_equipo values(1,"ACELERADOR LINEAL DE ALTA ENERGIA",now(),null,null,0);
+insert into cat_equipo values(2,"ACELERADOR LINEAL DE BAJA ENERGIA",now(),null,null,0);
+insert into cat_equipo values(3,"ANESTESIA",now(),null,null,0);
+insert into cat_equipo values(4,"ASPIRADOR",now(),null,null,0);
+insert into cat_equipo values(5,"CARDIOTOCOGRAFO",now(),null,null,0);
+
+
+

@@ -26,10 +26,9 @@ import org.springframework.stereotype.Component;
 @Component
 @SessionScoped
 public class CentroTrabajoBean implements Serializable {
-
-
-	private static final long serialVersionUID = 9098399661955767367L;
 	
+	private Logger log = Logger.getLogger(CentroTrabajoBean.class); // Bitacora
+
 	@Autowired
 	private CentroTrabajoService centroTrabajoService; // Servicio de Centros de trabajo
 	
@@ -42,12 +41,11 @@ public class CentroTrabajoBean implements Serializable {
 	@Autowired
 	private AlertaBean alertaBean; // Bean para mensajes al centroTrabajo
 	
-	private Logger log = Logger.getLogger(CentroTrabajoBean.class); // Bitacora
 	private List<CentroTrabajoDto> centrosTrabajo = new ArrayList<CentroTrabajoDto>(); // Lista de Centros de trabajo
-	private int pagina; // Paginador para la tabla
 	private CentroTrabajoDto centroTrabajo; // Centro de trabajo	
 	private List<UnidadRegionalDto> unidadesRegionales; // Lista de tipos de unidades regionales	
-	
+	private int pagina; // Paginador para la tabla
+
 	public String inicializar() {
 		
 		log.info("Inicializando el catalogo de centros de trabajo....");

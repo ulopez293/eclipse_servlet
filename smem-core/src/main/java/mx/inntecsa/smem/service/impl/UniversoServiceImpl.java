@@ -367,6 +367,7 @@ public class UniversoServiceImpl implements UniversoService {
 	@Override
 	public List<UniversoDto> getUniversosCompletosPorIdCentroTrabajo(Integer idCentroTrabajo) {
 		List<UniversoDto> universosDto = new ArrayList<UniversoDto>();
+		
 		for(UniversoContratoDto universo: universoDao.getUniversosCompletosPorIdCentroTrabajo(idCentroTrabajo)){
 			UniversoDto universoDto = this.getUniversoPorIdUniverso(universo.getIduniverso().longValue());
 			universoDto.setNumeroContrato(universo.getNumerocontrato());

@@ -1,460 +1,194 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
-	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:sec="http://www.springframework.org/security/tags"
-	xmlns:t="http://myfaces.apache.org/tomahawk"
-	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+	xmlns:b="http://bootsfaces.net/ui">
 
-	<f:subview id="modal_consultar_universos">
-		<h:form id="formConsultarUniversos">
-			<a4j:region>
-				<div align="center">
-					<rich:panel header="#{msg['universos.consulta.titulo']}">
-						
-						<t:panelGrid id="consultarUniversosGrid" columns="3" bgcolor='#F0F0F0'
-							width="830" style="margin-bottom: 10px; border: 1px solid #000000 !important;text-align: left;">
-							
-							<t:panelGroup colspan="3" style="padding-bottom: 8px; padding-top:5px; text-align:center; bgcolor:gray;">
-								<h:outputText value="PARAMETROS DE BUSQUEDA" styleClass="titulo-red"/>
-							</t:panelGroup>
-								
-							<h:outputText value="#{msg['smem.etiqueta.unidadregional']}" styleClass="titulo"/>						
-							<t:panelGroup colspan="2">
-								<h:selectOneMenu id="unidadRegional" enableManualInput="false" required="true"
-									value="#{universoBean.unidadRegionalBusqueda}"
-									requiredMessage="#{msg['unidadregional.mensaje.requerido']}">
-									<f:selectItems value="#{universoBean.unidadesRegionales}" var="u"
-										itemLabel="#{u.unidadRegional}" itemValue="#{u.idUnidadRegional}" />
-									<a4j:ajax event="change" render="centroTrabajo"
-										listener="#{universoBean.buscarCentrosTrabajo}" />	
-								</h:selectOneMenu>
-								<rich:message for="unidadRegional" />
-							</t:panelGroup>	
-
-							<h:outputText value="#{msg['smem.etiqueta.centrotrabajo']}" styleClass="titulo"/>
-							<t:panelGroup colspan="2">
-								<h:selectOneMenu id="centroTrabajo" enableManualInput="false" required="true"
-									value="#{universoBean.centroTrabajoBusqueda}"
-									requiredMessage="#{msg['centrotrabajo.mensaje.requerido']}">
-									<f:selectItems value="#{universoBean.centrosTrabajo}" var="c"
-										itemLabel="#{c.descripcion}" itemValue="#{c.idCentroTrabajo}" />									
-								</h:selectOneMenu>
-								<rich:message for="centroTrabajo" />
-							</t:panelGroup>
-
-							<h:outputText value="#{msg['smem.etiqueta.inventario.busqueda']}" styleClass="titulo"/>
-							<t:panelGroup colspan="2">
-								<h:inputText id="inventario" value="#{universoBean.inventarioBusqueda}"								
-									converterMessage="#{msg['conversion.entero.mensaje']}" >	
-									<f:convertNumber integerOnly="true"/>				
-								</h:inputText>	
-								<rich:message for="inventario" />							
-							</t:panelGroup>
-							
-							<h:outputText value="#{msg['smem.etiqueta.serie.busqueda']}" styleClass="titulo"/>
-							<t:panelGroup colspan="2">
-								<h:inputText id="serie" value="#{universoBean.serieBusqueda}" />																		
-							</t:panelGroup>
-							
-							<h:outputText value="#{msg['smem.etiqueta.idEquipo']}" styleClass="titulo"/>
-							<t:panelGroup colspan="2">
-								<h:inputText id="idUniverso" value="#{universoBean.idUniverso}" 
-									converterMessage="#{msg['conversion.entero.mensaje']}" >
-									<f:convertNumber integerOnly="true"/>			
-								</h:inputText>		
-								<rich:message for="idUniverso" />															
-							</t:panelGroup>
-							
-							<t:panelGroup colspan="3" style="text-align:center">
-								<a4j:commandButton value="Buscar"
-									render="tablaUniversos"
-									action="#{universoBean.buscarUniversos}" />
-							</t:panelGroup>
-						</t:panelGrid>				
-						
-						<rich:toolbar id="bar" height="5" width="855px" itemSeparator="none" style="margin-top:30px">
-							<!-- Botón Exportar -->
-							<rich:toolbarGroup location="left">
-								<h:commandButton value="Exportar" id="exportar"
-									image="/resources/images/icons/exportToExcel.png"
-									action="#{universoBean.descargarExcel}"																		
-									style="float: inherit; height: 30px; width: 30px; border:0px; margin-top: 6px"/>
-								<h:outputText value="#{msg['universos.consulta.exportar']}"
-									styleClass="txt-white" />
-							</rich:toolbarGroup>
-							<!-- Botón Exportar Todo-->
-							<sec:authorize ifAllGranted="ROLE_ADMINISTRADOR">														
-								<rich:toolbarGroup location="left">
-									<h:commandButton value="ExportarTodo" id="exportarTodo"
-										image="/resources/images/icons/exportToExcel.png"
-										action="#{universoBean.descargarTodoExcel}"																		
-										style="float: inherit; height: 30px; width: 30px; border:0px; margin-top: 6px"/>
-									<h:outputText value="#{msg['universos.consulta.exportartodo']}"
-										styleClass="txt-white" />
-								</rich:toolbarGroup>								
-							</sec:authorize>																				
-							<!-- Botón Alta de Equipo Medico (Universo) -->
-							<rich:toolbarGroup location="right">
-								<h:outputText value="#{msg['universos.consulta.agregaruniverso']}"
-									styleClass="txt-white" rendered="#{universoBean.muestraAgregar}" />
-								<a4j:commandLink styleClass="no-decor" execute="@this"
-									render="agregarUniverso" ajaxSingle="true"
-									action="#{universoBean.limpiarUniverso}"
-									rendered="#{universoBean.muestraAgregar}"
-									oncomplete="#{rich:component('agregarUniverso')}.show(); return false;">
-									<h:graphicImage value="/resources/images/icons/new.png"
-										alt="Nuevo" title="Nuevo Equipo Medico"
-										style="float: inherit; height: 30px; width: 30px; border:0px;" />
-								</a4j:commandLink>
-							</rich:toolbarGroup>
-							<!--Termina Botón Alta de Equipo Medico (Universo) -->
-						</rich:toolbar>
-						
-						<!-- Tabla para mostrar Registros -->
-						<rich:extendedDataTable value="#{universoBean.universos}"
-							var="universo" id="tablaUniversos" rows="15"
-							rowClasses="odd-row, even-row" sortMode="single"
-							style="position:relative; width: 850px; height:inherit; margin-bottom:50px"
-							noDataLabel="No existen registros de Equipos Médicos">
-													
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.nivelatencion']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.nivelAtencion.descripcion}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.idequipo']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.idUniverso}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.equipo']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.equipo.equipo}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.marca']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.marca}" styleClass="txt-gray-small"/>
-							</rich:column>
-																																												
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.modelo']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.modelo}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.serie']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.serie}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.inventario']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.inventario}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.numerobitacora']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.numeroBitacora}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.ubicacion']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.obsubica}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.especialidad']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.especialidad.especialidad}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.grupo']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.grupoClave.grupo.grupo}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.clave']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.grupoClave.clave.clave}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.nombregenerico']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.grupoClave.clave.nombreGenerico}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.funcionalidad']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.funcionalidad.descripcion}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">
-									<h:outputText value="#{msg['universos.consulta.estatus']}" />								
-								</f:facet>
-								<h:outputText value="#{universo.baja.descripcion}" />
-							</rich:column>	
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.requiereservicio']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.requiereServicio.descripcion}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.numerocontrato']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.numeroContrato}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.consecutivocontrato']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.consecutivoContrato}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.actualizaciontecnologica']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.actualizacionTecnologica}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.numerolicitacion']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.numeroLicitacion}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.partida']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.partida}" styleClass="txt-gray-small"/>
-							</rich:column>	
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.nocontratoadq']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.noContratoAdq}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.inicioperiodo1']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.inicioPeriodo1}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.finperiodo1']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.finPeriodo1}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.inicioperiodo2']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.inicioPeriodo2}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.finperiodo2']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.finPeriodo2}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.inicioperiodo3']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.inicioPeriodo3}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.finperiodo3']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.finPeriodo3}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.inicioperiodo4']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.inicioPeriodo4}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.finperiodo4']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.finPeriodo4}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.sectoradq']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.sectorAdq.sectorAdq}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.anioadquisicion']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.anioAdq}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.terminogarantia']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.fechaGarantia}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.puestamarcha']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.fechaInstalacion}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.fechaapertura']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.fechaApertura}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.proveedorventa']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.proveedorVentaEquipo}" styleClass="txt-gray-small"/>
-							</rich:column>	
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.precio']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.precioEquipoSinIva}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.observaciones']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.observaciones}" styleClass="txt-gray-small"/>
-							</rich:column>
-							
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.urct']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.centroTrabajo.urct}" styleClass="txt-gray-small"/>
-							</rich:column>
-																																												
-							<rich:column width="100px">
-								<f:facet name="header">								
-									<h:outputText value="#{msg['universos.consulta.cabm']}" />																
-								</f:facet>
-								<h:outputText value="#{universo.cabm}" styleClass="txt-gray-small"/>
-							</rich:column>																																					
-																																			
-							<rich:column width="80px" sorteable="false">
-								<f:facet name="header">
-									<h:outputText value="#{msg['universos.consulta.modificar']}" />
-								</f:facet>
-								<a4j:commandLink render="editarUniverso, alertPanel"
-									action="#{universoBean.modificaUniverso}"
-									oncomplete="if(#{universoBean.muestraModificacion==true}) {
-													#{rich:component('editarUniverso')}.show(); return false;
-												} else {
-													#{rich:component('alertPanel')}.show();	return false;												
-												}">
-									<h:graphicImage value="/resources/images/icons/edit.png"
-										alt="editar" title="Editar Equipo Médico"
-										style="float: inherit; height: 12px; width: 12px; border:0px;" />
-									<f:setPropertyActionListener target="#{universoBean.universo}"
-										value="#{universo}" />
-								</a4j:commandLink>
-							</rich:column>
-<!--
-	@Begin
-	@author: Oscar Roa
-	@date: 11/12/2014
-	@Ticket: I-003018 - Eliminar Columna de Eliminar 
- -->
-<!--
-							<rich:column width="80px" sorteable="false">
-								<f:facet name="header">
-									<h:outputText value="#{msg['universos.consulta.eliminar']}" />
-								</f:facet>
-								<a4j:commandLink execute="@this" render="@none"
-									ajaxSingle="true"
-									oncomplete="#{rich:component('panelConfirmacionBorrado')}.show(); return false;">
-									<h:graphicImage value="/resources/images/icons/delete.png"
-										alt="Eliminar" title="Eliminar Registro"
-										style="float: inherit; height: 15px; width: 15px; border:0px;" />
-									<f:setPropertyActionListener target="#{universoBean.universo}"
-										value="#{universo}" />
-								</a4j:commandLink>
-							</rich:column>
--->
-<!--
-	@End 
- -->
-							<f:facet name="footer">
-								<rich:dataScroller page="#{universoBean.pagina}" for="tablaUniversos" 
-									render="tablaUniversos" fastControls="hide"/>
-							</f:facet>							
-						</rich:extendedDataTable>
-					</rich:panel>									
-				</div>
-  				
-				<a4j:jsFunction name="eliminar" render="tablaUniversos, alertPanel"
-					action="#{universoBean.eliminarUniverso}" execute="@this"
-					oncomplete="#{rich:component('alertPanel')}.show();" />
-
-			</a4j:region>
-		</h:form>
-	</f:subview>
+	<h:form id="formConsultarUniversos">
+		<div align="center">
+			<b:panel header="#{msg['universos.consulta.titulo']}">
+			
+				<!-- Tabla para mostrar Registros -->
+				<b:dataTable value="#{universoBean.universos}"
+					var="universo" 
+					id="tablaUniversos" 
+					page-length="15"
+					excel="true"
+				    pdf="true"
+				    styleClass="txt-gray-small">
+				
+					<b:dataTableColumn label="#{msg['universos.consulta.nivelatencion']}">
+						<h:outputText value="#{universo.nivelAtencion.descripcion}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.idequipo']}">
+						<h:outputText value="#{universo.idUniverso}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.equipo']}">
+						<h:outputText value="#{universo.equipo.equipo}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.marca']}">
+						<h:outputText value="#{universo.marca}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+																																										
+					<b:dataTableColumn label="#{msg['universos.consulta.modelo']}">
+						<h:outputText value="#{universo.modelo}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.serie']}">
+						<h:outputText value="#{universo.serie}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.inventario']}">
+						<h:outputText value="#{universo.inventario}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.numerobitacora']}">
+						<h:outputText value="#{universo.numeroBitacora}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.ubicacion']}">
+						<h:outputText value="#{universo.obsubica}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.especialidad']}">
+						<h:outputText value="#{universo.especialidad.especialidad}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.grupo']}">
+						<h:outputText value="#{universo.grupoClave.grupo.grupo}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.clave']}">
+						<h:outputText value="#{universo.grupoClave.clave.clave}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.nombregenerico']}">
+						<h:outputText value="#{universo.grupoClave.clave.nombreGenerico}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.funcionalidad']}">
+						<h:outputText value="#{universo.funcionalidad.descripcion}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.estatus']}">
+						<h:outputText value="#{universo.baja.descripcion}" />
+					</b:dataTableColumn>	
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.requiereservicio']}">
+						<h:outputText value="#{universo.requiereServicio.descripcion}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.numerocontrato']}">
+						<h:outputText value="#{universo.numeroContrato}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.consecutivocontrato']}">
+						<h:outputText value="#{universo.consecutivoContrato}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.actualizaciontecnologica']}">
+						<h:outputText value="#{universo.actualizacionTecnologica}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.numerolicitacion']}">
+						<h:outputText value="#{universo.numeroLicitacion}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.partida']}">
+						<h:outputText value="#{universo.partida}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>	
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.nocontratoadq']}">
+						<h:outputText value="#{universo.noContratoAdq}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.inicioperiodo1']}">
+						<h:outputText value="#{universo.inicioPeriodo1}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.finperiodo1']}">
+						<h:outputText value="#{universo.finPeriodo1}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.inicioperiodo2']}">
+						<h:outputText value="#{universo.inicioPeriodo2}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.finperiodo2']}">
+						<h:outputText value="#{universo.finPeriodo2}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.inicioperiodo3']}">
+						<h:outputText value="#{universo.inicioPeriodo3}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.finperiodo3']}">
+						<h:outputText value="#{universo.finPeriodo3}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.inicioperiodo4']}">
+						<h:outputText value="#{universo.inicioPeriodo4}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.finperiodo4']}">
+						<h:outputText value="#{universo.finPeriodo4}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.sectoradq']}">
+						<h:outputText value="#{universo.sectorAdq.sectorAdq}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.anioadquisicion']}">
+						<h:outputText value="#{universo.anioAdq}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.terminogarantia']}">
+						<h:outputText value="#{universo.fechaGarantia}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.puestamarcha']}">
+						<h:outputText value="#{universo.fechaInstalacion}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.fechaapertura']}">
+						<h:outputText value="#{universo.fechaApertura}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.proveedorventa']}">
+						<h:outputText value="#{universo.proveedorVentaEquipo}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>	
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.precio']}">
+						<h:outputText value="#{universo.precioEquipoSinIva}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.observaciones']}">
+						<h:outputText value="#{universo.observaciones}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.urct']}">
+						<h:outputText value="#{universo.centroTrabajo.urct}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>
+																																										
+					<b:dataTableColumn label="#{msg['universos.consulta.cabm']}">
+						<h:outputText value="#{universo.cabm}" styleClass="txt-gray-small"/>
+					</b:dataTableColumn>																																					
+																																	
+					<b:dataTableColumn value="#{msg['universos.consulta.modificar']}" >
+					</b:dataTableColumn>
+					
+					<b:dataTableColumn label="#{msg['universos.consulta.eliminar']}">
+					</b:dataTableColumn>
+					
+				</b:dataTable>
+			</b:panel>									
+		</div>
+	</h:form>
 </ui:composition>

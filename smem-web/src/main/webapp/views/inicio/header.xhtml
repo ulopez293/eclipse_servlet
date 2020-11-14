@@ -19,12 +19,12 @@
 				    <b:dropMenu value="#{msg['menu.catalogos']}" >
 	                    <b:navCommandLink value="#{msg['menu.catalogos.centrotrabajo']}" action="#{centroTrabajoBean.inicializar()}" />
 						<b:navLink value="#{msg['menu.catalogos.clave']}" href="#"></b:navLink>
-						<b:navLink value="#{msg['menu.catalogos.equipo']}" href="#"></b:navLink>
+						<b:navCommandLink value="#{msg['menu.catalogos.equipo']}" action="#{equipoBean.inicializar}"/>
 						<b:navLink value="#{msg['menu.catalogos.especialidad']}" href="#"></b:navLink>
 						<b:navLink value="#{msg['menu.catalogos.grupo']}" href="#"></b:navLink>								
 						<b:navLink value="#{msg['menu.catalogos.grupoclave']}" href="#"></b:navLink>	
 						<b:navLink value="#{msg['menu.catalogos.nivelatencion']}" href="#"></b:navLink>
-						<b:navLink value="#{msg['menu.catalogos.proveedor']}" href="#"></b:navLink>
+						<!-- b:navLink value="#{msg['menu.catalogos.proveedor']}" href="#"></b:navLink -->
 						<b:navLink value="#{msg['menu.catalogos.tipocontratacion']}" href="#"></b:navLink>
 						<b:navLink value="#{msg['menu.catalogos.subtipocontratacion']}" href="#"></b:navLink> 
 						<b:navLink value="#{msg['menu.catalogos.sectoradquisicion']}" href="#"></b:navLink>				    
@@ -50,7 +50,7 @@
 			<sec:authorize ifAnyGranted="ROLE_ADMINISTRADOR, ROLE_ADMINISTRADOR_GENERAL, ROLE_UNIDAD">
 				<b:navbarLinks>
 					<b:dropMenu value="#{msg['menu.programacionservicios']}">
-						<b:navLink value="#{msg['menu.equipomedico']}" />
+						<b:navCommandLink value="#{msg['menu.equipomedico']}" action="#{universoBean.inicializar}"/>
 						<b:navCommandLink value="#{msg['menu.programacionservicios.servicios']}" action="#{programacionServicioBean.inicializar}"/>
 					</b:dropMenu>
 				</b:navbarLinks>
