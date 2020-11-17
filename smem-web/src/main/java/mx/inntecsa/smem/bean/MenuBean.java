@@ -3,7 +3,6 @@ package mx.inntecsa.smem.bean;
 import java.io.Serializable;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -25,7 +24,7 @@ public class MenuBean implements Serializable {
 	private String contentView; // nombre de la página
 	private Logger log = Logger.getLogger(MenuBean.class); // Bitácora	
 	
-	@PostConstruct
+
     public void init() {        
         contentView = "/views/inicio/work.xhtml"; 
     }
